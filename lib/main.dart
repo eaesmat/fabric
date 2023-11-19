@@ -1,4 +1,5 @@
 import 'package:auto_direction/auto_direction.dart';
+import 'package:fabricproject/screens/splash_screen.dart';
 import 'package:flag/flag.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: Locales.supportedLocales,
         locale: locale,
         theme: Pallete.lightModeAppTheme,
-        home: const HomeScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
