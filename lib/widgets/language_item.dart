@@ -12,6 +12,7 @@ class LanguageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(vertical: 0.001, horizontal: 10),
       title: Row(
         children: [
           if (languageAbr == 'en')

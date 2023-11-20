@@ -26,9 +26,21 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
       ),
       body: const Column(
         children: [
+          Divider(
+            color: Color.fromARGB(255, 215, 220, 222),
+          ),
           LanguageItem(languageAbr: 'en', languageName: 'English'),
+          Divider(
+            color: Color.fromARGB(255, 215, 220, 222),
+          ),
           LanguageItem(languageAbr: 'fa', languageName: 'دری'),
+          Divider(
+            color: Color.fromARGB(255, 215, 220, 222),
+          ),
           LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
+          Divider(
+            color: Color.fromARGB(255, 215, 220, 222),
+          ),
         ],
       ),
     );
