@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class Pallete {
   // Colors
+  static const whiteColor = Color.fromARGB(255, 241, 241, 206);
+  static const dividerColor = Color.fromARGB(255, 215, 220, 222);
   static const blackColor = Color.fromRGBO(1, 1, 1, 1); // primary color
   static const greyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
   static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
   static const blueColor = Color.fromRGBO(0, 104, 177, 1);
-  static const whiteColor = Color(0xFFFFFFF5);
-  // static const Color whiteColor = Color(0xFFFFFFF5);
+
   static var redColor = Colors.red.shade500;
-  // static var blueColor = Colors.blue.shade300;
 
   // Themes
   static var darkModeAppTheme = ThemeData.dark().copyWith(
