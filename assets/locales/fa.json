@@ -1,4 +1,10 @@
 {
     "welcome" : "خوش آمدی",
-    "language": "زبان"
+    "language": "زبان",
+    "email" : "ایمیل آدرس",
+    "password" : "رمز",
+    "forgotـpassword": "رمز تان را فراموش کردین ?"
+
+
+
 }

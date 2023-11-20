@@ -1,4 +1,7 @@
 {
     "welcome" : "Welcome",
-    "language": "Language"
+    "language": "Language",
+    "email" : "Email",
+    "password" : "Password",
+    "forgotـpassword": "Forgot Password?"
 }

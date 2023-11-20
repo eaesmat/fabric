@@ -1,4 +1,3 @@
-import 'package:auto_direction/auto_direction.dart';
 import 'package:fabricproject/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -25,40 +24,6 @@ class MyApp extends StatelessWidget {
         theme: Pallete.lightModeAppTheme,
         home: const SplashScreen(),
       ),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  String text = "";
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-          child: Column(
-        children: [
-          AutoDirection(
-            text: text,
-            child: TextField(
-              onChanged: (str) {
-                setState(() {
-                  text = str;
-                });
-              },
-            ),
-          ),
-          const Text('دری')
-        ],
-      )),
     );
   }
 }

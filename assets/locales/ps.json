@@ -1,4 +1,10 @@
 {
     "welcome" : "ښه راغلاست ",
-    "language": "ژبه"
+    "language": "ژبه",
+    "email" : "بریښنالیک",
+    "password" : "پټ نوم",
+    "forgotـpassword": "پټ نوم مو هیر شوی ?"
+
+
+
 }
