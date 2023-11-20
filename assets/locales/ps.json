@@ -3,7 +3,11 @@
     "language": "ژبه",
     "email" : "بریښنالیک",
     "password" : "پټ نوم",
-    "forgotـpassword": "پټ نوم مو هیر شوی ?"
+    "forgotـpassword": "پټ نوم مو هیر شوی ?",
+    "signin" : "ګډون",
+    "sign_in_with_google" : "د ګوګل سره ګډون کول",
+    "sign_in_with_facebook" : "د فیسبوک سره ګډون کول"
+
 
 
 

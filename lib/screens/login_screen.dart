@@ -1,4 +1,5 @@
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/login_button.dart';
 import 'package:fabricproject/widgets/login_sreen_appbar.dart';
 import 'package:fabricproject/widgets/texts_field.dart';
 import 'package:flutter/material.dart';
@@ -34,15 +35,17 @@ class LoginScreen extends StatelessWidget {
                     topRight: Radius.circular(size.height * 0.04)),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: size.height * 0.05),
+            SingleChildScrollView(
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/logo.svg',
-                    width: size.width * 0.4,
-                    color: Pallete.blueColor,
+                  Padding(
+                    padding: EdgeInsets.only(top: size.height * 0.03),
+                    child: SvgPicture.asset(
+                      'assets/images/logo.svg',
+                      width: size.width * 0.4,
+                      color: Pallete.blueColor,
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.05,
@@ -64,17 +67,49 @@ class LoginScreen extends StatelessWidget {
                   const LocaleText('forgotـpassword',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Pallete.blueColor, fontSize: 12)),
-                          SizedBox(
+                          color: Pallete.blueColor,
+                          fontSize: 12)),
+                  SizedBox(
                     height: size.height * 0.01,
                   ),
-                  TextsField(
-                    controller: passwordController,
-                    lblText: const LocaleText('password'),
+                  const LoginButton(
+                    btnIcon: Icon(Icons.login),
+                    btnText: LocaleText(
+                      'signin',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    bgColor: Pallete.blueColor,
                   ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  const Divider(
+                    color: Pallete.blueColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  LoginButton(
+                    btnIcon: const Icon(Icons.email),
+                    btnText: const LocaleText(
+                      'sign_in_with_google',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    bgColor: Pallete.redColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  const LoginButton(
+                    btnIcon: Icon(Icons.facebook_sharp),
+                    btnText: LocaleText(
+                      'sign_in_with_facebook',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ));
   }

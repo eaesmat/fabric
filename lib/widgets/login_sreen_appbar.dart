@@ -15,7 +15,6 @@ class LoginScreenAppBar extends StatelessWidget {
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
             backgroundColor: Pallete.blueColor,
-            shadowColor: Colors.transparent,
           ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
           label: const LocaleText(
             "language",

@@ -69,6 +69,8 @@ flutter:
     - assets/locales/fa.json
     - assets/locales/ps.json
     - assets/images/logo.svg
+    - assets/images/f_logo.svg
+    - assets/images/g_logo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
