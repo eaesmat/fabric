@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
             label: const LocaleText(
               "language",
               style: TextStyle(
-                  color: Pallete.blackColor, fontWeight: FontWeight.normal),
+                  color: Pallete.blackColor, fontWeight: FontWeight.bold),
             ),
             icon: const Icon(
               Icons.language_outlined,
