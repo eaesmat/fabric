@@ -4,10 +4,12 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
+  // these comes from main screen to toggle pages
   final int currentPage;
   final Function(int) onPageChanged;
 
-  CustomBottomNavigationBar({required this.currentPage, required this.onPageChanged});
+  const CustomBottomNavigationBar(
+      {super.key, required this.currentPage, required this.onPageChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
+      // the stack is used to make navigation items and upper blue line on item menu
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -37,23 +40,25 @@ class CustomBottomNavigationBar extends StatelessWidget {
             currentIndex: currentPage,
             onTap: onPageChanged,
             items: [
+              // these items comes as function to implement animation
               _buildAnimatedPaddedNavigationBarItem(
-                icon: Icon(Icons.home_rounded),
+                icon: const Icon(Icons.home_rounded),
                 label: "",
                 index: 0,
               ),
+              // these items comes as function to implement animation
               _buildAnimatedPaddedNavigationBarItem(
-                icon: Icon(Icons.shop),
+                icon: const Icon(Icons.shop),
                 label: "",
                 index: 1,
               ),
               _buildAnimatedPaddedNavigationBarItem(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 label: "",
                 index: 2,
               ),
               _buildAnimatedPaddedNavigationBarItem(
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
                 label: "",
                 index: 3,
               ),
@@ -62,6 +67,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             unselectedItemColor: Pallete.blackColor,
             // Set the color for the selected item
           ),
+          // this widget contains AnimatedContainer to make menu item animated
           Positioned(
             top: 0,
             right: 0,
@@ -90,6 +96,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
+  // this is the widget that makes animation
   BottomNavigationBarItem _buildAnimatedPaddedNavigationBarItem({
     required Icon icon,
     required String label,

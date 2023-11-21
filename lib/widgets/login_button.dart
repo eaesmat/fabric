@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class LoginButton extends StatelessWidget {
+  // All of them comes from the login screen to handle buttons and their on click events
   final Icon btnIcon;
   final LocaleText btnText;
   final Color bgColor;

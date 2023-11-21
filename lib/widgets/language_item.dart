@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class LanguageItem extends StatelessWidget {
+  // these comes from language screen to make language names and its icons
   final String? languageName;
   final String? languageAbr;
   const LanguageItem(

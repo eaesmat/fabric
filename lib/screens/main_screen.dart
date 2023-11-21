@@ -14,7 +14,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentPage = 0;
-  List<Widget> pages = [const HomeScreen(), const FabricScreen(), const SettingScreen(), const DrawerScreen()];
+  List<Widget> pages = [
+    const HomeScreen(),
+    const FabricScreen(),
+    const SettingScreen(),
+    const DrawerScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +32,8 @@ class _MainScreenState extends State<MainScreen> {
               children: pages,
             ),
           ),
+
+          //This widget comes to display bottom navigation and control page routes
           CustomBottomNavigationBar(
             currentPage: currentPage,
             onPageChanged: (index) {

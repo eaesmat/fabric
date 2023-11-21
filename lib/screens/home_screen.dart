@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -17,8 +17,6 @@ class HomeScreen extends StatelessWidget {
       body: const Center(
         child: Text("This is the Home screen!"),
       ),
-      //BottomNavigation comes from its widget class to display bottomNavigationBar
-      // bottomNavigationBar: const BottomNavigation(),
     );
   }
 }

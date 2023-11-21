@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class TextsField extends StatefulWidget {
+  // All of them comes from other widgets where TextsFields is used
   final TextEditingController? controller;
   final LocaleText lblText;
   const TextsField(
@@ -14,6 +15,8 @@ class TextsField extends StatefulWidget {
 }
 
 class _TextsFieldState extends State<TextsField> {
+  // These vars are used for Auto-Direction
+  // package to make text fields direction according to the language of keyboard
   String text = "";
   bool isRTL = false;
   @override
@@ -21,7 +24,7 @@ class _TextsFieldState extends State<TextsField> {
     final size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal:  size.width * 0.03),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
       child: AutoDirection(
         onDirectionChange: (isRTL) {
           setState(() {
@@ -38,27 +41,33 @@ class _TextsFieldState extends State<TextsField> {
           controller: widget.controller!,
           decoration: InputDecoration(
             label: widget.lblText,
-            labelStyle: const TextStyle(color: Pallete.blueColor, fontSize: 14),
+            labelStyle: const TextStyle(
+              color: Pallete.blueColor,
+              fontSize: 14,
+            ),
             contentPadding: const EdgeInsets.symmetric(
-                horizontal: 10), // Adjust the value as needed
+              horizontal: 10,
+            ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
               borderSide: const BorderSide(
-                color: Pallete.blueColor, // Assuming Pallete.blueColor is defined
+                color: Pallete.blueColor,
                 width: 1.0,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
               borderSide: const BorderSide(
-                color: Pallete.blueColor, // Assuming Pallete.blueColor is defined
+                color:
+                    Pallete.blueColor,
                 width: 1.0,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
               borderSide: BorderSide(
-                color: Pallete.redColor, // Assuming Pallete.blueColor is defined
+                color:
+                    Pallete.redColor,
                 width: 1.0,
               ),
             ),
