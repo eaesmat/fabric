@@ -1,3 +1,4 @@
+import 'package:fabricproject/screens/home_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/login_button.dart';
 import 'package:fabricproject/widgets/login_sreen_appbar.dart';
@@ -11,12 +12,24 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // form text controllers will be assign to the button constructor
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final size = MediaQuery.of(context).size;
+    // function to be called on button click of widget button
+    void onClick() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Pallete.blueColor,
+            // login screen app bar comes as a widget here
             title: const LoginScreenAppBar()),
         body: Stack(
           children: [
@@ -72,13 +85,14 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  const LoginButton(
-                    btnIcon: Icon(Icons.login),
-                    btnText: LocaleText(
+                  LoginButton(
+                    btnIcon: const Icon(Icons.login),
+                    btnText: const LocaleText(
                       'signin',
                       style: TextStyle(fontSize: 12),
                     ),
                     bgColor: Pallete.blueColor,
+                    callBack: onClick,
                   ),
                   SizedBox(
                     height: size.height * 0.03,
@@ -95,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                       'sign_in_with_google',
                       style: TextStyle(fontSize: 12),
                     ),
-                    bgColor: Pallete.redColor,
+                    bgColor: Pallete.redColor, 
                   ),
                   SizedBox(
                     height: size.height * 0.01,
