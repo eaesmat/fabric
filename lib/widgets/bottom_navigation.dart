@@ -2,7 +2,8 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({super.key});
+  final Function(int) onTabTapped;
+  const BottomNavigation({super.key, required this.onTabTapped});
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -34,11 +35,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         padding: EdgeInsets.symmetric(horizontal: size.width * .024),
         itemBuilder: (context, index) => InkWell(
           onTap: () {
-            setState(
-              () {
-                currentIndex = index;
-              },
-            );
+            widget.onTabTapped(index);
           },
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
