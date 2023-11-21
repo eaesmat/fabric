@@ -1,4 +1,4 @@
-import 'package:fabricproject/screens/home_screen.dart';
+import 'package:fabricproject/screens/main_scree..dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/login_button.dart';
 import 'package:fabricproject/widgets/login_sreen_appbar.dart';
@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>  HomeScreen(),
+          builder: (context) =>  MainScreen(),
         ),
       );
     }

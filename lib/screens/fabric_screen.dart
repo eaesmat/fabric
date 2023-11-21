@@ -22,7 +22,7 @@ class _FabricScreenState extends State<FabricScreen> {
         centerTitle: true,
       ),
       body: const Center(
-        child: Text("This is the home screen!"),
+        child: Text("This is the Fabric screen!"),
       ),
       //BottomNavigation comes from its widget class to display bottomNavigationBar
       // bottomNavigationBar: const BottomNavigation(),

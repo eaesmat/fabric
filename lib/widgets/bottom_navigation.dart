@@ -1,83 +1,108 @@
+// bottom_navigation.dart
+
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
-class BottomNavigation extends StatefulWidget {
-  final Function(int) onTabTapped;
-  const BottomNavigation({super.key, required this.onTabTapped});
+class CustomBottomNavigationBar extends StatelessWidget {
+  final int currentPage;
+  final Function(int) onPageChanged;
 
-  @override
-  State<BottomNavigation> createState() => _BottomNavigationState();
-}
-
-class _BottomNavigationState extends State<BottomNavigation> {
-  var currentIndex = 0;
+  CustomBottomNavigationBar({required this.currentPage, required this.onPageChanged});
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
 
     return Container(
-      // margin: EdgeInsets.only(left: size.width * 0.02, right: size.width * 0.02),
-      height: size.width * .155,
       decoration: BoxDecoration(
         color: Pallete.whiteColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.15),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, -2),
           ),
         ],
       ),
-      child: ListView.builder(
-        itemCount: 4,
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: size.width * .024),
-        itemBuilder: (context, index) => InkWell(
-          onTap: () {
-            widget.onTabTapped(index);
-          },
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 1500),
-                curve: Curves.fastLinearToSlowEaseIn,
-                margin: EdgeInsets.only(
-                  bottom: index == currentIndex ? 0 : size.width * .029,
-                  right: size.width * .04,
-                  left: size.width * .04,
-                ),
-                width: size.width * .160,
-                height: index == currentIndex ? size.width * .014 : 0,
-                decoration: const BoxDecoration(
-                  color: Pallete.blueColor,
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(10),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Pallete.whiteColor,
+            elevation: 0,
+            unselectedFontSize: 0,
+            selectedFontSize: 0,
+            iconSize: 25,
+            currentIndex: currentPage,
+            onTap: onPageChanged,
+            items: [
+              _buildAnimatedPaddedNavigationBarItem(
+                icon: Icon(Icons.home_rounded),
+                label: "",
+                index: 0,
+              ),
+              _buildAnimatedPaddedNavigationBarItem(
+                icon: Icon(Icons.shop),
+                label: "",
+                index: 1,
+              ),
+              _buildAnimatedPaddedNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: "",
+                index: 2,
+              ),
+              _buildAnimatedPaddedNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: "",
+                index: 3,
+              ),
+            ],
+            selectedItemColor: Pallete.blueColor,
+            unselectedItemColor: Pallete.blackColor,
+            // Set the color for the selected item
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            left: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                4,
+                (index) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  width: size.width * .160,
+                  height: index == currentPage ? size.width * .014 : 0,
+                  decoration: const BoxDecoration(
+                    color: Pallete.blueColor,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(10),
+                    ),
                   ),
                 ),
               ),
-              Icon(
-                listOfIcons[index],
-                size: size.width * .076,
-                color: index == currentIndex
-                    ? Pallete.blueColor
-                    : Pallete.blackColor,
-              ),
-              SizedBox(height: size.width * .03),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  List<IconData> listOfIcons = [
-    Icons.home_rounded,
-    Icons.shop_2_rounded,
-    Icons.settings,
-    Icons.menu_rounded,
-  ];
+  BottomNavigationBarItem _buildAnimatedPaddedNavigationBarItem({
+    required Icon icon,
+    required String label,
+    required int index,
+  }) {
+    return BottomNavigationBarItem(
+      icon: AnimatedPadding(
+        padding: EdgeInsets.only(bottom: index == currentPage ? 8 : 0),
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeInOut,
+        child: icon,
+      ),
+      label: label,
+    );
+  }
 }

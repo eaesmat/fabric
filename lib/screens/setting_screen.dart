@@ -22,7 +22,7 @@ class _SettingScreenState extends State<SettingScreen> {
         centerTitle: true,
       ),
       body: const Center(
-        child: Text("This is the home screen!"),
+        child: Text("This is the Settings screen!"),
       ),
       //BottomNavigation comes from its widget class to display bottomNavigationBar
       // bottomNavigationBar: const BottomNavigation(),

@@ -1,3 +1,4 @@
+import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
 var currentIndex = 0;
@@ -15,6 +16,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        title: const Text("Drawer", style: TextStyle(color: Pallete.blackColor),),
       ),
       body: const Center(
         child: Text("This is the drawer screen!"),
