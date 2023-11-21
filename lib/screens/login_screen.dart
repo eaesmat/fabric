@@ -1,7 +1,7 @@
 import 'package:fabricproject/screens/main_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/login_button.dart';
-import 'package:fabricproject/widgets/login_sreen_appbar.dart';
+import 'package:fabricproject/widgets/login_screen_appbar.dart';
 import 'package:fabricproject/widgets/texts_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>  MainScreen(),
+          builder: (context) => const MainScreen(),
         ),
       );
     }
@@ -57,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                     child: SvgPicture.asset(
                       'assets/images/logo.svg',
                       width: size.width * 0.4,
+                      // ignore: deprecated_member_use
                       color: Pallete.blueColor,
                     ),
                   ),
