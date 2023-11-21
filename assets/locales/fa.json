@@ -1,4 +1,14 @@
 {
     "welcome" : "خوش آمدی",
-    "language": "زبان"
+    "language": "زبان",
+    "email" : "ایمیل آدرس",
+    "password" : "رمز",
+    "forgotـpassword": "رمز تان را فراموش کردین ?",
+    "signin" : "ورود",
+    "sign_in_with_google" : "ورود با گوگل",
+    "sign_in_with_facebook" : "ورود با فیسبوک"
+
+
+
+
 }

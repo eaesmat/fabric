@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Pallete {
-  // Colors
+  // Colors F3E8E2
+  static const whiteColor = Color.fromRGBO(243, 233, 226, 1);
+  static const dividerColor = Color.fromARGB(255, 215, 220, 222);
   static const blackColor = Color.fromRGBO(1, 1, 1, 1); // primary color
   static const greyColor = Color.fromRGBO(26, 39, 45, 1); // secondary color
   static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
-  static const whiteColor = Colors.white;
+  static const blueColor = Color.fromRGBO(0, 104, 177, 1);
   static var redColor = Colors.red.shade500;
-  static var blueColor = Colors.blue.shade300;
 
   // Themes
   static var darkModeAppTheme = ThemeData.dark().copyWith(
+    textTheme: ThemeData.light().textTheme.apply(
+          fontFamily: 'Bahij-Pashto',
+        ),
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
@@ -23,7 +27,8 @@ class Pallete {
       backgroundColor: drawerColor,
     ),
     primaryColor: redColor,
-    backgroundColor: drawerColor, // will be used as alternative background color
+    backgroundColor:
+        drawerColor, // will be used as alternative background color
   );
 
   static var lightModeAppTheme = ThemeData.light().copyWith(

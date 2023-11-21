@@ -1,4 +1,10 @@
 {
     "welcome" : "Welcome",
-    "language": "Language"
+    "language": "Language",
+    "email" : "Email",
+    "password" : "Password",
+    "forgotـpassword": "Forgot Password?",
+    "signin" : "Sign in",
+    "sign_in_with_google" : "Sign in with Google account",
+    "sign_in_with_facebook" : "Sign in with Facebook account"
 }
