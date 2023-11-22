@@ -36,6 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: SvgPicture.asset(
           'assets/images/logo.svg',
           width: size.width * 0.8,
+          // ignore: deprecated_member_use
           color: Pallete.whiteColor,
         )),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class LanguageItem extends StatelessWidget {
+  // these comes from language screen to make language names and its icons
   final String? languageName;
   final String? languageAbr;
   const LanguageItem(
@@ -12,7 +13,7 @@ class LanguageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(vertical: 0.001, horizontal: 10),
+      contentPadding: const EdgeInsets.symmetric(vertical: 0.001, horizontal: 10),
       title: Row(
         children: [
           if (languageAbr == 'en')

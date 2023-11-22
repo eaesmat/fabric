@@ -30,6 +30,7 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
           Divider(
             color: Pallete.dividerColor,
           ),
+          // language item is widget class fo ListTile accepts the following params as constructor
           LanguageItem(languageAbr: 'en', languageName: 'English'),
           Divider(
             color: Pallete.dividerColor,
