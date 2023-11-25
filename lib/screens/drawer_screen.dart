@@ -180,6 +180,24 @@ class DrawerScreen extends StatelessWidget {
               tileTitle: LocaleText('hamid_account'),
             ),
 // Khalid accounts section ends
+// Hamid accounts section
+            const ListTileWidget(
+              lead: FaIcon(
+                FontAwesomeIcons.peopleArrows,
+                size: 20,
+              ),
+              tileTitle: LocaleText('customers_accounts'),
+            ),
+// Khalid accounts section ends
+// Hamid Forex
+            const ListTileWidget(
+              lead: FaIcon(
+                FontAwesomeIcons.wallet,
+                size: 20,
+              ),
+              tileTitle: LocaleText('sarafi'),
+            ),
+// Khalid Forex section ends
           ],
         ),
       ),
