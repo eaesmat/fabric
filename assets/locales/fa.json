@@ -1,29 +1,24 @@
 {
-    "welcome" : "خوش آمدی",
-    "language": "زبان",
-    "email" : "ایمیل آدرس",
-    "password" : "رمز",
-    "forgotـpassword": "رمز تان را فراموش کردین ?",
-    "signin" : "ورود",
-    "sign_in_with_google" : "ورود با گوگل",
-    "sign_in_with_facebook" : "ورود با فیسبوک",
-    "edit_profile" : "ویرایش نمایه",
-    "sarafi" : "صرافی",
-    "general_settings" :"تنظیمات عمومی",
-    "internal_companies" :"شرکت های داخلی",
-    "fabric" :"تکه",
-    "ٰvendor_companies" :"شرکت های خارجی",
-    "ٰtransport" :"حمل و نقل",
-    "ٰwarehouses" :"گدامها",
-    "customers" : "مشتریان"
-
-
-
-
-
-
-
-
-
-
+  "welcome": "خوش آمدی",
+  "language": "زبان",
+  "email": "ایمیل آدرس",
+  "password": "رمز",
+  "forgotـpassword": "رمز تان را فراموش کردین ?",
+  "signin": "ورود",
+  "sign_in_with_google": "ورود با گوگل",
+  "sign_in_with_facebook": "ورود با فیسبوک",
+  "edit_profile": "ویرایش نمایه",
+  "sarafi": "صرافی",
+  "general_settings": "تنظیمات عمومی",
+  "internal_companies": "شرکت های داخلی",
+  "fabric": "تکه",
+  "ٰvendor_companies": "شرکت های خارجی",
+  "ٰtransport": "حمل و نقل",
+  "ٰwarehouses": "گدامها",
+  "customers": "مشتریان",
+  "desires": "خواسته ها",
+  "chineseـaccounts": "حساب های چینی",
+  "buying_for_others": "خرید برای دیگران",
+  "cash_loan": "قرضه های نقدی",
+  "javid_account" : "حساب های جاوید"
 }

@@ -15,14 +15,21 @@ class DrawerExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      shape: const Border(),
-      childrenPadding: const EdgeInsets.only(left: 10, right: 10),
-      iconColor: Pallete.blueColor,
-      leading: lead,
-      title: expansionTitle,
+    return Column(
       children: [
-        ...children,
+        ExpansionTile(
+          shape: const Border(),
+          childrenPadding: const EdgeInsets.only(left: 10, right: 10),
+          iconColor: Pallete.blueColor,
+          leading: lead,
+          title: expansionTitle,
+          children: [
+            ...children,
+          ],
+        ),
+        const Divider(
+          thickness: .3,
+        ),
       ],
     );
   }

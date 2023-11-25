@@ -9,15 +9,16 @@
   "sign_in_with_facebook": "د فیسبوک سره ګډون کول",
   "edit_profile": "د مخ پاڼې سمون",
   "sarafi": "صرافي ",
-  "general_settings" :"عمومي ترتیبات",
-  "internal_companies" :"داخلي شرکتونه",
-  "fabric" :"ټوکر",
-  "ٰvendor_companies" :"بهرني شرکتونه",
-  "ٰtransport" :"ټرانسپورټ",
-  "ٰwarehouses" :"ګودامونه",
-  "customers" : "پیرودونکي"
-
-
-
-
+  "general_settings": "عمومي ترتیبات",
+  "internal_companies": "داخلي شرکتونه",
+  "fabric": "ټوکر",
+  "ٰvendor_companies": "بهرني شرکتونه",
+  "ٰtransport": "ټرانسپورټ",
+  "ٰwarehouses": "ګودامونه",
+  "customers": "پیرودونکي",
+  "desires": " غوښتنې",
+  "chineseـaccounts": "چینایي حسابونه",
+  "buying_for_others": "د نورو لپاره پیرود",
+  "cash_loan": "نغدي پور",
+  "javid_account" : "د جاوید حسابونه"
 }

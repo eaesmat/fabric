@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ListTileWidget extends StatelessWidget {
+class ListTileItemWidget extends StatelessWidget {
   final Widget lead;
   final Widget tileTitle;
   final Widget? tileSubTitle;
   final Widget? trail;
   final Function? callBack;
 
-  const ListTileWidget({
+  const ListTileItemWidget({
     Key? key,
     required this.lead,
     required this.tileTitle,
@@ -30,7 +30,9 @@ class ListTileWidget extends StatelessWidget {
             subtitle: tileSubTitle,
             trailing: trail,
           ),
-          const Divider(thickness: 0.3,)
+          const Divider(
+            thickness: 0.1,
+          )
         ],
       ),
     );

@@ -12,24 +12,31 @@ class LanguageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: [
-          if (languageAbr == 'en')
-            Flag.fromCode(FlagsCode.US, height: 20, width: 20),
-          if (languageAbr == 'ps' || languageAbr == 'fa')
-            Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
-          const SizedBox(
-            width: 10,
+    return Column(
+      children: [
+        ListTile(
+          title: Row(
+            children: [
+              if (languageAbr == 'en')
+                Flag.fromCode(FlagsCode.US, height: 20, width: 20),
+              if (languageAbr == 'ps' || languageAbr == 'fa')
+                Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                languageName!,
+              ),
+            ],
           ),
-          Text(
-            languageName!,
-          ),
-        ],
-      ),
-      onTap: () {
-        LocaleNotifier.of(context)?.change(languageAbr!);
-      },
+          onTap: () {
+            LocaleNotifier.of(context)?.change(languageAbr!);
+          },
+        ),
+        const Divider(
+          thickness: .1,
+        )
+      ],
     );
   }
 }
