@@ -1,4 +1,5 @@
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/drop_dwon.dart';
 import 'package:flutter/material.dart';
 
 var currentIndex = 0;
@@ -22,10 +23,12 @@ class _SettingScreenState extends State<SettingScreen> {
         centerTitle: true,
       ),
       body: const Center(
-        child: Text("This is the Settings screen!"),
+        child:  DropDown(),
       ),
       //BottomNavigation comes from its widget class to display bottomNavigationBar
       // bottomNavigationBar: const BottomNavigation(),
     );
   }
 }
+
+

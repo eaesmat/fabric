@@ -18,10 +18,10 @@ class LoginScreenAppBar extends StatelessWidget {
           ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0)),
           label: const LocaleText(
             "language",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Pallete.whiteColor),
           ),
           icon: const Icon(
-            Icons.language_outlined,
+            Icons.language_outlined, color: Pallete.whiteColor,
           ),
           onPressed: () => {
             Navigator.push(context,

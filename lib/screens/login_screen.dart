@@ -73,7 +73,9 @@ class LoginScreen extends StatelessWidget {
                   ),
                   TextsField(
                     controller: passwordController,
-                    lblText: const LocaleText('password'),
+                    lblText: const LocaleText(
+                      'password',
+                    ),
                   ),
                   SizedBox(
                     height: size.height * 0.01,
@@ -87,10 +89,10 @@ class LoginScreen extends StatelessWidget {
                     height: size.height * 0.01,
                   ),
                   LoginButton(
-                    btnIcon: const Icon(Icons.login),
+                    btnIcon: const Icon(Icons.login, color: Pallete.whiteColor),
                     btnText: const LocaleText(
                       'signin',
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 12, color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     callBack: onClick,
@@ -110,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                       'sign_in_with_google',
                       style: TextStyle(fontSize: 12),
                     ),
-                    bgColor: Pallete.redColor, 
+                    bgColor: Pallete.redColor,
                   ),
                   SizedBox(
                     height: size.height * 0.01,

@@ -1,6 +1,6 @@
 // home_screen.dart
 
-import 'package:fabricproject/screens/drawer_scree.dart';
+import 'package:fabricproject/screens/drawer_screen.dart';
 import 'package:fabricproject/screens/fabric_screen.dart';
 import 'package:fabricproject/screens/home_screen.dart';
 import 'package:fabricproject/screens/setting_screen.dart';
@@ -20,32 +20,13 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     const FabricScreen(),
     const SettingScreen(),
-    const DrawerScreen()
+    const DrawerScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: IndexedStack(
-              index: currentPage,
-              children: pages,
-            ),
-          ),
-
-          //This widget comes to display bottom navigation and control page routes
-          CustomBottomNavigationBar(
-            currentPage: currentPage,
-            onPageChanged: (index) {
-              setState(() {
-                currentPage = index;
-              });
-            },
-          ),
-        ],
-      ),
+    return const Scaffold(
+      body:  CustomBottomNavigation(),
     );
   }
 }

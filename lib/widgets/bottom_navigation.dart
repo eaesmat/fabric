@@ -1,115 +1,97 @@
-// bottom_navigation.dart
-
+import 'package:fabricproject/screens/drawer_screen.dart';
+import 'package:fabricproject/screens/fabric_screen.dart';
+import 'package:fabricproject/screens/home_screen.dart';
+import 'package:fabricproject/screens/setting_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
+import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
-  // these comes from main screen to toggle pages
-  final int currentPage;
-  final Function(int) onPageChanged;
+class CustomBottomNavigation extends StatefulWidget {
+  const CustomBottomNavigation({super.key});
 
-  const CustomBottomNavigationBar(
-      {super.key, required this.currentPage, required this.onPageChanged});
+  @override
+  State<CustomBottomNavigation> createState() => _CustomBottomNavigationState();
+}
+
+class _CustomBottomNavigationState extends State<CustomBottomNavigation> {
+  late PageController _pageController;
+  int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: selectedIndex);
+  }
+
+  void onButtonPressed(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    _pageController.animateToPage(selectedIndex,
+        duration: const Duration(milliseconds: 400), curve: Curves.easeOutQuad);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Pallete.whiteColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      // the stack is used to make navigation items and upper blue line on item menu
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Pallete.whiteColor,
-            elevation: 0,
-            unselectedFontSize: 0,
-            selectedFontSize: 0,
-            iconSize: 25,
-            currentIndex: currentPage,
-            onTap: onPageChanged,
-            items: [
-              // these items comes as function to implement animation
-              _buildAnimatedPaddedNavigationBarItem(
-                icon: const Icon(Icons.home_rounded),
-                label: "",
-                index: 0,
-              ),
-              // these items comes as function to implement animation
-              _buildAnimatedPaddedNavigationBarItem(
-                icon: const Icon(Icons.shop),
-                label: "",
-                index: 1,
-              ),
-              _buildAnimatedPaddedNavigationBarItem(
-                icon: const Icon(Icons.settings),
-                label: "",
-                index: 2,
-              ),
-              _buildAnimatedPaddedNavigationBarItem(
-                icon: const Icon(Icons.menu),
-                label: "",
-                index: 3,
-              ),
-            ],
-            selectedItemColor: Pallete.blueColor,
-            unselectedItemColor: Pallete.blackColor,
-            // Set the color for the selected item
-          ),
-          // this widget contains AnimatedContainer to make menu item animated
-          Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(
-                4,
-                (index) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  width: size.width * .160,
-                  height: index == currentPage ? size.width * .014 : 0,
-                  decoration: const BoxDecoration(
-                    color: Pallete.blueColor,
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              children: _listOfWidget,
             ),
           ),
         ],
       ),
-    );
-  }
-
-  // this is the widget that makes animation
-  BottomNavigationBarItem _buildAnimatedPaddedNavigationBarItem({
-    required Icon icon,
-    required String label,
-    required int index,
-  }) {
-    return BottomNavigationBarItem(
-      icon: AnimatedPadding(
-        padding: EdgeInsets.only(bottom: index == currentPage ? 8 : 0),
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeInOut,
-        child: icon,
+      bottomNavigationBar: SlidingClippedNavBar(
+        backgroundColor: Pallete.whiteColor,
+        onButtonPressed: onButtonPressed,
+        iconSize: 30,
+        activeColor: Pallete.blueColor,
+        inactiveColor: Pallete.greyColor,
+        selectedIndex: selectedIndex,
+        barItems: <BarItem>[
+          BarItem(
+            icon: Icons.home_filled,
+            title: 'Home',
+          ),
+          BarItem(
+            icon: Icons.shopping_basket_sharp,
+            title: 'Fabric',
+          ),
+          BarItem(
+            icon: Icons.settings_applications_rounded,
+            title: 'Setting',
+          ),
+          BarItem(
+            icon: Icons.tune_rounded,
+            title: 'More',
+          ),
+        ],
       ),
-      label: label,
     );
   }
 }
+
+// icon size:24 for fontAwesomeIcons
+// icons size: 30 for MaterialIcons
+
+List<Widget> _listOfWidget = <Widget>[
+  Container(
+    alignment: Alignment.center,
+    child: const HomeScreen(),
+  ),
+  Container(
+    alignment: Alignment.center,
+    child: const FabricScreen(),
+  ),
+  Container(
+    alignment: Alignment.center,
+    child: const SettingScreen(),
+  ),
+  Container(
+    alignment: Alignment.center,
+    child: const DrawerScreen(),
+  ),
+];
