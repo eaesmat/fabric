@@ -157,12 +157,29 @@ class DrawerScreen extends StatelessWidget {
             ),
 // Transport ends
 // Warehouse starts
-            ExpansionTileWidget(
-              lead: const Icon(Icons.warehouse),
-              expansionTitle: const LocaleText("warehouse_goods"),
-              children: [],
+            const ExpansionTileWidget(
+              lead: FaIcon(
+                FontAwesomeIcons.warehouse,
+                size: 20,
+              ),
+              expansionTitle: LocaleText("warehouse_goods"),
+              children: [
+                ListTileItemWidget(
+                  lead: Icon(Icons.warehouse),
+                  tileTitle: LocaleText("sarai"),
+                ),
+                ListTileItemWidget(
+                    lead: Icon(Icons.list),
+                    tileTitle: LocaleText("list_of_items"))
+              ],
             ),
 //Warehouse ends
+// Hamid accounts section
+            const ListTileWidget(
+              lead: Icon(Icons.person),
+              tileTitle: LocaleText('hamid_account'),
+            ),
+// Khalid accounts section ends
           ],
         ),
       ),

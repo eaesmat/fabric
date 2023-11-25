@@ -21,7 +21,11 @@
   "buying_for_others": "Buying for Others",
   "cash_loan": "Cash Loan",
   "khalid_account" : "Khalid's Accounts",
+  "hamid_account" : "Hamid's Accounts",
   "goods_on_the_way" : "Goods on the Way",
-  "warehouse_goods" : " Warehouse Commodity"
+  "warehouse_goods" : " Warehouse Commodities",
+  "sarai" : "Sarai",
+  "list_of_items" : "List of Goods"
+
 
 }

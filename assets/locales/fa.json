@@ -21,7 +21,12 @@
   "buying_for_others": "خرید برای دیگران",
   "cash_loan": "قرضه های نقدی",
   "khalid_account": "حساب های خالد",
+  "hamid_account": "حساب های حامد",
   "goods_on_the_way": "مال در راه",
-  "warehouse_goods" : "اجناس گدام"
+  "warehouse_goods" : "اجناس گدام",
+  "sarai" : "سرای ها",
+  "list_of_items" : "لیست اجناس"
+
+
 
 }
