@@ -1,7 +1,10 @@
 // drawer_widget.dart
 
+import 'package:fabricproject/widgets/drawer/expansion_tile.dart';
 import 'package:fabricproject/widgets/language_item.dart';
+import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({Key? key}) : super(key: key);
@@ -11,49 +14,38 @@ class DrawerScreen extends StatelessWidget {
     return const SafeArea(
       child: Column(
         children: [
-          ListTile(
-            leading: CircleAvatar(child: Icon(Icons.person_2_rounded)),
-            title: Text(
-              "Esmatullah Ahmadzai",
-              style: TextStyle(fontWeight: FontWeight.bold),
+          ListTileWidget(
+            lead: CircleAvatar(
+              child: Icon(Icons.person_2_rounded),
             ),
-            subtitle: Text("ea.ahmadzai2020@gmail.com"),
-            trailing: Icon(Icons.notification_add),
+            tileTitle: Text("Esmatullah Ahamdzai"),
+            tileSubTitle: Text("ea.ahmadzai2020@gmail.com"),
+            trail: Icon(Icons.notification_add),
           ),
           Divider(
             thickness: .3,
           ),
-          ListTile(
-            minVerticalPadding: 0, // else 2px still present
-            dense: true, // else 2px still present
-            visualDensity: VisualDensity.compact, // Else theme will be use
-            contentPadding: EdgeInsets.symmetric(horizontal: 20),
-
-            leading: Icon(
-              Icons.edit,
-              size: 16,
-            ),
-            title: Text(
-              "Edit Profile",
-              style: TextStyle(fontSize: 14),
-            ),
-            // trailing: Icon(
-            //   Icons.ads_click,
-            //   size: 16,
-            // ),
+          ListTileWidget(
+            lead: Icon(Icons.edit),
+            tileTitle: LocaleText('edit_profile'),
           ),
           Divider(
             thickness: .3,
           ),
-          ExpansionTile(
-            shape: Border(),
-            leading: Icon(Icons.language),
-            title: Text("Languages"),
-            childrenPadding: EdgeInsets.only(left: 10, right: 10),
-            // trailing: Icon(Icons.arrow_drop_down),
+          // expansion tile of app language
+          // this comes as a widget
+          DrawerLanguageExpansionTile(
+            lead: Icon(Icons.language),
+            expansionTitle: LocaleText('language'),
             children: [
               LanguageItem(languageAbr: 'en', languageName: 'English'),
+              Divider(
+                thickness: .1,
+              ),
               LanguageItem(languageAbr: 'fa', languageName: 'دری'),
+              Divider(
+                thickness: .1,
+              ),
               LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
             ],
           ),
@@ -65,6 +57,9 @@ class DrawerScreen extends StatelessWidget {
     );
   }
 }
+
+
+
 
 
  // Card(

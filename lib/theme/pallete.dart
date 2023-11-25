@@ -15,6 +15,13 @@ class Pallete {
     textTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'Bahij-Pashto',
         ),
+    listTileTheme: const ListTileThemeData(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      dense: true,
+      minLeadingWidth: 0,
+      minVerticalPadding: 0.0,
+      visualDensity: VisualDensity.compact, // Else theme will be use
+    ),
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
@@ -36,6 +43,14 @@ class Pallete {
     textTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'Bahij-Pashto',
         ),
+    listTileTheme: const ListTileThemeData(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      dense: true,
+      minLeadingWidth: 0,
+      minVerticalPadding: 0.0,
+      visualDensity: VisualDensity.compact, 
+      // Else theme will be use
+    ),
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(

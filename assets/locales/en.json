@@ -6,5 +6,6 @@
     "forgotـpassword": "Forgot Password?",
     "signin" : "Sign in",
     "sign_in_with_google" : "Sign in with Google account",
-    "sign_in_with_facebook" : "Sign in with Facebook account"
+    "sign_in_with_facebook" : "Sign in with Facebook account",
+    "edit_profile" : "Edit Profile"
 }
