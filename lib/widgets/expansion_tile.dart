@@ -1,12 +1,12 @@
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
-class DrawerExpansionTile extends StatelessWidget {
+class ExpansionTileWidget extends StatelessWidget {
   final Widget lead;
   final Widget expansionTitle;
   final List<Widget> children;
 
-  const DrawerExpansionTile({
+  const ExpansionTileWidget({
     Key? key,
     required this.children,
     required this.lead,

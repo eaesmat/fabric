@@ -27,6 +27,7 @@ class DrawerScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            // User profile
             const ListTileWidget(
               lead: CircleAvatar(
                 child: Icon(Icons.person_2_rounded),
@@ -35,15 +36,17 @@ class DrawerScreen extends StatelessWidget {
               tileSubTitle: Text("ea.ahmadzai2020@gmail.com"),
               trail: Icon(Icons.notification_add),
             ),
-
+// User profile ends
+// Edit profile
             const ListTileWidget(
               lead: Icon(Icons.edit),
               tileTitle: LocaleText('edit_profile'),
             ),
-
+//Edit Profile ends
             // expansion tile of app language
             // this comes as a widget
-            const DrawerExpansionTile(
+            /// Language section
+            const ExpansionTileWidget(
               lead: Icon(Icons.language),
               expansionTitle: LocaleText('language'),
               children: [
@@ -52,13 +55,56 @@ class DrawerScreen extends StatelessWidget {
                 LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
               ],
             ),
-
+// Language section ends
+// Khalid section
             const ListTileWidget(
               lead: Icon(Icons.person),
               tileTitle: LocaleText('khalid_account'),
             ),
+// Khalid section ends
 
-            const DrawerExpansionTile(
+// General Settings
+            ExpansionTileWidget(
+              lead: const Icon(Icons.settings),
+              expansionTitle: const LocaleText('general_settings'),
+              children: [
+                const Divider(
+                  thickness: 0.1,
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('sarafi'),
+                ),
+                ListTileItemWidget(
+                  lead: const Icon(Icons.settings),
+                  tileTitle: const LocaleText('internal_companies'),
+                  callBack: navigateCompaniesCallBack,
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('fabric'),
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('ٰvendor_companies'),
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('ٰtransport'),
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('ٰwarehouses'),
+                ),
+                const ListTileItemWidget(
+                  lead: Icon(Icons.settings),
+                  tileTitle: LocaleText('customers'),
+                ),
+              ],
+            ),
+            // General settings ends
+            //Desires section
+            const ExpansionTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.users,
                 size: 20,
@@ -97,45 +143,26 @@ class DrawerScreen extends StatelessWidget {
                 ),
               ],
             ),
-
-            DrawerExpansionTile(
-              lead: const Icon(Icons.settings),
-              expansionTitle: const LocaleText('general_settings'),
-              children: [
-                const Divider(
-                  thickness: 0.1,
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('sarafi'),
-                ),
-                ListTileItemWidget(
-                  lead: const Icon(Icons.settings),
-                  tileTitle: const LocaleText('internal_companies'),
-                  callBack: navigateCompaniesCallBack,
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('fabric'),
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('ٰvendor_companies'),
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('ٰtransport'),
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('ٰwarehouses'),
-                ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('customers'),
-                ),
-              ],
+// Desires section ends
+// Goods on the way
+            const ListTileWidget(
+              lead: Icon(Icons.local_shipping),
+              tileTitle: LocaleText("goods_on_the_way"),
             ),
+// Goods on the way ends
+// Transport
+            const ListTileWidget(
+              lead: FaIcon(FontAwesomeIcons.truckFast, size: 20),
+              tileTitle: LocaleText("ٰtransport"),
+            ),
+// Transport ends
+// Warehouse starts
+            ExpansionTileWidget(
+              lead: const Icon(Icons.warehouse),
+              expansionTitle: const LocaleText("warehouse_goods"),
+              children: [],
+            ),
+//Warehouse ends
           ],
         ),
       ),
