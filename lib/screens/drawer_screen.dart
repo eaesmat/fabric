@@ -55,7 +55,7 @@ class DrawerScreen extends StatelessWidget {
 
             const ListTileWidget(
               lead: Icon(Icons.person),
-              tileTitle: LocaleText('javid_account'),
+              tileTitle: LocaleText('khalid_account'),
             ),
 
             const DrawerExpansionTile(
