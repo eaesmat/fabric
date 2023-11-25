@@ -1,12 +1,12 @@
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
-class DrawerLanguageExpansionTile extends StatelessWidget {
-  final List<Widget> children;
+class DrawerExpansionTile extends StatelessWidget {
   final Widget lead;
   final Widget expansionTitle;
+  final List<Widget> children;
 
-  const DrawerLanguageExpansionTile({
+  const DrawerExpansionTile({
     Key? key,
     required this.children,
     required this.lead,
@@ -22,10 +22,7 @@ class DrawerLanguageExpansionTile extends StatelessWidget {
       leading: lead,
       title: expansionTitle,
       children: [
-        Divider(
-          thickness: .1,
-        ),
-        ...children, // Spread the list of children
+        ...children,
       ],
     );
   }

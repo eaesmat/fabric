@@ -1,14 +1,21 @@
 {
-    "welcome" : "ښه راغلاست ",
-    "language": "ژبه",
-    "email" : "بریښنالیک",
-    "password" : "پټ نوم",
-    "forgotـpassword": "پټ نوم مو هیر شوی ?",
-    "signin" : "ګډون",
-    "sign_in_with_google" : "د ګوګل سره ګډون کول",
-    "sign_in_with_facebook" : "د فیسبوک سره ګډون کول",
-    "edit_profile" : "د مخ پاڼې سمون"
-
+  "welcome": "ښه راغلاست ",
+  "language": "ژبه",
+  "email": "بریښنالیک",
+  "password": "پټ نوم",
+  "forgotـpassword": "پټ نوم مو هیر شوی ?",
+  "signin": "ګډون",
+  "sign_in_with_google": "د ګوګل سره ګډون کول",
+  "sign_in_with_facebook": "د فیسبوک سره ګډون کول",
+  "edit_profile": "د مخ پاڼې سمون",
+  "sarafi": "صرافي ",
+  "general_settings" :"عمومي ترتیبات",
+  "internal_companies" :"داخلي شرکتونه",
+  "fabric" :"ټوکر",
+  "ٰvendor_companies" :"بهرني شرکتونه",
+  "ٰtransport" :"ټرانسپورټ",
+  "ٰwarehouses" :"ګودامونه",
+  "customers" : "پیرودونکي"
 
 
 

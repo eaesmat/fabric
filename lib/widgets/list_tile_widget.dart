@@ -5,6 +5,7 @@ class ListTileWidget extends StatelessWidget {
   final Widget tileTitle;
   final Widget? tileSubTitle;
   final Widget? trail;
+  final Function? callBack;
 
   const ListTileWidget({
     Key? key,
@@ -12,15 +13,21 @@ class ListTileWidget extends StatelessWidget {
     required this.tileTitle,
     this.tileSubTitle,
     this.trail,
+    this.callBack,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: lead,
-      title: tileTitle,
-      subtitle: tileSubTitle,
-      trailing: trail,
+    return GestureDetector(
+      onTap: () {
+        callBack!();
+      },
+      child: ListTile(
+        leading: lead,
+        title: tileTitle,
+        subtitle: tileSubTitle,
+        trailing: trail,
+      ),
     );
   }
 }
