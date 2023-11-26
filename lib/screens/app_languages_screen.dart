@@ -28,20 +28,20 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
       body: const Column(
         children: [
           Divider(
-            color: Pallete.dividerColor,
+            thickness: .3,
           ),
           // language item is widget class fo ListTile accepts the following params as constructor
           LanguageItem(languageAbr: 'en', languageName: 'English'),
           Divider(
-            color: Pallete.dividerColor,
+            thickness: .3,
           ),
           LanguageItem(languageAbr: 'fa', languageName: 'دری'),
           Divider(
-            color: Pallete.dividerColor,
+            thickness: .3,
           ),
           LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
           Divider(
-            color: Pallete.dividerColor,
+            thickness: .3,
           ),
         ],
       ),
