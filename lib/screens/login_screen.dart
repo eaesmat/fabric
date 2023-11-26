@@ -56,7 +56,7 @@ class LoginScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: size.height * 0.03),
                     child: SvgPicture.asset(
                       'assets/images/logo.svg',
-                      width: size.width * 0.4,
+                      width: size.width * 0.6,
                       // ignore: deprecated_member_use
                       color: Pallete.blueColor,
                     ),

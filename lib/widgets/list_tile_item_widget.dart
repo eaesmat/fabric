@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ListTileItemWidget extends StatelessWidget {
+class ExpansionTileItemWidget extends StatelessWidget {
   final Widget lead;
   final Widget tileTitle;
   final Widget? tileSubTitle;
   final Widget? trail;
   final Function? callBack;
 
-  const ListTileItemWidget({
+  const ExpansionTileItemWidget({
     Key? key,
     required this.lead,
     required this.tileTitle,

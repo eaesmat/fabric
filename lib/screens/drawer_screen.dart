@@ -2,7 +2,6 @@
 
 import 'package:fabricproject/screens/companies_screen.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
-import 'package:fabricproject/widgets/language_item.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,75 +28,70 @@ class DrawerScreen extends StatelessWidget {
           children: [
             // User profile
             const ListTileWidget(
-              lead: CircleAvatar(
-                child: Icon(Icons.person_2_rounded),
+              lead: FaIcon(
+                FontAwesomeIcons.circleUser,
+                size: 20,
               ),
-              tileTitle: Text("Esmatullah Ahamdzai"),
+              tileTitle: Text(
+                "Esmatullah Ahamdzai",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               tileSubTitle: Text("ea.ahmadzai2020@gmail.com"),
               trail: Icon(Icons.notification_add),
             ),
 // User profile ends
-// Edit profile
-            const ListTileWidget(
-              lead: Icon(Icons.edit),
-              tileTitle: LocaleText('edit_profile'),
-            ),
-//Edit Profile ends
-            // expansion tile of app language
-            // this comes as a widget
-            /// Language section
-            const ExpansionTileWidget(
-              lead: Icon(Icons.language),
-              expansionTitle: LocaleText('language'),
-              children: [
-                LanguageItem(languageAbr: 'en', languageName: 'English'),
-                LanguageItem(languageAbr: 'fa', languageName: 'دری'),
-                LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
-              ],
-            ),
-// Language section ends
+
 // Khalid section
             const ListTileWidget(
-              lead: Icon(Icons.person),
+              lead: FaIcon(
+                FontAwesomeIcons.user,
+                size: 20,
+              ),
               tileTitle: LocaleText('khalid_account'),
             ),
 // Khalid section ends
 
 // General Settings
             ExpansionTileWidget(
-              lead: const Icon(Icons.settings),
+              lead: FaIcon(
+                FontAwesomeIcons.gear,
+                size: 20,
+              ),
               expansionTitle: const LocaleText('general_settings'),
               children: [
                 const Divider(
                   thickness: 0.1,
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
+                const ExpansionTileItemWidget(
+                  lead: FaIcon(FontAwesomeIcons.wallet, size: 20),
                   tileTitle: LocaleText('sarafi'),
                 ),
-                ListTileItemWidget(
-                  lead: const Icon(Icons.settings),
+                ExpansionTileItemWidget(
+                  lead: const FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
                   tileTitle: const LocaleText('internal_companies'),
                   callBack: navigateCompaniesCallBack,
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
-                  tileTitle: LocaleText('fabric'),
+                ExpansionTileItemWidget(
+                  lead: Image.asset(
+                    'assets/images/fabricIcon.png',
+                    height: 23,
+                  ),
+                  tileTitle: const LocaleText('fabric'),
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
+                const ExpansionTileItemWidget(
+                  lead: FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
                   tileTitle: LocaleText('ٰvendor_companies'),
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
+                const ExpansionTileItemWidget(
+                  lead: Icon(Icons.local_shipping),
                   tileTitle: LocaleText('ٰtransport'),
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
+                const ExpansionTileItemWidget(
+                  lead: Icon(Icons.warehouse),
                   tileTitle: LocaleText('ٰwarehouses'),
                 ),
-                const ListTileItemWidget(
-                  lead: Icon(Icons.settings),
+                const ExpansionTileItemWidget(
+                  lead: FaIcon(FontAwesomeIcons.users, size: 20),
                   tileTitle: LocaleText('customers'),
                 ),
               ],
@@ -114,7 +108,7 @@ class DrawerScreen extends StatelessWidget {
                 Divider(
                   thickness: 0.1,
                 ),
-                ListTileItemWidget(
+                ExpansionTileItemWidget(
                   lead: FaIcon(
                     FontAwesomeIcons.circleDollarToSlot,
                     size: 20,
@@ -123,7 +117,7 @@ class DrawerScreen extends StatelessWidget {
                     'chineseـaccounts',
                   ),
                 ),
-                ListTileItemWidget(
+                ExpansionTileItemWidget(
                   lead: FaIcon(
                     FontAwesomeIcons.circleDollarToSlot,
                     size: 20,
@@ -132,7 +126,7 @@ class DrawerScreen extends StatelessWidget {
                     'buying_for_others',
                   ),
                 ),
-                ListTileItemWidget(
+                ExpansionTileItemWidget(
                   lead: FaIcon(
                     FontAwesomeIcons.circleDollarToSlot,
                     size: 20,
@@ -164,11 +158,11 @@ class DrawerScreen extends StatelessWidget {
               ),
               expansionTitle: LocaleText("warehouse_goods"),
               children: [
-                ListTileItemWidget(
+                ExpansionTileItemWidget(
                   lead: Icon(Icons.warehouse),
                   tileTitle: LocaleText("sarai"),
                 ),
-                ListTileItemWidget(
+                ExpansionTileItemWidget(
                     lead: Icon(Icons.list),
                     tileTitle: LocaleText("list_of_items"))
               ],
@@ -176,11 +170,14 @@ class DrawerScreen extends StatelessWidget {
 //Warehouse ends
 // Hamid accounts section
             const ListTileWidget(
-              lead: Icon(Icons.person),
+              lead: FaIcon(
+                FontAwesomeIcons.user,
+                size: 20,
+              ),
               tileTitle: LocaleText('hamid_account'),
             ),
-// Khalid accounts section ends
-// Hamid accounts section
+// Hamid accounts section ends
+// Customers accounts section
             const ListTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.peopleArrows,
@@ -188,8 +185,8 @@ class DrawerScreen extends StatelessWidget {
               ),
               tileTitle: LocaleText('customers_accounts'),
             ),
-// Khalid accounts section ends
-// Hamid Forex
+// Customers accounts section ends
+// Forex
             const ListTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.wallet,
@@ -197,7 +194,16 @@ class DrawerScreen extends StatelessWidget {
               ),
               tileTitle: LocaleText('sarafi'),
             ),
-// Khalid Forex section ends
+//  Forex section ends
+// Users section
+            const ListTileWidget(
+              lead: FaIcon(
+                FontAwesomeIcons.users,
+                size: 20,
+              ),
+              tileTitle: LocaleText('users'),
+            ),
+//  Users section ends
           ],
         ),
       ),
