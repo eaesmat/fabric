@@ -1,7 +1,7 @@
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/language_item.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_locales/flutter_locales.dart';
 
 class AppLanguagesScreen extends StatefulWidget {
   const AppLanguagesScreen({super.key});
@@ -16,13 +16,7 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.whiteColor,
-        title: const LocaleText(
-          "language",
-          style: TextStyle(
-              color: Pallete.blackColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
-        ),
+        title: const LocaleTexts.new(localeText: 'language'),
         centerTitle: true,
       ),
       body: const Column(
@@ -48,3 +42,4 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
     );
   }
 }
+
