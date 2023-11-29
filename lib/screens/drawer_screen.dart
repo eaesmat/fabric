@@ -1,6 +1,8 @@
 // drawer_widget.dart
 
-import 'package:fabricproject/screens/companies_screen.dart';
+import 'package:fabricproject/models/internal_companies_model.dart';
+import 'package:fabricproject/screens/forex_screen.dart';
+import 'package:fabricproject/screens/internal_companies_screen.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -17,7 +19,7 @@ class DrawerScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => const CompaniesScreen(),
+          builder: (_) => const InternalCompanies(),
         ),
       );
     }
@@ -62,9 +64,17 @@ class DrawerScreen extends StatelessWidget {
                 const Divider(
                   thickness: 0.1,
                 ),
-                const ExpansionTileItemWidget(
-                  lead: FaIcon(FontAwesomeIcons.wallet, size: 20),
-                  tileTitle: LocaleText('sarafi'),
+                ExpansionTileItemWidget(
+                  lead: const FaIcon(FontAwesomeIcons.wallet, size: 20),
+                  tileTitle: const LocaleText('sarafi'),
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ForexScreen(),
+                      ),
+                    );
+                  },
                 ),
                 ExpansionTileItemWidget(
                   lead: const FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
