@@ -130,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
 List<Widget> _listOfWidget = <Widget>[
   Container(
     alignment: Alignment.center,
-    child: const HomeScreen(),
+    child:  const HomeScreen(),
   ),
   Container(
     alignment: Alignment.center,

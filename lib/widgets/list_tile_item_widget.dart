@@ -5,7 +5,7 @@ class ExpansionTileItemWidget extends StatelessWidget {
   final Widget tileTitle;
   final Widget? tileSubTitle;
   final Widget? trail;
-  final Function? callBack;
+  final VoidCallback? callBack;
 
   const ExpansionTileItemWidget({
     Key? key,
