@@ -1,6 +1,5 @@
 // drawer_widget.dart
 
-import 'package:fabricproject/models/internal_companies_model.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';

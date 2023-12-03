@@ -15,6 +15,8 @@ class InternalCompanies extends StatefulWidget {
 class _InternalCompaniesState extends State<InternalCompanies> {
   List<Data>? companyData;
   bool _addingNewItem = false;
+  bool _updated = false;
+  bool _added = false;
 
   @override
   void initState() {
@@ -42,6 +44,7 @@ class _InternalCompaniesState extends State<InternalCompanies> {
       );
 
       if (response.statusCode == 200) {
+        _updated = true;
         fetchData(); // Refresh the data after updating an item
       } else {
         throw Exception('Failed to update item');
@@ -51,6 +54,9 @@ class _InternalCompaniesState extends State<InternalCompanies> {
     } finally {
       setState(() {
         _addingNewItem = false;
+        if (_updated) {
+          showSuccessMessage(context, 'Updated!', Colors.green);
+        }
       });
     }
   }
@@ -76,9 +82,13 @@ class _InternalCompaniesState extends State<InternalCompanies> {
         'http://10.0.2.2:8000/api/delete-company?company_id=${companyData![index].companyId}'));
 
     if (response.statusCode == 500) {
+      setState(() {
+        showSuccessMessage(context, 'Has children!', Colors.red);
+      });
     } else if (response.statusCode == 200) {
       setState(() {
         companyData!.removeAt(index);
+        showSuccessMessage(context, 'Deleted!', Colors.green);
       });
     } else {
       throw Exception('Failed to delete item');
@@ -103,6 +113,7 @@ class _InternalCompaniesState extends State<InternalCompanies> {
       );
 
       if (response.statusCode == 200) {
+        _added = true;
         fetchData(); // Refresh the data after adding a new item
       } else {
         throw Exception('Failed to add item');
@@ -112,6 +123,9 @@ class _InternalCompaniesState extends State<InternalCompanies> {
     } finally {
       setState(() {
         _addingNewItem = false;
+        if (_added) {
+          showSuccessMessage(context, 'Added!', Colors.green);
+        }
       });
     }
   }
@@ -133,8 +147,10 @@ class _InternalCompaniesState extends State<InternalCompanies> {
 
                 return ListTileWidget(
                   lead: CircleAvatar(
+                    backgroundColor: Pallete.blueColor,
                     child: Text(
                       data.marka.toString(),
+                      style: const TextStyle(color: Pallete.whiteColor),
                     ),
                   ),
                   tileTitle: Text(
@@ -143,23 +159,14 @@ class _InternalCompaniesState extends State<InternalCompanies> {
                   tileSubTitle: Text(
                     data.description.toString(),
                   ),
-                  trail: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => showEditDialog(
-                            index,
-                            data.name.toString(),
-                            data.marka.toString(),
-                            data.description.toString()),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => deleteItem(index),
-                      ),
-                    ],
-                  ),
+                  onLongPress: () {
+                    showLongPressDialog(
+                      index,
+                      data.name.toString(),
+                      data.marka.toString(),
+                      data.description.toString(),
+                    );
+                  },
                 );
               },
             ),
@@ -172,10 +179,48 @@ class _InternalCompaniesState extends State<InternalCompanies> {
               ),
             )
           : FloatingActionButton(
-              onPressed: addItem,
+              backgroundColor: Pallete.blueColor,
+              onPressed: () {
+                addItem();
+              },
               tooltip: 'Add Item',
-              child: const Icon(Icons.add),
+              child: const Icon(
+                Icons.add,
+                color: Pallete.whiteColor,
+              ),
             ),
+    );
+  }
+
+  Future<void> showLongPressDialog(int index, String currentName,
+      String currentMarka, String currentDescription) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.pop(context);
+                  showEditDialog(
+                      index, currentName, currentMarka, currentDescription);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  Navigator.pop(context);
+                  deleteItem(index);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -187,9 +232,9 @@ class _InternalCompaniesState extends State<InternalCompanies> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add New Item'),
-          content: Column(
+        return Dialog.fullscreen(
+          // title: Text('Add New Item'),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -204,24 +249,22 @@ class _InternalCompaniesState extends State<InternalCompanies> {
                 onChanged: (value) => newDescription = value,
                 decoration: InputDecoration(labelText: 'Description'),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Perform the add operation with the entered data
+                  addNewItem(newName, newMarka, newDescription);
+                  Navigator.pop(context);
+                },
+                child: Text('Add'),
+              ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Perform the add operation with the entered data
-                addNewItem(newName, newMarka, newDescription);
-                Navigator.pop(context);
-              },
-              child: Text('Add'),
-            ),
-          ],
         );
       },
     );
@@ -236,9 +279,8 @@ class _InternalCompaniesState extends State<InternalCompanies> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit Item'),
-          content: Column(
+        return Dialog.fullscreen(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -256,26 +298,34 @@ class _InternalCompaniesState extends State<InternalCompanies> {
                 decoration: InputDecoration(labelText: 'Description'),
                 controller: TextEditingController(text: currentDescription),
               ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Perform the update operation with the entered data
+                  updateItem(index, newName, newMarka, newDescription);
+                  Navigator.pop(context);
+                },
+                child: Text('Update'),
+              ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Perform the update operation with the entered data
-                updateItem(index, newName, newMarka, newDescription);
-                Navigator.pop(context);
-              },
-              child: Text('Update'),
-            ),
-          ],
         );
       },
     );
   }
+}
+
+void showSuccessMessage(BuildContext context, String message, Color color) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: 2), // Adjust the duration as needed
+      backgroundColor: color, // You can customize the color
+    ),
+  );
 }
