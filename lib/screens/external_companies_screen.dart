@@ -1,19 +1,20 @@
+import 'package:fabricproject/models/external_companies_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:fabricproject/models/internal_companies_model.dart';
 
-class InternalCompaniesScreen extends StatefulWidget {
-  const InternalCompaniesScreen({Key? key}) : super(key: key);
+class ExternalCompaniesScreen extends StatefulWidget {
+  const ExternalCompaniesScreen({Key? key}) : super(key: key);
 
   @override
-  _InternalCompaniesScreenState createState() => _InternalCompaniesScreenState();
+  _ExternalCompaniesScreenState createState() =>
+      _ExternalCompaniesScreenState();
 }
 
-class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
-  List<Data>? companyData;
+class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
+  List<Data>? externalCompanyData;
   bool _addingNewItem = false;
   bool _updated = false;
   bool _added = false;
@@ -25,7 +26,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
   }
 
   Future<void> updateItem(
-      int index, String newName, String newMarka, String newDescription) async {
+      int index, String newName, String newPhone, String newDescription) async {
     setState(() {
       _addingNewItem = true;
     });
@@ -33,11 +34,11 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-company?company_id=${companyData![index].companyId}'),
+            'http://10.0.2.2:8000/api/update-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'),
         body: json.encode({
-          'companyId': companyData![index].companyId,
+          'venodrcompany_id': externalCompanyData![index].vendorcompanyId,
           'name': newName,
-          'marka': newMarka,
+          'phone': newPhone,
           'description': newDescription,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -63,14 +64,14 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
   Future<void> fetchData() async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/getCompany'));
+        await http.get(Uri.parse('http://10.0.2.2:8000/api/getVendorCompany'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
-      final internalCompany = InternalCompany.fromJson(jsonResponse);
+      final externalCompany = ExternalCompany.fromJson(jsonResponse);
 
       setState(() {
-        companyData = internalCompany.data;
+        externalCompanyData = externalCompany.data;
       });
     } else {
       throw Exception('Failed to load data');
@@ -79,7 +80,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-company?company_id=${companyData![index].companyId}'));
+        'http://10.0.2.2:8000/api/delete-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -87,7 +88,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
       });
     } else if (response.statusCode == 200) {
       setState(() {
-        companyData!.removeAt(index);
+        externalCompanyData!.removeAt(index);
         showSuccessMessage(context, 'Deleted!', Colors.green);
       });
     } else {
@@ -95,18 +96,18 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
     }
   }
 
-  Future<void> addNewItem(String name, String marka, String description) async {
+  Future<void> addNewItem(String name, String phone, String description) async {
     setState(() {
       _addingNewItem = true;
     });
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-company'),
+        Uri.parse('http://10.0.2.2:8000/api/add-vendor-company'),
         body: json.encode({
-          'companyId': 0,
+          'vendorcompany_Id': 0,
           'name': name,
-          'marka': marka,
+          'phone': phone,
           'description': description,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -136,25 +137,33 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
       appBar: AppBar(
         title: Text('Your App Title'),
       ),
-      body: companyData == null
+      body: externalCompanyData == null
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-              itemCount: companyData!.length,
+              itemCount: externalCompanyData!.length,
               itemBuilder: (context, index) {
-                final data = companyData![index];
+                final data = externalCompanyData![index];
 
                 return ListTileWidget(
-                  lead: CircleAvatar(
-                    backgroundColor: Pallete.blueColor,
-                    child: Text(
-                      data.marka.toString(),
-                      style: const TextStyle(color: Pallete.whiteColor),
-                    ),
-                  ),
-                  tileTitle: Text(
-                    data.name.toString(),
+                  // lead: CircleAvatar(
+                  //   backgroundColor: Pallete.blueColor,
+                  //   child: Text(
+                  //     data.phone.toString(),
+                  //     style: const TextStyle(color: Pallete.whiteColor),
+                  //   ),
+                  // ),
+                  tileTitle: Row(
+                    children: [
+                      Text(
+                        data.name.toString(),
+                      ),
+                      const Spacer(),
+                      Text(
+                        data.phone.toString(),
+                      ),
+                    ],
                   ),
                   tileSubTitle: Text(
                     data.description.toString(),
@@ -163,7 +172,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
                     showLongPressDialog(
                       index,
                       data.name.toString(),
-                      data.marka.toString(),
+                      data.phone.toString(),
                       data.description.toString(),
                     );
                   },
@@ -193,7 +202,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
   }
 
   Future<void> showLongPressDialog(int index, String currentName,
-      String currentMarka, String currentDescription) async {
+      String currentPhone, String currentDescription) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -207,7 +216,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                   showEditDialog(
-                      index, currentName, currentMarka, currentDescription);
+                      index, currentName, currentPhone, currentDescription);
                 },
               ),
               IconButton(
@@ -226,7 +235,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
   Future<void> addItem() async {
     String newName = '';
-    String newMarka = '';
+    String newPhone = '';
     String newDescription = '';
 
     await showDialog(
@@ -242,8 +251,8 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
                 decoration: InputDecoration(labelText: 'Name'),
               ),
               TextField(
-                onChanged: (value) => newMarka = value,
-                decoration: InputDecoration(labelText: 'Marka'),
+                onChanged: (value) => newPhone = value,
+                decoration: InputDecoration(labelText: 'Phone'),
               ),
               TextField(
                 onChanged: (value) => newDescription = value,
@@ -258,7 +267,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
               ElevatedButton(
                 onPressed: () {
                   // Perform the add operation with the entered data
-                  addNewItem(newName, newMarka, newDescription);
+                  addNewItem(newName, newPhone, newDescription);
                   Navigator.pop(context);
                 },
                 child: Text('Add'),
@@ -271,9 +280,9 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
   }
 
   Future<void> showEditDialog(int index, String currentName,
-      String currentMarka, String currentDescription) async {
+      String currentPhone, String currentDescription) async {
     String newName = currentName;
-    String newMarka = currentMarka;
+    String newPhone = currentPhone;
     String newDescription = currentDescription;
 
     await showDialog(
@@ -289,9 +298,9 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
                 controller: TextEditingController(text: currentName),
               ),
               TextField(
-                onChanged: (value) => newMarka = value,
-                decoration: InputDecoration(labelText: 'Marka'),
-                controller: TextEditingController(text: currentMarka),
+                onChanged: (value) => newPhone = value,
+                decoration: InputDecoration(labelText: 'Phone'),
+                controller: TextEditingController(text: currentPhone),
               ),
               TextField(
                 onChanged: (value) => newDescription = value,
@@ -307,7 +316,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
               TextButton(
                 onPressed: () {
                   // Perform the update operation with the entered data
-                  updateItem(index, newName, newMarka, newDescription);
+                  updateItem(index, newName, newPhone, newDescription);
                   Navigator.pop(context);
                 },
                 child: Text('Update'),
