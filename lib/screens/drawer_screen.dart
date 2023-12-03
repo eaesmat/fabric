@@ -2,6 +2,7 @@
 
 import 'package:fabricproject/screens/customer_screen.dart';
 import 'package:fabricproject/screens/external_companies_screen.dart';
+import 'package:fabricproject/screens/fabric_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
 import 'package:fabricproject/screens/sarai_screen.dart';
@@ -85,6 +86,14 @@ class DrawerScreen extends StatelessWidget {
                   callBack: navigateCompaniesCallBack,
                 ),
                 ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FabricScreen(),
+                      ),
+                    );
+                  },
                   lead: Image.asset(
                     'assets/images/fabricIcon.png',
                     height: 23,
