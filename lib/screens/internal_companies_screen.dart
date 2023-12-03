@@ -138,7 +138,9 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
       ),
       body: companyData == null
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Pallete.blueColor,
+              ),
             )
           : ListView.builder(
               itemCount: companyData!.length,
