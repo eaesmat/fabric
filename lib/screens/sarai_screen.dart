@@ -1,4 +1,4 @@
-import 'package:fabricproject/models/forex_model.dart';
+import 'package:fabricproject/models/sarai_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class SaraiScreen extends StatefulWidget {
 }
 
 class _SaraiScreenState extends State<SaraiScreen> {
-  List<Data>? forexData;
+  List<Data>? saraiData;
   bool _addingNewItem = false;
   bool _updated = false;
   bool _added = false;
@@ -26,8 +26,8 @@ class _SaraiScreenState extends State<SaraiScreen> {
     fetchData();
   }
 
-  Future<void> updateItem(int index, String newFullName, String newDescription,
-      String newPhone, String newShoNo, String newLocation) async {
+  Future<void> updateItem(int index, String newName, String newDescription,
+      String newPhone, String newLocation) async {
     setState(() {
       _addingNewItem = true;
     });
@@ -35,10 +35,11 @@ class _SaraiScreenState extends State<SaraiScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-sarfi?sarfi_id=${forexData![index].sarafiId}'),
+            'http://10.0.2.2:8000/api/update-sarai?sarai_id=${saraiData![index].saraiId}'),
         body: json.encode({
-          'sarafi_id': forexData![index].sarafiId,
-          'fullname': newFullName,
+          'sarai_id': saraiData![index].saraiId,
+          'name': newName,
+          'location': newLocation,
           'description': newDescription,
           'phone': newPhone,
         }),
@@ -66,14 +67,14 @@ class _SaraiScreenState extends State<SaraiScreen> {
   Future<void> fetchData() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/getSarafi'));
+          await http.get(Uri.parse('http://10.0.2.2:8000/api/getSarai'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        final forex = Forex.fromJson(jsonResponse);
+        final sarai = Sarai.fromJson(jsonResponse);
 
         setState(() {
-          forexData = forex.data;
+          saraiData = sarai.data;
         });
       } else {
         throw Exception(
@@ -87,7 +88,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-sarafi?sarafi_id=${forexData![index].sarafiId}'));
+        'http://10.0.2.2:8000/api/delete-sarai?sarai_id=${saraiData![index].saraiId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -95,7 +96,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
       });
     } else if (response.statusCode == 200) {
       setState(() {
-        forexData!.removeAt(index);
+        saraiData!.removeAt(index);
         showSuccessMessage(context, 'Deleted!', Colors.green);
       });
     } else {
@@ -103,21 +104,20 @@ class _SaraiScreenState extends State<SaraiScreen> {
     }
   }
 
-  Future<void> addNewItem(String fullname, String phone, String description,
-      String shopno, String location) async {
+  Future<void> addNewItem(
+      String name, String phone, String description, String location) async {
     setState(() {
       _addingNewItem = true;
     });
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-sarafi'),
+        Uri.parse('http://10.0.2.2:8000/api/add-sarai'),
         body: json.encode({
-          'companyId': 0,
-          'fullname': fullname,
+          'sarai_Id': 0,
+          'name': name,
           'description': description,
           'phone': phone,
-          'shopno': shopno,
           'location': location
         }),
         headers: {'Content-Type': 'application/json'},
@@ -147,29 +147,22 @@ class _SaraiScreenState extends State<SaraiScreen> {
       appBar: AppBar(
         title: Text('Your App Title'),
       ),
-      body: forexData == null
+      body: saraiData == null
           ? const Center(
               child: CircularProgressIndicator(
                 color: Pallete.blueColor,
               ),
             )
           : ListView.builder(
-              itemCount: forexData!.length,
+              itemCount: saraiData!.length,
               itemBuilder: (context, index) {
-                final data = forexData![index];
+                final data = saraiData![index];
 
                 return ListTileWidget(
-                  lead: CircleAvatar(
-                    backgroundColor: Pallete.blueColor,
-                    child: Text(
-                      data.location.toString(),
-                      style: const TextStyle(color: Pallete.whiteColor),
-                    ),
-                  ),
                   tileTitle: Row(
                     children: [
                       Text(
-                        data.fullname.toString(),
+                        data.name.toString(),
                       ),
                       const Spacer(),
                       Text(
@@ -184,17 +177,16 @@ class _SaraiScreenState extends State<SaraiScreen> {
                       ),
                       const Spacer(),
                       Text(
-                        data.shopno.toString(),
+                        data.location.toString(),
                       ),
                     ],
                   ),
                   onLongPress: () {
                     showLongPressDialog(
                       index,
-                      data.fullname.toString(),
+                      data.name.toString(),
                       data.description.toString(),
                       data.phone.toString(),
-                      data.shopno.toString(),
                       data.location.toString(),
                     );
                   },
@@ -225,10 +217,9 @@ class _SaraiScreenState extends State<SaraiScreen> {
 
   Future<void> showLongPressDialog(
       int index,
-      String currentFullName,
+      String currentName,
       String currentPhone,
       String currentDescription,
-      String currentShopno,
       String currentLocation) async {
     await showDialog(
       context: context,
@@ -242,8 +233,8 @@ class _SaraiScreenState extends State<SaraiScreen> {
                 icon: const Icon(Icons.edit),
                 onPressed: () {
                   Navigator.pop(context);
-                  showEditDialog(index, currentFullName, currentPhone,
-                      currentDescription, currentShopno, currentLocation);
+                  showEditDialog(index, currentName, currentPhone,
+                      currentDescription, currentLocation);
                 },
               ),
               IconButton(
@@ -261,10 +252,9 @@ class _SaraiScreenState extends State<SaraiScreen> {
   }
 
   Future<void> addItem() async {
-    String newFullName = '';
+    String newName = '';
     String newDescription = '';
     String newPhone = '';
-    String newShopno = '';
     String newLocation = '';
 
     await showDialog(
@@ -276,8 +266,8 @@ class _SaraiScreenState extends State<SaraiScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  onChanged: (value) => newFullName = value,
-                  decoration: InputDecoration(labelText: 'Full Name'),
+                  onChanged: (value) => newName = value,
+                  decoration: InputDecoration(labelText: 'Name'),
                 ),
                 TextField(
                   onChanged: (value) => newDescription = value,
@@ -286,10 +276,6 @@ class _SaraiScreenState extends State<SaraiScreen> {
                 TextField(
                   onChanged: (value) => newPhone = value,
                   decoration: InputDecoration(labelText: 'Phone'),
-                ),
-                TextField(
-                  onChanged: (value) => newShopno = value,
-                  decoration: InputDecoration(labelText: 'Shop No'),
                 ),
                 TextField(
                   onChanged: (value) => newLocation = value,
@@ -304,8 +290,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
                 TextButton(
                   onPressed: () {
                     // Perform the add operation with the entered data
-                    addNewItem(newFullName, newPhone, newDescription, newShopno,
-                        newLocation);
+                    addNewItem(newName, newPhone, newDescription, newLocation);
                     Navigator.pop(context);
                   },
                   child: Text('Add'),
@@ -320,15 +305,13 @@ class _SaraiScreenState extends State<SaraiScreen> {
 
   Future<void> showEditDialog(
       int index,
-      String currentFullName,
+      String currentName,
       String currentPhone,
       String currentDescription,
-      String currentShopno,
       String currentLocation) async {
-    String newFullName = currentFullName;
+    String newName = currentName;
     String newPhone = currentPhone;
     String newDescription = currentDescription;
-    String newShopno = currentShopno;
     String newLocation = currentLocation;
 
     await showDialog(
@@ -339,9 +322,9 @@ class _SaraiScreenState extends State<SaraiScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                onChanged: (value) => newFullName = value,
+                onChanged: (value) => newName = value,
                 decoration: InputDecoration(labelText: 'Name'),
-                controller: TextEditingController(text: currentFullName),
+                controller: TextEditingController(text: currentName),
               ),
               TextField(
                 onChanged: (value) => newPhone = value,
@@ -352,11 +335,6 @@ class _SaraiScreenState extends State<SaraiScreen> {
                 onChanged: (value) => newDescription = value,
                 decoration: InputDecoration(labelText: 'Description'),
                 controller: TextEditingController(text: currentDescription),
-              ),
-              TextField(
-                onChanged: (value) => newShopno = value,
-                decoration: InputDecoration(labelText: 'Shop No'),
-                controller: TextEditingController(text: currentShopno),
               ),
               TextField(
                 onChanged: (value) => newLocation = value,
@@ -372,8 +350,8 @@ class _SaraiScreenState extends State<SaraiScreen> {
               TextButton(
                 onPressed: () {
                   // Perform the update operation with the entered data
-                  updateItem(index, newFullName, newPhone, newDescription,
-                      newShopno, newLocation);
+                  updateItem(
+                      index, newName, newPhone, newDescription, newLocation);
                   Navigator.pop(context);
                 },
                 child: Text('Update'),
