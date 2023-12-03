@@ -3,6 +3,7 @@
 import 'package:fabricproject/screens/external_companies_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
+import 'package:fabricproject/screens/sarai_screen.dart';
 import 'package:fabricproject/screens/transport.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
@@ -102,7 +103,7 @@ class DrawerScreen extends StatelessWidget {
                   tileTitle: LocaleText('ٰvendor_companies'),
                 ),
                 ExpansionTileItemWidget(
-                   callBack: () {
+                  callBack: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -113,7 +114,15 @@ class DrawerScreen extends StatelessWidget {
                   lead: Icon(Icons.local_shipping),
                   tileTitle: LocaleText('ٰtransport'),
                 ),
-                const ExpansionTileItemWidget(
+                ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SaraiScreen(),
+                      ),
+                    );
+                  },
                   lead: Icon(Icons.warehouse),
                   tileTitle: LocaleText('ٰwarehouses'),
                 ),
