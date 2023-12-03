@@ -1,5 +1,6 @@
 // drawer_widget.dart
 
+import 'package:fabricproject/screens/external_companies_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
@@ -18,7 +19,7 @@ class DrawerScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => const InternalCompanies(),
+          builder: (_) => const InternalCompaniesScreen(),
         ),
       );
     }
@@ -87,7 +88,15 @@ class DrawerScreen extends StatelessWidget {
                   ),
                   tileTitle: const LocaleText('fabric'),
                 ),
-                const ExpansionTileItemWidget(
+                ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ExternalCompaniesScreen(),
+                      ),
+                    );
+                  },
                   lead: FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
                   tileTitle: LocaleText('ٰvendor_companies'),
                 ),
