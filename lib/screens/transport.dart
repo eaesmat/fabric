@@ -1,21 +1,19 @@
-import 'package:fabricproject/models/forex_model.dart';
+import 'package:fabricproject/models/transport_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-// import 'package:fabricproject/models/internal_companies_model.dart';
-// import 'package:fabricproject/models/forex_model.dart'; // Make sure to import your models
 
-class ForexScreen extends StatefulWidget {
-  const ForexScreen({Key? key}) : super(key: key);
+class TransportScreen extends StatefulWidget {
+  const TransportScreen({Key? key}) : super(key: key);
 
   @override
-  _ForexScreenState createState() => _ForexScreenState();
+  _TransportScreenState createState() => _TransportScreenState();
 }
 
-class _ForexScreenState extends State<ForexScreen> {
-  List<Data>? forexData;
+class _TransportScreenState extends State<TransportScreen> {
+  List<Data>? transportData;
   bool _addingNewItem = false;
   bool _updated = false;
   bool _added = false;
@@ -26,8 +24,8 @@ class _ForexScreenState extends State<ForexScreen> {
     fetchData();
   }
 
-  Future<void> updateItem(int index, String newFullName, String newDescription,
-      String newPhone, String newShoNo, String newLocation) async {
+  Future<void> updateItem(
+      int index, String newName, String newPhone, String newDescription) async {
     setState(() {
       _addingNewItem = true;
     });
@@ -35,12 +33,12 @@ class _ForexScreenState extends State<ForexScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-sarfi?sarfi_id=${forexData![index].sarafiId}'),
+            'http://10.0.2.2:8000/api/update-transport?transport_id=${transportData![index].transportId}'),
         body: json.encode({
-          'sarafi_id': forexData![index].sarafiId,
-          'fullname': newFullName,
-          'description': newDescription,
+          'transport_id': transportData![index].transportId,
+          'name': newName,
           'phone': newPhone,
+          'description': newDescription,
         }),
         headers: {'Content-Type': 'application/json'},
       );
@@ -64,30 +62,24 @@ class _ForexScreenState extends State<ForexScreen> {
   }
 
   Future<void> fetchData() async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/getSarafi'));
+    final response =
+        await http.get(Uri.parse('http://10.0.2.2:8000/api/getTransport'));
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        final forex = Forex.fromJson(jsonResponse);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final transport = Transport.fromJson(jsonResponse);
 
-        setState(() {
-          forexData = forex.data;
-        });
-      } else {
-        throw Exception(
-            'Failed to load data. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching data: $e');
+      setState(() {
+        transportData = transport.data;
+      });
+    } else {
       throw Exception('Failed to load data');
     }
   }
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-sarafi?sarafi_id=${forexData![index].sarafiId}'));
+        'http://10.0.2.2:8000/api/delete-transport?transport_id=${transportData![index].transportId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -95,7 +87,7 @@ class _ForexScreenState extends State<ForexScreen> {
       });
     } else if (response.statusCode == 200) {
       setState(() {
-        forexData!.removeAt(index);
+        transportData!.removeAt(index);
         showSuccessMessage(context, 'Deleted!', Colors.green);
       });
     } else {
@@ -103,22 +95,19 @@ class _ForexScreenState extends State<ForexScreen> {
     }
   }
 
-  Future<void> addNewItem(String fullname, String phone, String description,
-      String shopno, String location) async {
+  Future<void> addNewItem(String name, String phone, String description) async {
     setState(() {
       _addingNewItem = true;
     });
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-sarafi'),
+        Uri.parse('http://10.0.2.2:8000/api/add-transport'),
         body: json.encode({
-          'companyId': 0,
-          'fullname': fullname,
-          'description': description,
+          'transport_Id': 0,
+          'name': name,
           'phone': phone,
-          'shopno': shopno,
-          'location': location
+          'description': description,
         }),
         headers: {'Content-Type': 'application/json'},
       );
@@ -147,29 +136,23 @@ class _ForexScreenState extends State<ForexScreen> {
       appBar: AppBar(
         title: Text('Your App Title'),
       ),
-      body: forexData == null
+      body: transportData == null
           ? const Center(
               child: CircularProgressIndicator(
                 color: Pallete.blueColor,
               ),
             )
           : ListView.builder(
-              itemCount: forexData!.length,
+              itemCount: transportData!.length,
               itemBuilder: (context, index) {
-                final data = forexData![index];
+                final data = transportData![index];
 
                 return ListTileWidget(
-                  lead: CircleAvatar(
-                    backgroundColor: Pallete.blueColor,
-                    child: Text(
-                      data.location.toString(),
-                      style: const TextStyle(color: Pallete.whiteColor),
-                    ),
-                  ),
+                  
                   tileTitle: Row(
                     children: [
                       Text(
-                        data.fullname.toString(),
+                        data.name.toString(),
                       ),
                       const Spacer(),
                       Text(
@@ -177,25 +160,15 @@ class _ForexScreenState extends State<ForexScreen> {
                       ),
                     ],
                   ),
-                  tileSubTitle: Row(
-                    children: [
-                      Text(
-                        data.description.toString(),
-                      ),
-                      const Spacer(),
-                      Text(
-                        data.shopno.toString(),
-                      ),
-                    ],
+                  tileSubTitle: Text(
+                    data.description.toString(),
                   ),
                   onLongPress: () {
                     showLongPressDialog(
                       index,
-                      data.fullname.toString(),
-                      data.description.toString(),
+                      data.name.toString(),
                       data.phone.toString(),
-                      data.shopno.toString(),
-                      data.location.toString(),
+                      data.description.toString(),
                     );
                   },
                 );
@@ -223,13 +196,8 @@ class _ForexScreenState extends State<ForexScreen> {
     );
   }
 
-  Future<void> showLongPressDialog(
-      int index,
-      String currentFullName,
-      String currentPhone,
-      String currentDescription,
-      String currentShopno,
-      String currentLocation) async {
+  Future<void> showLongPressDialog(int index, String currentName,
+      String currentPhone, String currentDescription) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -242,8 +210,8 @@ class _ForexScreenState extends State<ForexScreen> {
                 icon: const Icon(Icons.edit),
                 onPressed: () {
                   Navigator.pop(context);
-                  showEditDialog(index, currentFullName, currentPhone,
-                      currentDescription, currentShopno, currentLocation);
+                  showEditDialog(
+                      index, currentName, currentPhone, currentDescription);
                 },
               ),
               IconButton(
@@ -261,75 +229,56 @@ class _ForexScreenState extends State<ForexScreen> {
   }
 
   Future<void> addItem() async {
-    String newFullName = '';
-    String newDescription = '';
+    String newName = '';
     String newPhone = '';
-    String newShopno = '';
-    String newLocation = '';
+    String newDescription = '';
 
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog.fullscreen(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  onChanged: (value) => newFullName = value,
-                  decoration: InputDecoration(labelText: 'Full Name'),
-                ),
-                TextField(
-                  onChanged: (value) => newDescription = value,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                TextField(
-                  onChanged: (value) => newPhone = value,
-                  decoration: InputDecoration(labelText: 'Phone'),
-                ),
-                TextField(
-                  onChanged: (value) => newShopno = value,
-                  decoration: InputDecoration(labelText: 'Shop No'),
-                ),
-                TextField(
-                  onChanged: (value) => newLocation = value,
-                  decoration: InputDecoration(labelText: 'Location'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Perform the add operation with the entered data
-                    addNewItem(newFullName, newPhone, newDescription, newShopno,
-                        newLocation);
-                    Navigator.pop(context);
-                  },
-                  child: Text('Add'),
-                ),
-              ],
-            ),
+          // title: Text('Add New Item'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                onChanged: (value) => newName = value,
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
+              TextField(
+                onChanged: (value) => newPhone = value,
+                decoration: InputDecoration(labelText: 'Phone'),
+              ),
+              TextField(
+                onChanged: (value) => newDescription = value,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Perform the add operation with the entered data
+                  addNewItem(newName, newPhone, newDescription);
+                  Navigator.pop(context);
+                },
+                child: Text('Add'),
+              ),
+            ],
           ),
         );
       },
     );
   }
 
-  Future<void> showEditDialog(
-      int index,
-      String currentFullName,
-      String currentPhone,
-      String currentDescription,
-      String currentShopno,
-      String currentLocation) async {
-    String newFullName = currentFullName;
+  Future<void> showEditDialog(int index, String currentName,
+      String currentPhone, String currentDescription) async {
+    String newName = currentName;
     String newPhone = currentPhone;
     String newDescription = currentDescription;
-    String newShopno = currentShopno;
-    String newLocation = currentLocation;
 
     await showDialog(
       context: context,
@@ -339,29 +288,19 @@ class _ForexScreenState extends State<ForexScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                onChanged: (value) => newFullName = value,
+                onChanged: (value) => newName = value,
                 decoration: InputDecoration(labelText: 'Name'),
-                controller: TextEditingController(text: currentFullName),
+                controller: TextEditingController(text: currentName),
               ),
               TextField(
                 onChanged: (value) => newPhone = value,
-                decoration: InputDecoration(labelText: 'Marka'),
+                decoration: InputDecoration(labelText: 'Phone'),
                 controller: TextEditingController(text: currentPhone),
               ),
               TextField(
                 onChanged: (value) => newDescription = value,
                 decoration: InputDecoration(labelText: 'Description'),
                 controller: TextEditingController(text: currentDescription),
-              ),
-              TextField(
-                onChanged: (value) => newShopno = value,
-                decoration: InputDecoration(labelText: 'Shop No'),
-                controller: TextEditingController(text: currentShopno),
-              ),
-              TextField(
-                onChanged: (value) => newLocation = value,
-                decoration: InputDecoration(labelText: 'Location'),
-                controller: TextEditingController(text: currentLocation),
               ),
               TextButton(
                 onPressed: () {
@@ -372,8 +311,7 @@ class _ForexScreenState extends State<ForexScreen> {
               TextButton(
                 onPressed: () {
                   // Perform the update operation with the entered data
-                  updateItem(index, newFullName, newPhone, newDescription,
-                      newShopno, newLocation);
+                  updateItem(index, newName, newPhone, newDescription);
                   Navigator.pop(context);
                 },
                 child: Text('Update'),

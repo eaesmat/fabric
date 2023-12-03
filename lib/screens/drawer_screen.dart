@@ -3,6 +3,7 @@
 import 'package:fabricproject/screens/external_companies_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
+import 'package:fabricproject/screens/transport.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -100,7 +101,15 @@ class DrawerScreen extends StatelessWidget {
                   lead: FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
                   tileTitle: LocaleText('ٰvendor_companies'),
                 ),
-                const ExpansionTileItemWidget(
+                ExpansionTileItemWidget(
+                   callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TransportScreen(),
+                      ),
+                    );
+                  },
                   lead: Icon(Icons.local_shipping),
                   tileTitle: LocaleText('ٰtransport'),
                 ),
