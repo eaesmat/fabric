@@ -1,5 +1,6 @@
 // drawer_widget.dart
 
+import 'package:fabricproject/screens/customer_screen.dart';
 import 'package:fabricproject/screens/external_companies_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
 import 'package:fabricproject/screens/internal_companies_screen.dart';
@@ -126,7 +127,15 @@ class DrawerScreen extends StatelessWidget {
                   lead: Icon(Icons.warehouse),
                   tileTitle: LocaleText('ٰwarehouses'),
                 ),
-                const ExpansionTileItemWidget(
+                ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CustomerScreen(),
+                      ),
+                    );
+                  },
                   lead: FaIcon(FontAwesomeIcons.users, size: 20),
                   tileTitle: LocaleText('customers'),
                 ),
