@@ -27,7 +27,17 @@
   "sarai" : "Sarai",
   "list_of_items" : "List of Goods",
   "customers_accounts" : "Customers Accounts",
-  "users" : "Users"
+  "users" : "Users",
+  "company" : "Company",
+  "bundle" : "Bundle",
+  "meter" : "Meter",
+  "war" : "War",
+  "yen_price" : "Yen Price",
+  "total_yen_price" : "Total Yen Price",
+  "dollar_price" : "Dollar Price",
+  "total_dollar_price" : "Total Dollar Price",
+  "tt_commission" : "TT Commission",
+  "tamam_shoda" : "Exact Cost"
 
 
 }

@@ -1,20 +1,23 @@
 import 'package:fabricproject/common/api_endpoint.dart';
-import 'package:fabricproject/models/fabric_model.dart';
+import 'package:fabricproject/models/external_companies_model.dart';
+import 'package:fabricproject/screens/fabric_purchase_details_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class FabricScreen extends StatefulWidget {
-  const FabricScreen({Key? key}) : super(key: key);
+class ExternalCompaniesListScreen extends StatefulWidget {
+  const ExternalCompaniesListScreen({Key? key}) : super(key: key);
 
   @override
-  _FabricScreenState createState() => _FabricScreenState();
+  _ExternalCompaniesListScreenState createState() =>
+      _ExternalCompaniesListScreenState();
 }
 
-class _FabricScreenState extends State<FabricScreen> {
-  List<Data>? fabricData;
+class _ExternalCompaniesListScreenState
+    extends State<ExternalCompaniesListScreen> {
+  List<Data>? externalCompanyData;
   bool _addingNewItem = false;
   bool _updated = false;
   bool _added = false;
@@ -26,7 +29,7 @@ class _FabricScreenState extends State<FabricScreen> {
   }
 
   Future<void> updateItem(
-      int index, String newName, String newAbr, String newDescription) async {
+      int index, String newName, String newPhone, String newDescription) async {
     setState(() {
       _addingNewItem = true;
     });
@@ -34,11 +37,11 @@ class _FabricScreenState extends State<FabricScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            '${baseURL}update-fabric?fabric_id=${fabricData![index].fabricId}'),
+            '${baseURL}update-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'),
         body: json.encode({
-          'fabric_Id': fabricData![index].fabricId,
+          'venodrcompany_id': externalCompanyData![index].vendorcompanyId,
           'name': newName,
-          'abr': newAbr,
+          'phone': newPhone,
           'description': newDescription,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -53,77 +56,60 @@ class _FabricScreenState extends State<FabricScreen> {
     } catch (e) {
       // Handle exceptions here if needed
     } finally {
-      if (mounted) {
-        setState(() {
-          _addingNewItem = false;
-          if (_updated) {
-            showSuccessMessage(context, 'Updated!', Colors.green);
-          }
-        });
-      }
+      setState(() {
+        _addingNewItem = false;
+        if (_updated) {
+          showSuccessMessage(context, 'Updated!', Colors.green);
+        }
+      });
     }
   }
 
   Future<void> fetchData() async {
-    try {
-      final response = await http.get(Uri.parse('${baseURL}getFabric'));
+    final response = await http.get(Uri.parse('${baseURL}getVendorCompany'));
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        final fabric = Fabric.fromJson(jsonResponse);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final externalCompany = ExternalCompany.fromJson(jsonResponse);
 
-        if (mounted) {
-          setState(() {
-            fabricData = fabric.data;
-          });
-        }
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (e) {
-      // Handle exceptions here if needed
+      setState(() {
+        externalCompanyData = externalCompany.data;
+      });
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
   Future<void> deleteItem(int index) async {
-    try {
-      final response = await http.delete(Uri.parse(
-          '${baseURL}delete-fabric?fabric_id=${fabricData![index].fabricId}'));
+    final response = await http.delete(Uri.parse(
+        '${baseURL}delete-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'));
 
-      if (response.statusCode == 500) {
-        if (mounted) {
-          setState(() {
-            showSuccessMessage(context, 'Has children!', Colors.red);
-          });
-        }
-      } else if (response.statusCode == 200) {
-        if (mounted) {
-          setState(() {
-            fabricData!.removeAt(index);
-            showSuccessMessage(context, 'Deleted!', Colors.green);
-          });
-        }
-      } else {
-        throw Exception('Failed to delete item');
-      }
-    } catch (e) {
-      // Handle exceptions here if needed
+    if (response.statusCode == 500) {
+      setState(() {
+        showSuccessMessage(context, 'Has children!', Colors.red);
+      });
+    } else if (response.statusCode == 200) {
+      setState(() {
+        externalCompanyData!.removeAt(index);
+        showSuccessMessage(context, 'Deleted!', Colors.green);
+      });
+    } else {
+      throw Exception('Failed to delete item');
     }
   }
 
-  Future<void> addNewItem(
-      String name, String abr, String description) async {
+  Future<void> addNewItem(String name, String phone, String description) async {
     setState(() {
       _addingNewItem = true;
     });
 
     try {
       final response = await http.post(
-        Uri.parse('${baseURL}add-fabric'),
+        Uri.parse('${baseURL}add-vendor-company'),
         body: json.encode({
-          'companyId': 0,
+          'vendorcompany_Id': 0,
           'name': name,
-          'abr': abr,
+          'phone': phone,
           'description': description,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -138,14 +124,12 @@ class _FabricScreenState extends State<FabricScreen> {
     } catch (e) {
       // Handle exceptions here if needed
     } finally {
-      if (mounted) {
-        setState(() {
-          _addingNewItem = false;
-          if (_added) {
-            showSuccessMessage(context, 'Added!', Colors.green);
-          }
-        });
-      }
+      setState(() {
+        _addingNewItem = false;
+        if (_added) {
+          showSuccessMessage(context, 'Added!', Colors.green);
+        }
+      });
     }
   }
 
@@ -155,27 +139,28 @@ class _FabricScreenState extends State<FabricScreen> {
       appBar: AppBar(
         title: Text('Your App Title'),
       ),
-      body: fabricData == null
+      body: externalCompanyData == null
           ? const Center(
               child: CircularProgressIndicator(
                 color: Pallete.blueColor,
               ),
             )
           : ListView.builder(
-              itemCount: fabricData!.length,
+              itemCount: externalCompanyData!.length,
               itemBuilder: (context, index) {
-                final data = fabricData![index];
+                final data = externalCompanyData![index];
 
                 return ListTileWidget(
-                  lead: CircleAvatar(
-                    backgroundColor: Pallete.blueColor,
-                    child: Text(
-                      data.abr.toString(),
-                      style: const TextStyle(color: Pallete.whiteColor),
-                    ),
-                  ),
-                  tileTitle: Text(
-                    data.name.toString(),
+                  tileTitle: Row(
+                    children: [
+                      Text(
+                        data.name.toString(),
+                      ),
+                      const Spacer(),
+                      Text(
+                        data.phone.toString(),
+                      ),
+                    ],
                   ),
                   tileSubTitle: Text(
                     data.description.toString(),
@@ -184,8 +169,17 @@ class _FabricScreenState extends State<FabricScreen> {
                     showLongPressDialog(
                       index,
                       data.name.toString(),
-                      data.abr.toString(),
+                      data.phone.toString(),
                       data.description.toString(),
+                    );
+                  },
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return FabricPurchaseDetailsScreen(
+                            externalCompanyId: data.vendorcompanyId!,
+                            externalCompanyName: data.name.toString());
+                      }),
                     );
                   },
                 );
@@ -214,7 +208,7 @@ class _FabricScreenState extends State<FabricScreen> {
   }
 
   Future<void> showLongPressDialog(int index, String currentName,
-      String currentAbr, String currentDescription) async {
+      String currentPhone, String currentDescription) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -228,7 +222,7 @@ class _FabricScreenState extends State<FabricScreen> {
                 onPressed: () {
                   Navigator.pop(context);
                   showEditDialog(
-                      index, currentName, currentAbr, currentDescription);
+                      index, currentName, currentPhone, currentDescription);
                 },
               ),
               IconButton(
@@ -247,13 +241,14 @@ class _FabricScreenState extends State<FabricScreen> {
 
   Future<void> addItem() async {
     String newName = '';
-    String newAbr = '';
+    String newPhone = '';
     String newDescription = '';
 
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        return Dialog.fullscreen(
+          // title: Text('Add New Item'),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -262,8 +257,8 @@ class _FabricScreenState extends State<FabricScreen> {
                 decoration: InputDecoration(labelText: 'Name'),
               ),
               TextField(
-                onChanged: (value) => newAbr = value,
-                decoration: InputDecoration(labelText: 'Abr'),
+                onChanged: (value) => newPhone = value,
+                decoration: InputDecoration(labelText: 'Phone'),
               ),
               TextField(
                 onChanged: (value) => newDescription = value,
@@ -278,7 +273,7 @@ class _FabricScreenState extends State<FabricScreen> {
               ElevatedButton(
                 onPressed: () {
                   // Perform the add operation with the entered data
-                  addNewItem(newName, newAbr, newDescription);
+                  addNewItem(newName, newPhone, newDescription);
                   Navigator.pop(context);
                 },
                 child: Text('Add'),
@@ -291,15 +286,15 @@ class _FabricScreenState extends State<FabricScreen> {
   }
 
   Future<void> showEditDialog(int index, String currentName,
-      String currentAbr, String currentDescription) async {
+      String currentPhone, String currentDescription) async {
     String newName = currentName;
-    String newAbr = currentAbr;
+    String newPhone = currentPhone;
     String newDescription = currentDescription;
 
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
+        return Dialog.fullscreen(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -309,9 +304,9 @@ class _FabricScreenState extends State<FabricScreen> {
                 controller: TextEditingController(text: currentName),
               ),
               TextField(
-                onChanged: (value) => newAbr = value,
-                decoration: InputDecoration(labelText: 'Abr'),
-                controller: TextEditingController(text: newAbr),
+                onChanged: (value) => newPhone = value,
+                decoration: InputDecoration(labelText: 'Phone'),
+                controller: TextEditingController(text: currentPhone),
               ),
               TextField(
                 onChanged: (value) => newDescription = value,
@@ -327,7 +322,7 @@ class _FabricScreenState extends State<FabricScreen> {
               TextButton(
                 onPressed: () {
                   // Perform the update operation with the entered data
-                  updateItem(index, newName, newAbr, newDescription);
+                  updateItem(index, newName, newPhone, newDescription);
                   Navigator.pop(context);
                 },
                 child: Text('Update'),

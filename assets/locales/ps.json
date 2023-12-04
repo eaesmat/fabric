@@ -27,6 +27,17 @@
   "sarai": "سرای",
   "list_of_items": "د توکو لیست",
   "customers_accounts": "د پیرودونکو حسابونه",
-  "users" : "کاروونکي"
+  "users" : "کاروونکي",
+  "company" : "شرکت",
+  "bundle" : "بنډل",
+  "meter" : "متر",
+  "war" : "وار",
+  "yen_price" : "د ین قیمت",
+  "total_yen_price" : "د ین ټول قیمت",
+  "dollar_price" : "د ډالر قیمت",
+  "total_dollar_price" : "د ډالرو ټول قیمت",
+  "tt_commission" : "د ټي ټي کمیشن",
+  "tamam_shoda" : "دقیق لګښت"
+
 
 }

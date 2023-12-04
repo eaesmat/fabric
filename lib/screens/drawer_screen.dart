@@ -1,6 +1,7 @@
 // drawer_widget.dart
 
 import 'package:fabricproject/screens/customer_screen.dart';
+import 'package:fabricproject/screens/external_companies_list_screen.dart';
 import 'package:fabricproject/screens/external_companies_screen.dart';
 import 'package:fabricproject/screens/fabric_screen.dart';
 import 'package:fabricproject/screens/forex_screen.dart';
@@ -152,7 +153,7 @@ class DrawerScreen extends StatelessWidget {
             ),
             // General settings ends
             //Desires section
-            const ExpansionTileWidget(
+            ExpansionTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.users,
                 size: 20,
@@ -163,6 +164,15 @@ class DrawerScreen extends StatelessWidget {
                   thickness: 0.1,
                 ),
                 ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const ExternalCompaniesListScreen(),
+                      ),
+                    );
+                  },
                   lead: FaIcon(
                     FontAwesomeIcons.circleDollarToSlot,
                     size: 20,

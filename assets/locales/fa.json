@@ -27,7 +27,18 @@
   "sarai" : "سرای ها",
   "list_of_items" : "لیست اجناس",
   "customers_accounts" : "حساب های مشتریان",
-  "users" : "کاربران"
+  "users" : "کاربران",
+  "company" : "شرکت",
+  "bundle" : "باندل",
+  "meter" : "متر",
+  "war" : "وار",
+  "yen_price" : "قیمت ین",
+  "total_yen_price" : "قیمت ین کل",
+  "dollar_price" : "قیمت دلار",
+  "total_dollar_price" : "قیمت کل دلار",
+  "tt_commission" : " کمیشن تی تی ",
+  "tamam_shoda" : "تمام شده"
+
 
 
 
