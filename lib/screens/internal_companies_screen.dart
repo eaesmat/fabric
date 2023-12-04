@@ -1,3 +1,4 @@
+import 'package:fabricproject/common/api_endpoint.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-company?company_id=${companyData![index].companyId}'),
+            '${baseURL}update-company?company_id=${companyData![index].companyId}'),
         body: json.encode({
           'companyId': companyData![index].companyId,
           'name': newName,
@@ -63,7 +64,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
   Future<void> fetchData() async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/getCompany'));
+        await http.get(Uri.parse('${baseURL}getCompany'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -79,7 +80,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-company?company_id=${companyData![index].companyId}'));
+        '${baseURL}delete-company?company_id=${companyData![index].companyId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -102,7 +103,7 @@ class _InternalCompaniesScreenState extends State<InternalCompaniesScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-company'),
+        Uri.parse('${baseURL}add-company'),
         body: json.encode({
           'companyId': 0,
           'name': name,

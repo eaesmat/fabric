@@ -3,18 +3,19 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class TextsField extends StatefulWidget {
-  // All of them comes from other widgets where TextsFields is used
+class CustomTextFieldWithController extends StatefulWidget {
+  // All of them comes from other widgets where CustomTextFieldWithControllers is used
   final TextEditingController? controller;
   final LocaleText lblText;
-  const TextsField(
-      {super.key, required this.controller, required this.lblText});
+  final Function? onChanged;
+  const CustomTextFieldWithController(
+      {super.key, this.controller, required this.lblText, this.onChanged});
 
   @override
-  State<TextsField> createState() => _TextsFieldState();
+  State<CustomTextFieldWithController> createState() => _CustomTextFieldWithControllerState();
 }
 
-class _TextsFieldState extends State<TextsField> {
+class _CustomTextFieldWithControllerState extends State<CustomTextFieldWithController> {
   // These vars are used for Auto-Direction
   // package to make text fields direction according to the language of keyboard
   String text = "";
@@ -36,6 +37,7 @@ class _TextsFieldState extends State<TextsField> {
           onChanged: (str) {
             setState(() {
               text = str;
+              widget.onChanged!(str);
             });
           },
           controller: widget.controller!,
@@ -58,16 +60,7 @@ class _TextsFieldState extends State<TextsField> {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),
               borderSide: const BorderSide(
-                color:
-                    Pallete.blueColor,
-                width: 1.0,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4),
-              borderSide: BorderSide(
-                color:
-                    Pallete.redColor,
+                color: Pallete.blueColor,
                 width: 1.0,
               ),
             ),

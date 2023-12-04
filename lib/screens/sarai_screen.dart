@@ -1,3 +1,4 @@
+import 'package:fabricproject/common/api_endpoint.dart';
 import 'package:fabricproject/models/sarai_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -35,7 +36,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-sarai?sarai_id=${saraiData![index].saraiId}'),
+            '${baseURL}update-sarai?sarai_id=${saraiData![index].saraiId}'),
         body: json.encode({
           'sarai_id': saraiData![index].saraiId,
           'name': newName,
@@ -67,7 +68,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
   Future<void> fetchData() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/getSarai'));
+          await http.get(Uri.parse('${baseURL}getSarai'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -88,7 +89,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-sarai?sarai_id=${saraiData![index].saraiId}'));
+        '${baseURL}delete-sarai?sarai_id=${saraiData![index].saraiId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -112,7 +113,7 @@ class _SaraiScreenState extends State<SaraiScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-sarai'),
+        Uri.parse('${baseURL}add-sarai'),
         body: json.encode({
           'sarai_Id': 0,
           'name': name,

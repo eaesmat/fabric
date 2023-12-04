@@ -1,3 +1,4 @@
+import 'package:fabricproject/common/api_endpoint.dart';
 import 'package:fabricproject/models/fabric_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -33,7 +34,7 @@ class _FabricScreenState extends State<FabricScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-fabric?fabric_id=${fabricData![index].fabricId}'),
+            '${baseURL}update-fabric?fabric_id=${fabricData![index].fabricId}'),
         body: json.encode({
           'fabric_Id': fabricData![index].fabricId,
           'name': newName,
@@ -63,7 +64,7 @@ class _FabricScreenState extends State<FabricScreen> {
 
   Future<void> fetchData() async {
     final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/getFabric'));
+        await http.get(Uri.parse('${baseURL}getFabric'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -79,7 +80,7 @@ class _FabricScreenState extends State<FabricScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-fabric?fabric_id=${fabricData![index].fabricId}'));
+        '${baseURL}delete-fabric?fabric_id=${fabricData![index].fabricId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -102,7 +103,7 @@ class _FabricScreenState extends State<FabricScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-fabric'),
+        Uri.parse('${baseURL}add-fabric'),
         body: json.encode({
           'companyId': 0,
           'name': name,

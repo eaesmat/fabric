@@ -199,7 +199,15 @@ class DrawerScreen extends StatelessWidget {
             ),
 // Goods on the way ends
 // Transport
-            const ListTileWidget(
+            ListTileWidget(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SaraiScreen(),
+                  ),
+                );
+              },
               lead: FaIcon(FontAwesomeIcons.truckFast, size: 20),
               tileTitle: LocaleText("ٰtransport"),
             ),

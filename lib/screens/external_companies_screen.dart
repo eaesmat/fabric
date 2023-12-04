@@ -1,3 +1,4 @@
+import 'package:fabricproject/common/api_endpoint.dart';
 import 'package:fabricproject/models/external_companies_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -34,7 +35,7 @@ class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'),
+            '${baseURL}update-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'),
         body: json.encode({
           'venodrcompany_id': externalCompanyData![index].vendorcompanyId,
           'name': newName,
@@ -63,8 +64,7 @@ class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
   }
 
   Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:8000/api/getVendorCompany'));
+    final response = await http.get(Uri.parse('${baseURL}getVendorCompany'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -80,7 +80,7 @@ class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'));
+        '${baseURL}delete-vendor-company?vendorcompany_id=${externalCompanyData![index].vendorcompanyId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -103,7 +103,7 @@ class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-vendor-company'),
+        Uri.parse('${baseURL}add-vendor-company'),
         body: json.encode({
           'vendorcompany_Id': 0,
           'name': name,
@@ -149,13 +149,6 @@ class _ExternalCompaniesScreenState extends State<ExternalCompaniesScreen> {
                 final data = externalCompanyData![index];
 
                 return ListTileWidget(
-                  // lead: CircleAvatar(
-                  //   backgroundColor: Pallete.blueColor,
-                  //   child: Text(
-                  //     data.phone.toString(),
-                  //     style: const TextStyle(color: Pallete.whiteColor),
-                  //   ),
-                  // ),
                   tileTitle: Row(
                     children: [
                       Text(

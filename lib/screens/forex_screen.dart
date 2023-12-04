@@ -1,3 +1,4 @@
+import 'package:fabricproject/common/api_endpoint.dart';
 import 'package:fabricproject/models/forex_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -35,7 +36,7 @@ class _ForexScreenState extends State<ForexScreen> {
     try {
       final response = await http.put(
         Uri.parse(
-            'http://10.0.2.2:8000/api/update-sarfi?sarfi_id=${forexData![index].sarafiId}'),
+            '${baseURL}update-sarfi?sarfi_id=${forexData![index].sarafiId}'),
         body: json.encode({
           'sarafi_id': forexData![index].sarafiId,
           'fullname': newFullName,
@@ -66,7 +67,7 @@ class _ForexScreenState extends State<ForexScreen> {
   Future<void> fetchData() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:8000/api/getSarafi'));
+          await http.get(Uri.parse('${baseURL}getSarafi'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -87,7 +88,7 @@ class _ForexScreenState extends State<ForexScreen> {
 
   Future<void> deleteItem(int index) async {
     final response = await http.delete(Uri.parse(
-        'http://10.0.2.2:8000/api/delete-sarafi?sarafi_id=${forexData![index].sarafiId}'));
+        '${baseURL}delete-sarafi?sarafi_id=${forexData![index].sarafiId}'));
 
     if (response.statusCode == 500) {
       setState(() {
@@ -111,7 +112,7 @@ class _ForexScreenState extends State<ForexScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/add-sarafi'),
+        Uri.parse('${baseURL}add-sarafi'),
         body: json.encode({
           'companyId': 0,
           'fullname': fullname,
