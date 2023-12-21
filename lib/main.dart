@@ -1,6 +1,7 @@
 import 'package:fabricproject/controller/company_controller.dart';
 import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
+import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
@@ -65,6 +66,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FabricDesignColorController>(
           create: (_) => FabricDesignColorController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<FabricDesignBundleController>(
+          create: (_) => FabricDesignBundleController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

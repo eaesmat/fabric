@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/model/fabric_design_model.dart';
@@ -27,6 +28,8 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
   Widget build(BuildContext context) {
     final fabricDesignController = Provider.of<FabricDesignController>(context);
     final fabricDesignColorController =
+        Provider.of<FabricDesignBundleController>(context);
+    final fabricDesignBundleController =
         Provider.of<FabricDesignColorController>(context);
     return Scaffold(
       appBar: AppBar(
@@ -61,6 +64,9 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                     return ListTileWidget(
                       onTap: () {
                         fabricDesignColorController
+                            .navigateToFabricDesignDetails(data.name.toString(),
+                                data.fabricdesignId!.toInt());
+                        fabricDesignBundleController
                             .navigateToFabricDesignDetails(data.name.toString(),
                                 data.fabricdesignId!.toInt());
                       },
