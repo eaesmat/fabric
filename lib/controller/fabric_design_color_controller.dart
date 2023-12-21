@@ -84,7 +84,6 @@ class FabricDesignColorController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
         getAllFabricDesignColors(fabricDesignId!);
@@ -214,7 +213,7 @@ class FabricDesignColorController extends ChangeNotifier {
             .where((fabricDesignColor) =>
                 fabricDesignColor.fabricdesignId == fabricDesignId)
             .toList();
-       searchFabricDesignColors?.clear();
+        searchFabricDesignColors?.clear();
         searchFabricDesignColors?.addAll(allFabricDesignColors!);
 
         _helperServices.goBack();
@@ -229,22 +228,22 @@ class FabricDesignColorController extends ChangeNotifier {
   }
 
   updateFabricDesignColorData() {
-  searchFabricDesignColors?.clear();
-  if (searchText.isEmpty) {
-    searchFabricDesignColors?.addAll(allFabricDesignColors!);
-  } else {
-    searchFabricDesignColors?.addAll(
-      allFabricDesignColors!
-          .where(
-            (element) =>
-                element.colorname!.toLowerCase().contains(searchText.toLowerCase()),
-          )
-          .toList(),
-    );
+    searchFabricDesignColors?.clear();
+    if (searchText.isEmpty) {
+      searchFabricDesignColors?.addAll(allFabricDesignColors!);
+    } else {
+      searchFabricDesignColors?.addAll(
+        allFabricDesignColors!
+            .where(
+              (element) => element.colorname!
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()),
+            )
+            .toList(),
+      );
+    }
+    notifyListeners();
   }
-  notifyListeners();
-}
-
 
   void clearAllControllers() {
     colorNameController.clear();
