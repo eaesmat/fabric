@@ -4,68 +4,109 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class CustomTextFieldWithController extends StatefulWidget {
-  // All of them comes from other widgets where CustomTextFieldWithControllers is used
   final TextEditingController? controller;
+  final bool? isDisabled;
   final LocaleText lblText;
+  final Widget? iconBtn;
   final Function? onChanged;
+  final Function(String?)? customValidator;
+  final TextInputType? keyboardType;
+
   const CustomTextFieldWithController(
-      {super.key, this.controller, required this.lblText, this.onChanged});
+      {Key? key,
+      this.controller,
+      required this.lblText,
+      this.onChanged,
+      this.customValidator,
+      this.iconBtn,
+      this.keyboardType,
+      this.isDisabled})
+      : super(key: key);
 
   @override
-  State<CustomTextFieldWithController> createState() => _CustomTextFieldWithControllerState();
+  State<CustomTextFieldWithController> createState() =>
+      _CustomTextFieldWithControllerState();
 }
 
-class _CustomTextFieldWithControllerState extends State<CustomTextFieldWithController> {
-  // These vars are used for Auto-Direction
-  // package to make text fields direction according to the language of keyboard
+class _CustomTextFieldWithControllerState
+    extends State<CustomTextFieldWithController> {
   String text = "";
   bool isRTL = false;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-      child: AutoDirection(
-        onDirectionChange: (isRTL) {
-          setState(() {
-            this.isRTL = isRTL;
-          });
-        },
-        text: text,
-        child: TextField(
-          onChanged: (str) {
-            setState(() {
-              text = str;
-              widget.onChanged!(str);
-            });
-          },
-          controller: widget.controller!,
-          decoration: InputDecoration(
-            label: widget.lblText,
-            labelStyle: const TextStyle(
-              color: Pallete.blueColor,
-              fontSize: 14,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4),
-              borderSide: const BorderSide(
-                color: Pallete.blueColor,
-                width: 1.0,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4),
-              borderSide: const BorderSide(
-                color: Pallete.blueColor,
-                width: 1.0,
+      child: Column(
+        children: [
+          AutoDirection(
+            onDirectionChange: (isRTL) {
+              setState(() {
+                this.isRTL = isRTL;
+              });
+            },
+            text: text,
+            child: TextFormField(
+              enabled: !(widget.isDisabled ?? false),
+              keyboardType: widget.keyboardType,
+              onChanged: (str) {
+                setState(() {
+                  text = str;
+                  widget.onChanged?.call(str);
+                });
+              },
+              controller: widget.controller,
+              validator: (value) {
+                return widget.customValidator?.call(value);
+              },
+              decoration: InputDecoration(
+                // enabled: widget.isDisabled,
+                prefixIcon: widget.iconBtn,
+                label: widget.lblText,
+                labelStyle: const TextStyle(
+                  color: Pallete.blueColor,
+                  fontSize: 14,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: const BorderSide(
+                    color: Pallete.blueColor,
+                    width: 1.0,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: const BorderSide(
+                    color: Pallete.blueColor,
+                    width: 1.0,
+                  ),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: const BorderSide(
+                    color: Pallete.disabledBorder,
+                    width: 1.0,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    color: Pallete.redColor,
+                    width: 1.0,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
+        ],
       ),
     );
   }

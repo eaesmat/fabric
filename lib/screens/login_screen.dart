@@ -17,14 +17,6 @@ class LoginScreen extends StatelessWidget {
     final passwordController = TextEditingController();
     final size = MediaQuery.of(context).size;
     // function to be called on button click of widget button
-    void onClick() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
-    }
 
     return Scaffold(
         appBar: AppBar(
@@ -68,9 +60,6 @@ class LoginScreen extends StatelessWidget {
                     controller: emailController,
                     lblText: const LocaleText('email'),
                   ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
                   CustomTextFieldWithController(
                     controller: passwordController,
                     lblText: const LocaleText(
@@ -89,13 +78,21 @@ class LoginScreen extends StatelessWidget {
                     height: size.height * 0.01,
                   ),
                   CustomButton(
+                    btnWidth: 1,
                     btnIcon: const Icon(Icons.login, color: Pallete.whiteColor),
                     btnText: const LocaleText(
                       'signin',
                       style: TextStyle(fontSize: 12, color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
-                    callBack: onClick,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainScreen(),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: size.height * 0.03,
@@ -107,6 +104,7 @@ class LoginScreen extends StatelessWidget {
                     height: size.height * 0.03,
                   ),
                   CustomButton(
+                    btnWidth: 1,
                     btnIcon: const Icon(Icons.email),
                     btnText: const LocaleText(
                       'sign_in_with_google',
@@ -118,6 +116,7 @@ class LoginScreen extends StatelessWidget {
                     height: size.height * 0.01,
                   ),
                   const CustomButton(
+                    btnWidth: 1,
                     btnIcon: Icon(Icons.facebook_sharp),
                     btnText: LocaleText(
                       'sign_in_with_facebook',

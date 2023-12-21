@@ -6,15 +6,15 @@ class CustomButton extends StatelessWidget {
   final Icon btnIcon;
   final LocaleText btnText;
   final Color bgColor;
-  final VoidCallback? callBack;
-  final double? btnWidth;
+  final Function? onTap;
+  final double btnWidth;
   const CustomButton(
       {super.key,
       required this.btnIcon,
       required this.btnText,
       this.bgColor = Colors.blue,
-      this.callBack,
-      this.btnWidth = 1});
+     required this.btnWidth,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,11 @@ class CustomButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-            minimumSize: Size(size.width * btnWidth!, size.height * 0.07),
+            minimumSize: Size(size.width * btnWidth, size.height * 0.07),
             backgroundColor: bgColor),
-        onPressed: callBack,
+        onPressed: () {
+          onTap!();
+        },
         icon: btnIcon,
         label: btnText,
       ),
