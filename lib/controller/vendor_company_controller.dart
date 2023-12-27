@@ -8,23 +8,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class VendorCompanyController extends ChangeNotifier {
+// helper class instance
   final HelperServices _helperServices;
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController desorptionController = TextEditingController();
-  // TextEditingController userController = TextEditingController();
+// holds api calls return data
   List<Data>? allVendorCompanies = [];
   List<Data>? searchVendorCompanies = [];
+// store search texts
   String searchText = "";
 
   VendorCompanyController(this._helperServices) {
     getAllVendorCompanies();
   }
+// navigates to create screen
   navigateToVendorCompanyCreate() {
     _helperServices.navigate(const VendorCompanyCreateScreen());
   }
 
+// navigates to edit screen
   navigateToVendorCompanyEdit(Data data, int id) {
+// pass the data to edit screen
     nameController.text = data.name.toString();
     phoneController.text = data.phone.toString();
     desorptionController.text = data.description.toString();
@@ -33,8 +38,7 @@ class VendorCompanyController extends ChangeNotifier {
     );
   }
 
-  
-
+// gets data from api
   getAllVendorCompanies() async {
     _helperServices.showLoader();
     final response = await VendorCompanyApiServiceProvider()

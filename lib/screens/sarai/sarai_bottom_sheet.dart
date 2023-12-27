@@ -1,5 +1,5 @@
-import 'package:fabricproject/controller/draw_controller.dart';
-import 'package:fabricproject/controller/forex_controller.dart';
+import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -7,27 +7,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class ForexBottomSheet extends StatefulWidget {
-  const ForexBottomSheet({super.key});
+class SaraiButtonSheet extends StatefulWidget {
+  const SaraiButtonSheet({super.key});
 
   @override
-  State<ForexBottomSheet> createState() => _ForexBottomSheetState();
+  State<SaraiButtonSheet> createState() => _SaraiButtonSheetState();
 }
 
-class _ForexBottomSheetState extends State<ForexBottomSheet> {
-   @override
+class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      Provider.of<ForexController>(context, listen: false).resetSearchFilter();
+      Provider.of<SaraiController>(context, listen: false).resetSearchFilter();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    // controllers
-    final forexController = Provider.of<ForexController>(context);
-    final drawController = Provider.of<DrawController>(context);
+    // controller provider
+    SaraiController saraiController = Provider.of<SaraiController>(context);
+    // fabric purchase controller to pass the selected id to the fabric purchase controller
+    final transportDealController =
+        Provider.of<TransportDealController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -43,8 +46,9 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                // search textfield
+                // search text filed
                 child: CustomTextFieldWithController(
+                  // create button in the search text filed
                   iconBtn: IconButton(
                     icon: const Icon(
                       size: 30,
@@ -52,46 +56,40 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                       color: Pallete.blueColor,
                     ),
                     onPressed: () {
-                      // search Icon to create new item
-                      forexController.navigateToForexCreate();
+                      // to create new
+                      saraiController.navigateToSaraiCreate();
                     },
                   ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
-                    // Passes search text to the controller
-                    forexController.searchForexMethod(value);
+                    // searches item
+                    saraiController.searchSarisMethod(value);
                   },
                 ),
               ),
               const SizedBox(height: 20.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: forexController.searchForex?.length ?? 0,
+                itemCount: saraiController.searchSarais?.length ?? 0,
                 itemBuilder: (context, index) {
+                  // data gets data from controller
                   final reversedList =
-                      forexController.searchForex!.reversed.toList();
+                      saraiController.searchSarais!.reversed.toList();
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      // Pass item id when clicked
-                      drawController.forexController.text =
-                          data.sarafiId!.toString();
-                      // Pass name when clicked
-                      drawController.selectedForexController.text =
-                          '${data.fullname}';
+                      // pass id
+                      transportDealController.selectedSaraiIdController.text =
+                          data.saraiId!.toString();
+                      transportDealController.selectedSaraiNameController.text =
+                          data.name!.toString();
+
                       Navigator.pop(context);
                     },
-                    lead: CircleAvatar(
-                      backgroundColor: Pallete.blueColor,
-                      child: Text(
-                        data.shopno.toString(),
-                        style: const TextStyle(color: Pallete.whiteColor),
-                      ),
-                    ),
                     tileTitle: Row(
                       children: [
                         Text(
-                          data.fullname.toString(),
+                          data.name.toString(),
                         ),
                         const Spacer(),
                         Text(
@@ -110,7 +108,6 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                         ),
                       ],
                     ),
-                    // menu button for delete and update actions
                     trail: PopupMenuButton(
                       color: Pallete.whiteColor,
                       child: const Icon(Icons.more_vert_sharp),
@@ -140,13 +137,11 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          // navigates to edit screen with item id
-                          forexController.navigateToForexEdit(
-                              data, data.sarafiId!.toInt());
+                          saraiController.navigateToSaraiEdit(
+                              data, data.saraiId!.toInt());
                         }
-                        // delete the item
                         if (value == "delete") {
-                          forexController.deleteForex(data.sarafiId, index);
+                          saraiController.deleteSarai(data.saraiId, index);
                         }
                       },
                     ),

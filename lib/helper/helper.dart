@@ -30,9 +30,11 @@ class HelperServices {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(
-                  color: Pallete.blueColor,
+              body: SafeArea(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Pallete.blueColor,
+                  ),
                 ),
               ),
             );

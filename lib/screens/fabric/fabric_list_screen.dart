@@ -16,6 +16,15 @@ class FabricListScreen extends StatefulWidget {
 
 class _FabricListScreenState extends State<FabricListScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<FabricController>(context, listen: false).resetSearchFilter();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -3,7 +3,6 @@ import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/draw_model.dart';
 import 'package:fabricproject/screens/draw/draw_create_screen.dart';
 import 'package:fabricproject/screens/draw/draw_edit_screen.dart';
-import 'package:fabricproject/screens/vendor_company/vendor_company_details_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';

@@ -80,7 +80,10 @@ class CompanyController extends ChangeNotifier {
       },
     );
     response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+      (l) => {
+        _helperServices.goBack(),
+        _helperServices.showErrorMessage(l),
+      },
       (r) => {
         getAllCompanies(),
         _helperServices.goBack(),
@@ -205,9 +208,11 @@ class CompanyController extends ChangeNotifier {
     }
     notifyListeners();
   }
-   void resetSearchFilter() {
-    searchText = ''; // Reset the search text
-    updateCompaniesData(); // Update the searchCompanies list to display all data
+
+  // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateCompaniesData();
   }
 
   void clearAllController() {

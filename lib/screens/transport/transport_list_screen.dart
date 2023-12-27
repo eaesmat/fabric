@@ -1,4 +1,6 @@
 import 'package:fabricproject/controller/transport_controller.dart';
+import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -11,15 +13,16 @@ class TransportListScreen extends StatefulWidget {
   const TransportListScreen({Key? key}) : super(key: key);
 
   @override
-  State<TransportListScreen> createState() =>
-      _TransportListScreenState();
+  State<TransportListScreen> createState() => _TransportListScreenState();
 }
 
 class _TransportListScreenState extends State<TransportListScreen> {
   @override
   Widget build(BuildContext context) {
-    final transportController =
-        Provider.of<TransportController>(context);
+    final transportController = Provider.of<TransportController>(context);
+    final transportDealController =
+        Provider.of<TransportDealController>(context);
+    final transportPayment = Provider.of<TransportPaymentController>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,14 +48,26 @@ class _TransportListScreenState extends State<TransportListScreen> {
             child: Consumer<TransportController>(
               builder: (context, transportController, child) {
                 return ListView.builder(
-                  itemCount:
-                      transportController.searchTransports?.length ??
-                          0,
+                  itemCount: transportController.searchTransports?.length ?? 0,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data =
-                        transportController.searchTransports![index];
+                    final data = transportController.searchTransports![index];
                     return ListTileWidget(
+                      onTap: () {
+                        transportDealController
+                            .navigateToTransportDealDetailsScreen(
+                                data.name.toString(), data.transportId!);
+                        transportDealController.transportId =
+                            data.transportId!.toInt();
+
+                        transportPayment.navigateToTransportDealDetailsScreen(
+                          data.name.toString(),
+                          data.transportId!.toInt(),
+                        );
+
+                        transportPayment.transportId =
+                            data.transportId!.toInt();
+                      },
                       tileTitle: Text(
                         data.name.toString(),
                       ),

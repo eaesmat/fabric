@@ -26,7 +26,6 @@ class Data {
   String? startdate;
   String? arrivaldate;
   int? fabricpurchaseId;
-  int? containerId;
   double? khatamount;
   double? costperkhat;
   int? transportId;
@@ -39,14 +38,14 @@ class Data {
   int? userId;
   Transport? transport;
   Fabricpurchase? fabricpurchase;
-  List<Container>? container;
+  List<ContainerModel>? container;
+  List<Saraiindeal>? saraiindeal;
 
   Data(
       {this.transportdealId,
       this.startdate,
       this.arrivaldate,
       this.fabricpurchaseId,
-      this.containerId,
       this.khatamount,
       this.costperkhat,
       this.transportId,
@@ -59,24 +58,24 @@ class Data {
       this.userId,
       this.transport,
       this.fabricpurchase,
-      this.container});
+      this.container,
+      this.saraiindeal});
 
   Data.fromJson(Map<String, dynamic> json) {
-    transportdealId = json['transportdeal_id'];
+    transportdealId = _checkInt(json['transportdeal_id']);
     startdate = json['startdate'];
     arrivaldate = json['arrivaldate'];
-    fabricpurchaseId = json['fabricpurchase_id'];
-    containerId = json['container_id'];
-    khatamount = json['khatamount'];
-    costperkhat = json['costperkhat'];
-    transportId = json['transport_id'];
+    fabricpurchaseId = _checkInt(json['fabricpurchase_id']);
+    khatamount = _checkDouble(json['khatamount']);
+    costperkhat = _checkDouble(json['costperkhat']);
+    transportId = _checkInt(json['transport_id']);
     status = json['status'];
-    duration = json['duration'];
-    bundle = json['bundle'];
+    duration = _checkInt(json['duration']);
+    bundle = _checkInt(json['bundle']);
     photo = json['photo'];
-    totalcost = json['totalcost'];
-    warcost = json['warcost'];
-    userId = json['user_id'];
+    totalcost = _checkDouble(json['totalcost']);
+    warcost = _checkDouble(json['warcost']);
+    userId = _checkInt(json['user_id']);
     transport = json['transport'] != null
         ? new Transport.fromJson(json['transport'])
         : null;
@@ -84,11 +83,20 @@ class Data {
         ? new Fabricpurchase.fromJson(json['fabricpurchase'])
         : null;
     if (json['container'] != null) {
-      container = <Container>[];
+      container = <ContainerModel>[];
       json['container'].forEach((v) {
-        container!.add(new Container.fromJson(v));
+        container!.add(new ContainerModel.fromJson(v));
       });
     }
+    if (json['saraiindeal'] != null) {
+      saraiindeal = <Saraiindeal>[];
+      json['saraiindeal'].forEach(
+        (v) {
+          saraiindeal!.add(new Saraiindeal.fromJson(v));
+        },
+      );
+    }
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -97,7 +105,6 @@ class Data {
     data['startdate'] = this.startdate;
     data['arrivaldate'] = this.arrivaldate;
     data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['container_id'] = this.containerId;
     data['khatamount'] = this.khatamount;
     data['costperkhat'] = this.costperkhat;
     data['transport_id'] = this.transportId;
@@ -117,7 +124,32 @@ class Data {
     if (this.container != null) {
       data['container'] = this.container!.map((v) => v.toJson()).toList();
     }
+    if (this.saraiindeal != null) {
+      data['saraiindeal'] = this.saraiindeal!.map((v) => v.toJson()).toList();
+    }
     return data;
+  }
+  
+  int? _checkInt(dynamic value) {
+    if (value is int) {
+      return value;
+    } else if (value is String) {
+      return int.tryParse(value);
+    } else {
+      return null;
+    }
+  }
+
+  double? _checkDouble(dynamic value) {
+    if (value is int) {
+      return value.toDouble();
+    } else if (value is double) {
+      return value;
+    } else if (value is String) {
+      return double.tryParse(value);
+    } else {
+      return null;
+    }
   }
 }
 
@@ -147,7 +179,7 @@ class Transport {
 }
 
 class Fabricpurchase {
- int? fabricpurchaseId;
+  int? fabricpurchaseId;
   int? bundle;
   double? meter;
   double? war;
@@ -187,88 +219,87 @@ class Fabricpurchase {
       this.userId});
 
   Fabricpurchase.fromJson(Map<String, dynamic> json) {
-    fabricpurchaseId = checkInt(json['fabricpurchase_id']);
-    bundle = checkInt(json['bundle']);
-    meter = checkDouble(json['meter']);
-    war = checkDouble(json['war']);
-    yenprice = checkDouble(json['yenprice']);
-    yenexchange = checkDouble(json['yenexchange']);
-    ttcommission = checkDouble(json['ttcommission']);
+    fabricpurchaseId = _checkInt(json['fabricpurchase_id']);
+    bundle = _checkInt(json['bundle']);
+    meter = _checkDouble(json['meter']);
+    war = _checkDouble(json['war']);
+    yenprice = _checkDouble(json['yenprice']);
+    yenexchange = _checkDouble(json['yenexchange']);
+    ttcommission = _checkDouble(json['ttcommission']);
     packagephoto = json['packagephoto'];
     bankreceiptphoto = json['bankreceiptphoto'];
     date = json['date'];
-    fabricId = checkInt(json['fabric_id']);
-    companyId = checkInt(json['company_id']);
-    vendorcompanyId = checkInt(json['vendorcompany_id']);
+    fabricId = _checkInt(json['fabric_id']);
+    companyId = _checkInt(json['company_id']);
+    vendorcompanyId = _checkInt(json['vendorcompany_id']);
     fabricpurchasecode = json['fabricpurchasecode'];
-    dollerprice = checkDouble(json['dollerprice']);
-    totalyenprice = checkDouble(json['totalyenprice']);
-    totaldollerprice = checkDouble(json['totaldollerprice']);
-    userId = checkInt(json['user_id']);
+    dollerprice = _checkDouble(json['dollerprice']);
+    totalyenprice = _checkDouble(json['totalyenprice']);
+    totaldollerprice = _checkDouble(json['totaldollerprice']);
+    userId = _checkInt(json['user_id']);
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['bundle'] = this.bundle;
-    data['meter'] = this.meter;
-    data['war'] = this.war;
-    data['yenprice'] = this.yenprice;
-    data['yenexchange'] = this.yenexchange;
-    data['ttcommission'] = this.ttcommission;
-    data['packagephoto'] = this.packagephoto;
-    data['bankreceiptphoto'] = this.bankreceiptphoto;
-    data['date'] = this.date;
-    data['fabric_id'] = this.fabricId;
-    data['company_id'] = this.companyId;
-    data['vendorcompany_id'] = this.vendorcompanyId;
-    data['fabricpurchasecode'] = this.fabricpurchasecode;
-    data['dollerprice'] = this.dollerprice;
-    data['totalyenprice'] = this.totalyenprice;
-    data['totaldollerprice'] = this.totaldollerprice;
-    data['user_id'] = this.userId;
-    return data;
-  }
-   int? checkInt(dynamic value) {
+  int? _checkInt(dynamic value) {
     if (value is int) {
       return value;
     } else if (value is String) {
       return int.tryParse(value);
     } else {
-      return null; // or any default value depending on your logic
+      return null;
     }
   }
 
-  double? checkDouble(dynamic value) {
+  double? _checkDouble(dynamic value) {
     if (value is int) {
       return value.toDouble();
     } else if (value is double) {
-      return value; // Return as is if it's already a double
+      return value;
     } else if (value is String) {
-      final parsedValue = double.tryParse(value);
-
-      return parsedValue;
+      return double.tryParse(value);
     } else {
-      return null; // or any default value depending on your logic
+      return null;
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['fabricpurchase_id'] = fabricpurchaseId;
+    data['bundle'] = bundle;
+    data['meter'] = meter;
+    data['war'] = war;
+    data['yenprice'] = yenprice;
+    data['yenexchange'] = yenexchange;
+    data['ttcommission'] = ttcommission;
+    data['packagephoto'] = packagephoto;
+    data['bankreceiptphoto'] = bankreceiptphoto;
+    data['date'] = date;
+    data['fabric_id'] = fabricId;
+    data['company_id'] = companyId;
+    data['vendorcompany_id'] = vendorcompanyId;
+    data['fabricpurchasecode'] = fabricpurchasecode;
+    data['dollerprice'] = dollerprice;
+    data['totalyenprice'] = totalyenprice;
+    data['totaldollerprice'] = totaldollerprice;
+    data['user_id'] = userId;
+    return data;
   }
 }
 
-class Container {
+class ContainerModel {
   int? containerId;
   String? name;
   String? description;
   String? status;
   int? transportdealId;
 
-  Container(
+  ContainerModel(
       {this.containerId,
       this.name,
       this.description,
       this.status,
       this.transportdealId});
 
-  Container.fromJson(Map<String, dynamic> json) {
+  ContainerModel.fromJson(Map<String, dynamic> json) {
     containerId = json['container_id'];
     name = json['name'];
     description = json['description'];
@@ -283,6 +314,39 @@ class Container {
     data['description'] = this.description;
     data['status'] = this.status;
     data['transportdeal_id'] = this.transportdealId;
+    return data;
+  }
+}
+
+class Saraiindeal {
+  int? saraiindealId;
+  String? indate;
+  int? transportdealId;
+  int? saraifrom;
+  int? saraiId;
+
+  Saraiindeal(
+      {this.saraiindealId,
+      this.indate,
+      this.transportdealId,
+      this.saraifrom,
+      this.saraiId});
+
+  Saraiindeal.fromJson(Map<String, dynamic> json) {
+    saraiindealId = json['saraiindeal_id'];
+    indate = json['indate'];
+    transportdealId = json['transportdeal_id'];
+    saraifrom = json['saraifrom'];
+    saraiId = json['sarai_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['saraiindeal_id'] = this.saraiindealId;
+    data['indate'] = this.indate;
+    data['transportdeal_id'] = this.transportdealId;
+    data['saraifrom'] = this.saraifrom;
+    data['sarai_id'] = this.saraiId;
     return data;
   }
 }

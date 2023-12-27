@@ -225,6 +225,11 @@ class ForexController extends ChangeNotifier {
     }
     notifyListeners();
   }
+   // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateForexData();
+  }
 
   clearAllControllers() {
     fullNameController.clear();

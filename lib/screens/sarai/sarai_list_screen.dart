@@ -16,10 +16,16 @@ class SaraiListScreen extends StatefulWidget {
 
 class _SaraiListScreenState extends State<SaraiListScreen> {
   @override
-  Widget build(BuildContext context) {
-    final saraiController =
-        Provider.of<SaraiController>(context, listen: false);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<SaraiController>(context, listen: false).resetSearchFilter();
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const LocaleTexts(localeText: 'sarai'),
@@ -27,19 +33,34 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
       ),
       body: Column(
         children: [
+          // search text field area
           Consumer<SaraiController>(
             builder: (context, saraiController, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
+                // search textfield
                 child: CustomTextFieldWithController(
+                  iconBtn: IconButton(
+                    icon: const Icon(
+                      size: 30,
+                      Icons.add_box_rounded,
+                      color: Pallete.blueColor,
+                    ),
+                    onPressed: () {
+                      // search Icon to create new item
+                      saraiController.navigateToSaraiCreate();
+                    },
+                  ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
+                    //  pass the search textfield text to search
                     saraiController.searchSarisMethod(value);
                   },
                 ),
               );
             },
           ),
+          //  data items list view
           Expanded(
             child: Consumer<SaraiController>(
               builder: (context, saraiController, child) {
@@ -47,8 +68,12 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                   itemCount: saraiController.searchSarais?.length ?? 0,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data = saraiController.searchSarais![index];
+                    // reverse the data items
+                    final reversedList =
+                        saraiController.searchSarais!.reversed.toList();
+                    final data = reversedList[index];
                     return ListTileWidget(
+                      // list tile title
                       tileTitle: Row(
                         children: [
                           Text(
@@ -60,6 +85,7 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                           ),
                         ],
                       ),
+                      // tile subtitle
                       tileSubTitle: Row(
                         children: [
                           Text(
@@ -71,10 +97,13 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                           ),
                         ],
                       ),
+                      // tile title trailing
+                      // holds delete and update buttons
                       trail: PopupMenuButton(
                         color: Pallete.whiteColor,
                         child: const Icon(Icons.more_vert_sharp),
                         itemBuilder: (context) => <PopupMenuEntry<String>>[
+                          // delete button
                           const PopupMenuItem(
                               value: "delete",
                               child: Row(
@@ -87,6 +116,7 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                                 ],
                               )),
                           const PopupMenuItem(
+                              // update button
                               value: "edit",
                               child: Row(
                                 children: [
@@ -100,10 +130,12 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                         ],
                         onSelected: (String value) {
                           if (value == "edit") {
+                            // edit and pass data and id to the controller
                             saraiController.navigateToSaraiEdit(
                                 data, data.saraiId!.toInt());
                           }
                           if (value == "delete") {
+                            // edit
                             saraiController.deleteSarai(data.saraiId, index);
                           }
                         },
@@ -115,16 +147,6 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Pallete.blueColor,
-        onPressed: () {
-          saraiController.navigateToSaraiCreate();
-        },
-        child: const Icon(
-          Icons.add,
-          color: Pallete.whiteColor,
-        ),
       ),
     );
   }

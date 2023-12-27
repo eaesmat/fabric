@@ -8,24 +8,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class SaraiController extends ChangeNotifier {
+  // helper class instance
+  // controllers to provide data to the ui and get from
   final HelperServices _helperServices;
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  // TextEditingController userController = TextEditingController();
+  // to store  api call response data
   List<Data>? allSarais = [];
   List<Data>? searchSarais = [];
+  // holds text when user search
   String searchText = "";
 
   SaraiController(this._helperServices) {
+    //  get all the data at first visit
     getAllSarais();
   }
+
   navigateToSaraiCreate() {
+    // clear form data
+    clearAllControllers();
+    // navigates from helper class used to navigate to screen
     _helperServices.navigate(const SaraiCreateScreen());
   }
 
+// gets this data from the list screen
   navigateToSaraiEdit(Data data, int id) {
+    // clear form data
+    clearAllControllers();
+
+    // pass all the data to the edit screen
     nameController.text = data.name.toString();
     descriptionController.text = data.description.toString();
     phoneController.text = data.phone.toString();
@@ -40,13 +53,25 @@ class SaraiController extends ChangeNotifier {
 
   getAllSarais() async {
     _helperServices.showLoader();
+    // endpoint passed to the api class
     final response = await SaraiApiServiceProvider().getSarai('getSarai');
     response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+      (l) => {
+        // l returns failure with status code to the ui
+        // goBack pops the current stack
+
+        _helperServices.goBack(),
+        _helperServices.showErrorMessage(l),
+      },
       (r) {
+        // r holds data comes from api with success
+
         allSarais = r;
         _helperServices.goBack();
-        updateSaraisData();
+        searchSarais?.clear();
+        searchSarais?.addAll(allSarais!);
+        // this methods assign the recent data to the search List
+        notifyListeners();
       },
     );
   }
@@ -77,10 +102,7 @@ class SaraiController extends ChangeNotifier {
             color: Pallete.whiteColor,
           ),
         ),
-        nameController.clear(),
-        descriptionController.clear(),
-        phoneController.clear(),
-        locationController.clear(),
+        clearAllControllers
       },
     );
   }
@@ -110,12 +132,25 @@ class SaraiController extends ChangeNotifier {
             color: Pallete.whiteColor,
           ),
         ),
-        nameController.clear(),
-        descriptionController.clear(),
-        phoneController.clear(),
-        locationController.clear(),
       },
     );
+    clearAllControllers();
+  }
+
+// This method removes  or delete the item without reloading server
+  void deleteItemLocally(int id) {
+    final index = allSarais!.indexWhere((element) => element.saraiId == id);
+    if (index != -1) {
+      allSarais!.removeAt(index);
+
+      final searchIndex =
+          searchSarais!.indexWhere((element) => element.saraiId == id);
+      if (searchIndex != -1) {
+        searchSarais!.removeAt(searchIndex);
+      }
+
+      notifyListeners();
+    }
   }
 
   deleteSarai(id, index) async {
@@ -136,8 +171,7 @@ class SaraiController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             ),
-            searchSarais!.removeAt(index),
-            notifyListeners(),
+            deleteItemLocally(id),
           }
         else if (r == 500)
           {
@@ -159,6 +193,7 @@ class SaraiController extends ChangeNotifier {
     updateSaraisData();
   }
 
+// updates data ui according entered search text
   updateSaraisData() {
     searchSarais?.clear();
     if (searchText.isEmpty) {
@@ -168,6 +203,8 @@ class SaraiController extends ChangeNotifier {
         allSarais!
             .where(
               (element) =>
+                  // search filter is applied on these columns
+
                   element.name!.toLowerCase().contains(searchText) ||
                   element.description!.toLowerCase().contains(searchText) ||
                   element.phone!.toLowerCase().contains(searchText) ||
@@ -177,5 +214,18 @@ class SaraiController extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateSaraisData();
+  }
+
+  void clearAllControllers() {
+    nameController.clear();
+    descriptionController.clear();
+    phoneController.clear();
+    locationController.clear();
   }
 }

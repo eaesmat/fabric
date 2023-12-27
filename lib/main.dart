@@ -1,4 +1,6 @@
+import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
+import 'package:fabricproject/controller/container_controller.dart';
 import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
@@ -7,7 +9,10 @@ import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
+import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
@@ -69,6 +74,21 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FabricDesignBundleController>(
           create: (_) => FabricDesignBundleController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<TransportDealController>(
+          create: (_) => TransportDealController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<ContainerController>(
+          create: (_) => ContainerController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<AllFabricPurchaseController>(
+          create: (_) => AllFabricPurchaseController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<TransportPaymentController>(
+          create: (_) => TransportPaymentController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiInDealController>(
+          create: (_) => SaraiInDealController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

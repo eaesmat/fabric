@@ -3,8 +3,9 @@ import 'package:fabricproject/constants/api_url.dart';
 import 'package:fabricproject/model/vendor_company_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
-
+// this class provides api calls to the controller
 class VendorCompanyApiServiceProvider {
+// base URL comes from constant
   final String _baseURL = baseURL;
 
   Future<Either<String, List<Data>>> getVendorCompany(String apiEndpoint) async {

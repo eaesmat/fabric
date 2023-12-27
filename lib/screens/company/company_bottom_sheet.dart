@@ -7,9 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class CompanyBottomSheet extends StatelessWidget {
+class CompanyBottomSheet extends StatefulWidget {
   const CompanyBottomSheet({super.key});
 
+  @override
+  State<CompanyBottomSheet> createState() => _CompanyBottomSheetState();
+}
+
+class _CompanyBottomSheetState extends State<CompanyBottomSheet> {
+   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<CompanyController>(context, listen: false).resetSearchFilter();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // controller provider

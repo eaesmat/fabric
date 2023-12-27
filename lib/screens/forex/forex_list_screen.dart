@@ -15,6 +15,14 @@ class ForexListScreen extends StatefulWidget {
 }
 
 class _ForexListScreenState extends State<ForexListScreen> {
+    @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<ForexController>(context, listen: false).resetSearchFilter();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

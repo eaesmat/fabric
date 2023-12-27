@@ -1,7 +1,7 @@
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_button.dart';
+import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +20,7 @@ class _SaraiCreateScreenState extends State<SaraiCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // sends and gets data from the controller
     final saraiController = Provider.of<SaraiController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
@@ -59,7 +60,7 @@ class _SaraiCreateScreenState extends State<SaraiCreateScreen> {
                     lblText: const LocaleText('location'),
                     // customValidator: customFormValidator,
                   ),
-                  CustomButton(
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
                       Icons.check,
@@ -72,6 +73,7 @@ class _SaraiCreateScreenState extends State<SaraiCreateScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
+                        // if form is validated will be created
                         saraiController.createSarai();
                         Navigator.pop(context);
                       }

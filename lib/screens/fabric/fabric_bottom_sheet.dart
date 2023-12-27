@@ -7,9 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class FabricBottomSheet extends StatelessWidget {
+class FabricBottomSheet extends StatefulWidget {
   const FabricBottomSheet({super.key});
 
+  @override
+  State<FabricBottomSheet> createState() => _FabricBottomSheetState();
+}
+
+class _FabricBottomSheetState extends State<FabricBottomSheet> {
+   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<FabricController>(context, listen: false).resetSearchFilter();
+    });
+  }
   @override
   Widget build(BuildContext context) {
 // controller class providers

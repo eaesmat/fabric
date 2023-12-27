@@ -1,38 +1,34 @@
-import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/model/sarai_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
+import 'package:fabricproject/widgets/date_picker.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiEditScreen extends StatefulWidget {
-  // gets this data from controller, controller gets it from the list screen
-  final Data saraiData;
-  final int saraiId;
-
-  const SaraiEditScreen(
-      {super.key, required this.saraiData, required this.saraiId});
+class TransportPaymentCreateScreen extends StatefulWidget {
+  const TransportPaymentCreateScreen({super.key});
 
   @override
-  State<SaraiEditScreen> createState() => _SaraiEditScreenState();
+  State<TransportPaymentCreateScreen> createState() => _TransportPaymentCreateScreenState();
 }
 
-class _SaraiEditScreenState extends State<SaraiEditScreen> {
+class _TransportPaymentCreateScreenState extends State<TransportPaymentCreateScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    // gets and sends data to the controller using
-    final saraiController = Provider.of<SaraiController>(context);
+    // controller provider instance
+    final transportPaymentController =
+        Provider.of<TransportPaymentController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'update_sarai'),
+        title: const LocaleTexts(localeText: 'create_transport_payment'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -45,27 +41,21 @@ class _SaraiEditScreenState extends State<SaraiEditScreen> {
               child: Column(
                 children: [
                   CustomTextFieldWithController(
-                    lblText: const LocaleText('full_name'),
-                    controller: saraiController.nameController,
-                    // This comes from helper method to validate the field
-
+                    lblText: const LocaleText('amount'),
+                    controller: transportPaymentController.amountController,
+                    // comes from helper validates the field
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
-                    controller: saraiController.descriptionController,
-                    lblText: const LocaleText('description'),
-                    //  customValidator: customFormValidator
+                    lblText: const LocaleText('person'),
+                    controller: transportPaymentController.personController,
+                    // comes from helper validates the field
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
                   ),
-                  CustomTextFieldWithController(
-                    controller: saraiController.phoneController,
-                    lblText: const LocaleText('phone'),
-                    // customValidator: customFormValidator,
-                  ),
-                  CustomTextFieldWithController(
-                    controller: saraiController.locationController,
-                    lblText: const LocaleText('location'),
-                    // customValidator: customFormValidator,
+                  DatePicker(
+                    controller: transportPaymentController.dateOneController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -74,15 +64,14 @@ class _SaraiEditScreenState extends State<SaraiEditScreen> {
                       color: Pallete.whiteColor,
                     ),
                     btnText: const LocaleText(
-                      'update',
+                      'create',
                       style: TextStyle(color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
+                      // validates the form to create the new item
                       if (formKey.currentState!.validate()) {
-                        // if form is validate will be edited
-                        // pass the id to the controller
-                        saraiController.editSarai(widget.saraiId);
+                        transportPaymentController.createTransportPayment();
                         Navigator.pop(context);
                       }
                     },

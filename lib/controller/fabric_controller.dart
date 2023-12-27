@@ -199,6 +199,11 @@ class FabricController extends ChangeNotifier {
     }
     notifyListeners();
   }
+   // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateFabricsData();
+  }
 
   void clearAllControllers() {
     nameController.clear();
