@@ -1,8 +1,8 @@
 import 'package:fabricproject/screens/main_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/login_button.dart';
+import 'package:fabricproject/widgets/custom_button.dart';
 import 'package:fabricproject/widgets/login_screen_appbar.dart';
-import 'package:fabricproject/widgets/texts_field.dart';
+import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,14 +17,6 @@ class LoginScreen extends StatelessWidget {
     final passwordController = TextEditingController();
     final size = MediaQuery.of(context).size;
     // function to be called on button click of widget button
-    void onClick() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
-    }
 
     return Scaffold(
         appBar: AppBar(
@@ -64,14 +56,11 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.05,
                   ),
-                  TextsField(
+                  CustomTextFieldWithController(
                     controller: emailController,
                     lblText: const LocaleText('email'),
                   ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  TextsField(
+                  CustomTextFieldWithController(
                     controller: passwordController,
                     lblText: const LocaleText(
                       'password',
@@ -88,14 +77,22 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  LoginButton(
+                  CustomButton(
+                    btnWidth: 1,
                     btnIcon: const Icon(Icons.login, color: Pallete.whiteColor),
                     btnText: const LocaleText(
                       'signin',
                       style: TextStyle(fontSize: 12, color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
-                    callBack: onClick,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainScreen(),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: size.height * 0.03,
@@ -106,7 +103,8 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  LoginButton(
+                  CustomButton(
+                    btnWidth: 1,
                     btnIcon: const Icon(Icons.email),
                     btnText: const LocaleText(
                       'sign_in_with_google',
@@ -117,7 +115,8 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  const LoginButton(
+                  const CustomButton(
+                    btnWidth: 1,
                     btnIcon: Icon(Icons.facebook_sharp),
                     btnText: LocaleText(
                       'sign_in_with_facebook',

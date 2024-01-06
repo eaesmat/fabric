@@ -9,6 +9,7 @@ class Pallete {
   static const drawerColor = Color.fromRGBO(18, 18, 18, 1);
   static const blueColor = Color.fromRGBO(0, 104, 177, 1);
   static var redColor = Colors.red.shade500;
+  static const disabledBorder = Color.fromARGB(255, 147, 168, 172);
 
   // Themes
   static var darkModeAppTheme = ThemeData.dark().copyWith(
@@ -48,7 +49,7 @@ class Pallete {
       dense: true,
       minLeadingWidth: 0,
       minVerticalPadding: 0.0,
-      visualDensity: VisualDensity.compact, 
+      visualDensity: VisualDensity.compact,
       // Else theme will be use
     ),
     scaffoldBackgroundColor: whiteColor,
@@ -63,7 +64,7 @@ class Pallete {
     drawerTheme: const DrawerThemeData(
       backgroundColor: whiteColor,
     ),
-    primaryColor: redColor,
+    primaryColor: whiteColor,
     // ignore: deprecated_member_use
     backgroundColor: whiteColor,
   );

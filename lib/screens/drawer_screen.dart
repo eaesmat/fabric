@@ -1,12 +1,14 @@
 // drawer_widget.dart
 
-import 'package:fabricproject/screens/customer_screen.dart';
-import 'package:fabricproject/screens/external_companies_screen.dart';
-import 'package:fabricproject/screens/fabric_screen.dart';
-import 'package:fabricproject/screens/forex_screen.dart';
-import 'package:fabricproject/screens/internal_companies_screen.dart';
-import 'package:fabricproject/screens/sarai_screen.dart';
-import 'package:fabricproject/screens/transport.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_list_screen.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.dart';
+import 'package:fabricproject/screens/company/company_list_screen.dart';
+import 'package:fabricproject/screens/customer/customer_list_screen.dart';
+import 'package:fabricproject/screens/fabric/fabric_list_screen.dart';
+import 'package:fabricproject/screens/forex/forex_list_screen.dart';
+import 'package:fabricproject/screens/sarai/sarai_list_screen.dart';
+import 'package:fabricproject/screens/transport/transport_list_screen.dart';
+import 'package:fabricproject/screens/vendor_company/vendor_company_list_screen.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -19,15 +21,6 @@ class DrawerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    navigateCompaniesCallBack() {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const InternalCompaniesScreen(),
-        ),
-      );
-    }
-
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -48,18 +41,26 @@ class DrawerScreen extends StatelessWidget {
 // User profile ends
 
 // Khalid section
-            const ListTileWidget(
-              lead: FaIcon(
+            ExpansionTileItemWidget(
+              callBack: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const KhalidDetailsScreen(),
+                  ),
+                );
+              },
+              lead: const FaIcon(
                 FontAwesomeIcons.user,
                 size: 20,
               ),
-              tileTitle: LocaleText('khalid_account'),
+              tileTitle: const LocaleText('khalid_account'),
             ),
 // Khalid section ends
 
 // General Settings
             ExpansionTileWidget(
-              lead: FaIcon(
+              lead: const FaIcon(
                 FontAwesomeIcons.gear,
                 size: 20,
               ),
@@ -75,22 +76,29 @@ class DrawerScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ForexScreen(),
+                        builder: (context) => const ForexListScreen(),
                       ),
                     );
                   },
                 ),
                 ExpansionTileItemWidget(
                   lead: const FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
-                  tileTitle: const LocaleText('internal_companies'),
-                  callBack: navigateCompaniesCallBack,
+                  tileTitle: const LocaleText('companies'),
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CompanyListScreen(),
+                      ),
+                    );
+                  },
                 ),
                 ExpansionTileItemWidget(
                   callBack: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const FabricScreen(),
+                        builder: (context) => const FabricListScreen(),
                       ),
                     );
                   },
@@ -105,19 +113,19 @@ class DrawerScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ExternalCompaniesScreen(),
+                        builder: (context) => const VendorCompanyListScreen(),
                       ),
                     );
                   },
-                  lead: FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
-                  tileTitle: LocaleText('ٰvendor_companies'),
+                  lead: const FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
+                  tileTitle: const LocaleText('ٰvendor_companies'),
                 ),
                 ExpansionTileItemWidget(
                   callBack: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TransportScreen(),
+                        builder: (context) => const TransportListScreen(),
                       ),
                     );
                   },
@@ -129,19 +137,19 @@ class DrawerScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SaraiScreen(),
+                        builder: (context) => const SaraiListScreen(),
                       ),
                     );
                   },
                   lead: Icon(Icons.warehouse),
-                  tileTitle: LocaleText('ٰwarehouses'),
+                  tileTitle: LocaleText('sarai'),
                 ),
                 ExpansionTileItemWidget(
                   callBack: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CustomerScreen(),
+                        builder: (context) => const CustomerListScreen(),
                       ),
                     );
                   },
@@ -152,7 +160,7 @@ class DrawerScreen extends StatelessWidget {
             ),
             // General settings ends
             //Desires section
-            const ExpansionTileWidget(
+            ExpansionTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.users,
                 size: 20,
@@ -163,6 +171,14 @@ class DrawerScreen extends StatelessWidget {
                   thickness: 0.1,
                 ),
                 ExpansionTileItemWidget(
+                  callBack: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VendorCompanyListScreen(),
+                      ),
+                    );
+                  },
                   lead: FaIcon(
                     FontAwesomeIcons.circleDollarToSlot,
                     size: 20,
@@ -199,7 +215,15 @@ class DrawerScreen extends StatelessWidget {
             ),
 // Goods on the way ends
 // Transport
-            const ListTileWidget(
+            ListTileWidget(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TransportListScreen(),
+                  ),
+                );
+              },
               lead: FaIcon(FontAwesomeIcons.truckFast, size: 20),
               tileTitle: LocaleText("ٰtransport"),
             ),
@@ -241,12 +265,20 @@ class DrawerScreen extends StatelessWidget {
             ),
 // Customers accounts section ends
 // Forex
-            const ListTileWidget(
+            ListTileWidget(
               lead: FaIcon(
                 FontAwesomeIcons.wallet,
                 size: 20,
               ),
               tileTitle: LocaleText('sarafi'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ForexListScreen(),
+                  ),
+                );
+              },
             ),
 //  Forex section ends
 // Users section

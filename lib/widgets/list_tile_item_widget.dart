@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ExpansionTileItemWidget extends StatelessWidget {
-  final Widget lead;
+  final Widget? lead;
   final Widget tileTitle;
   final Widget? tileSubTitle;
   final Widget? trail;
@@ -9,7 +9,7 @@ class ExpansionTileItemWidget extends StatelessWidget {
 
   const ExpansionTileItemWidget({
     Key? key,
-    required this.lead,
+     this.lead,
     required this.tileTitle,
     this.tileSubTitle,
     this.trail,
@@ -19,9 +19,7 @@ class ExpansionTileItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        callBack!();
-      },
+      onTap: callBack,
       child: Column(
         children: [
           ListTile(
