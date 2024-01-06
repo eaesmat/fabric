@@ -3,12 +3,15 @@ import 'package:fabricproject/constants/api_url.dart';
 import 'package:fabricproject/model/vendor_company_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
+
 // this class provides api calls to the controller
 class VendorCompanyApiServiceProvider {
 // base URL comes from constant
   final String _baseURL = baseURL;
-
-  Future<Either<String, List<Data>>> getVendorCompany(String apiEndpoint) async {
+// data is model type
+// this methods are expecting endpoint from controller
+  Future<Either<String, List<Data>>> getVendorCompany(
+      String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),
@@ -17,11 +20,12 @@ class VendorCompanyApiServiceProvider {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
         final vendorCompany = VendorCompanyModel.fromJson(jsonResponse);
-
+// return data to the controller
         return right(
           vendorCompany.data!,
         );
       } else {
+// return status code if failure
         return left(" ${response.statusCode}");
       }
     } catch (e) {
@@ -30,6 +34,7 @@ class VendorCompanyApiServiceProvider {
       );
     }
   }
+
 
   Future<Either<String, int>> createVendorCompany(
       String apiEndpoint, Map<String, dynamic> data) async {

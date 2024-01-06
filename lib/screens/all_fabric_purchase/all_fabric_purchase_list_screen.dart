@@ -1,35 +1,30 @@
+import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
-import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class FabricPurchaseListScreen extends StatefulWidget {
-  // Gets the data from the controller
-  final int vendorCompanyId;
-  final String vendorCompanyName;
-  const FabricPurchaseListScreen(
-      {Key? key,
-      required this.vendorCompanyId,
-      required this.vendorCompanyName})
-      : super(key: key);
+class AllFabricPurchaseListScreen extends StatefulWidget {
+  const AllFabricPurchaseListScreen({super.key});
 
   @override
-  State<FabricPurchaseListScreen> createState() =>
-      _FabricPurchaseListScreenState();
+  State<AllFabricPurchaseListScreen> createState() =>
+      _AllFabricPurchaseListScreenState();
 }
 
-class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
+class _AllFabricPurchaseListScreenState
+    extends State<AllFabricPurchaseListScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      Provider.of<FabricPurchaseController>(context, listen: false)
+      Provider.of<AllFabricPurchaseController>(context, listen: false)
           .resetSearchFilter();
     });
   }
@@ -41,8 +36,8 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
     return Column(
       children: [
         // Search Text field
-        Consumer<FabricPurchaseController>(
-          builder: (context, fabricPurchaseController, child) {
+        Consumer<AllFabricPurchaseController>(
+          builder: (context, allFabricPurchaseController, child) {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               // Search text filed
@@ -54,12 +49,14 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
                     ),
                     onPressed: () {
                       // navigate to new create screen
-                      fabricPurchaseController.navigateToFabricPurchaseCreate();
+                      allFabricPurchaseController
+                          .navigateToFabricPurchaseCreate();
                     }),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
                   // pass the data to the search method controller
-                  fabricPurchaseController.searchFabricPurchasesMethod(value);
+                  allFabricPurchaseController
+                      .searchFabricPurchasesMethod(value);
                 },
               ),
             );
@@ -67,20 +64,19 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
         ),
         // data list
         Expanded(
-          child: Consumer<FabricPurchaseController>(
-            builder: (context, fabricPurchaseController, child) {
+          child: Consumer<AllFabricPurchaseController>(
+            builder: (context, allFabricPurchaseController, child) {
               return ListView.builder(
                 itemCount:
-                    fabricPurchaseController.searchFabricPurchases?.length ?? 0,
+                    allFabricPurchaseController.searchFabricPurchases?.length ??
+                        0,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   // data vars takes data from controller
-                  final reversedList = fabricPurchaseController
+                  final reversedList = allFabricPurchaseController
                       .searchFabricPurchases!.reversed
                       .toList();
                   final data = reversedList[index];
-                  fabricPurchaseController.vendorCompanyId =
-                      data.vendorcompanyId;
 
                   return ListTileWidget(
                     onTap: () {
@@ -156,13 +152,14 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          fabricPurchaseController.navigateToFabricPurchaseEdit(
+                          allFabricPurchaseController
+                              .navigateToFabricPurchaseEdit(
                             data,
                             data.fabricpurchaseId!.toInt(),
                           );
                         }
                         if (value == "delete") {
-                          fabricPurchaseController.deleteFabricPurchase(
+                          allFabricPurchaseController.deleteFabricPurchase(
                               data.fabricpurchaseId, index);
                         }
                       },

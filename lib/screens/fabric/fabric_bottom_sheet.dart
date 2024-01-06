@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -15,7 +16,7 @@ class FabricBottomSheet extends StatefulWidget {
 }
 
 class _FabricBottomSheetState extends State<FabricBottomSheet> {
-   @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,12 +24,15 @@ class _FabricBottomSheetState extends State<FabricBottomSheet> {
       Provider.of<FabricController>(context, listen: false).resetSearchFilter();
     });
   }
+
   @override
   Widget build(BuildContext context) {
 // controller class providers
     FabricController fabricController = Provider.of<FabricController>(context);
     final fabricPurchaseController =
         Provider.of<FabricPurchaseController>(context);
+    final allFabricPurchaseController =
+        Provider.of<AllFabricPurchaseController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -65,7 +69,7 @@ class _FabricBottomSheetState extends State<FabricBottomSheet> {
                 ),
               ),
               const SizedBox(height: 20.0),
-              // list data here 
+              // list data here
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: fabricController.searchFabrics?.length ?? 0,
@@ -78,10 +82,18 @@ class _FabricBottomSheetState extends State<FabricBottomSheet> {
                     onTap: () {
                       // passes the id and name to the controller class
                       // pass id
-                      fabricPurchaseController.fabricController.text =
+                      fabricPurchaseController.selectedFabricIdController.text =
                           data.fabricId!.toString();
                       // pass the name and others
-                      fabricPurchaseController.selectedFabric.text =
+                      allFabricPurchaseController.selectedFabricIdController
+                          .text = data.fabricId!.toString();
+                      // pass the name and others
+                      allFabricPurchaseController
+                              .selectedFabricNameController.text =
+                          '${data.name},  ${data.description} (${data.abr} )';
+
+                      fabricPurchaseController
+                              .selectedFabricNameController.text =
                           '${data.name},  ${data.description} (${data.abr} )';
                       Navigator.pop(context);
                     },

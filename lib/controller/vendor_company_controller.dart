@@ -24,11 +24,15 @@ class VendorCompanyController extends ChangeNotifier {
   }
 // navigates to create screen
   navigateToVendorCompanyCreate() {
+    clearAllControllers();
+
     _helperServices.navigate(const VendorCompanyCreateScreen());
   }
 
 // navigates to edit screen
   navigateToVendorCompanyEdit(Data data, int id) {
+    clearAllControllers();
+
 // pass the data to edit screen
     nameController.text = data.name.toString();
     phoneController.text = data.phone.toString();
@@ -65,22 +69,21 @@ class VendorCompanyController extends ChangeNotifier {
       },
     );
     response.fold(
-        (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-        (r) => {
-              getAllVendorCompanies(),
-              _helperServices.goBack(),
-              _helperServices.showMessage(
-                const LocaleText('added'),
-                Colors.green,
-                const Icon(
-                  Icons.check,
-                  color: Pallete.whiteColor,
-                ),
-              ),
-              nameController.clear(),
-              phoneController.clear(),
-              desorptionController.clear(),
-            });
+      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+      (r) => {
+        getAllVendorCompanies(),
+        _helperServices.goBack(),
+        _helperServices.showMessage(
+          const LocaleText('added'),
+          Colors.green,
+          const Icon(
+            Icons.check,
+            color: Pallete.whiteColor,
+          ),
+        ),
+        clearAllControllers(),
+      },
+    );
   }
 
   editVendorCompany(int id) async {
@@ -108,11 +111,25 @@ class VendorCompanyController extends ChangeNotifier {
             color: Pallete.whiteColor,
           ),
         ),
-        nameController.clear(),
-        phoneController.clear(),
-        desorptionController.clear(),
+        clearAllControllers(),
       },
     );
+  }
+
+  void deleteItemLocally(int id) {
+    final index = allVendorCompanies!
+        .indexWhere((element) => element.vendorcompanyId == id);
+    if (index != -1) {
+      allVendorCompanies!.removeAt(index);
+
+      final searchIndex = searchVendorCompanies!
+          .indexWhere((element) => element.vendorcompanyId == id);
+      if (searchIndex != -1) {
+        searchVendorCompanies!.removeAt(searchIndex);
+      }
+
+      notifyListeners();
+    }
   }
 
   deleteVendorCompany(id, index) async {
@@ -133,8 +150,7 @@ class VendorCompanyController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             ),
-            searchVendorCompanies!.removeAt(index),
-            notifyListeners(),
+            deleteItemLocally(id),
           }
         else if (r == 500)
           {
@@ -171,5 +187,16 @@ class VendorCompanyController extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+   // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateVendorCompaniesData();
+  }
+
+  void clearAllControllers() {
+    nameController.clear();
+    phoneController.clear();
+    desorptionController.clear();
   }
 }

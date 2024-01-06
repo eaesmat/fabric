@@ -10,11 +10,11 @@ import 'package:flutter_locales/flutter_locales.dart';
 
 class FabricPurchaseController extends ChangeNotifier {
   final HelperServices _helperServices;
-  TextEditingController vendorCompanyNameController = TextEditingController();
-  TextEditingController companyController = TextEditingController();
-  TextEditingController selectedCompany = TextEditingController();
-  TextEditingController selectedFabric = TextEditingController();
-  TextEditingController fabricController = TextEditingController();
+  // Gets and sends data to the ui
+  TextEditingController selectedCompanyIdController = TextEditingController();
+  TextEditingController selectedCompanyNameController = TextEditingController();
+  TextEditingController selectedFabricNameController = TextEditingController();
+  TextEditingController selectedFabricIdController = TextEditingController();
   TextEditingController amountOfBundlesController = TextEditingController();
   TextEditingController amountOfMetersController = TextEditingController();
   TextEditingController amountOfWarsController = TextEditingController();
@@ -31,12 +31,14 @@ class FabricPurchaseController extends ChangeNotifier {
 
   int? vendorCompanyId;
   double sumOfFabricPurchaseTotalDollar =
-      0; // Variable to hold the sum of the 'amount' column
+      0; // Variable to hold the sum of the 'dollar' column
   double sumOfFabricPurchaseTotalYen =
-      0; // Variable to hold the sum of the 'amount' column
+      0; // Variable to hold the sum of the 'yen' column
 
+// Hold api response data
   List<Data>? allFabricPurchases = [];
   List<Data>? searchFabricPurchases = [];
+// Holds search textfield text
   String searchText = "";
 
   FabricPurchaseController(
@@ -52,11 +54,12 @@ class FabricPurchaseController extends ChangeNotifier {
 
   navigateToFabricPurchaseEdit(Data data, int id) {
     clearAllControllers();
-
-    companyController.text = data.companyId.toString();
-    fabricController.text = data.fabricId.toString();
-    selectedFabric.text = ("${data.fabric!.name!},   ${data.fabric!.abr!}");
-    selectedCompany.text =
+// pass these data to the edit screen
+    selectedCompanyIdController.text = data.companyId.toString();
+    selectedFabricIdController.text = data.fabricId.toString();
+    selectedFabricNameController.text =
+        ("${data.fabric!.name!},   ${data.fabric!.abr!}");
+    selectedCompanyNameController.text =
         ("${data.company!.name!},   ${data.company!.marka!}");
     amountOfBundlesController.text = data.bundle.toString();
     amountOfMetersController.text = data.meter.toString();
@@ -71,10 +74,12 @@ class FabricPurchaseController extends ChangeNotifier {
     bankReceivedPhotoController.text = data.bankreceiptphoto.toString();
     dateController.text = data.date.toString();
     fabricCodeController.text = data.fabricpurchasecode.toString();
-    _helperServices.navigate(FabricPurchaseEditScreen(
-      fabricPurchaseData: data,
-      fabricPurchaseId: id,
-    ));
+    _helperServices.navigate(
+      FabricPurchaseEditScreen(
+        fabricPurchaseData: data,
+        fabricPurchaseId: id,
+      ),
+    );
   }
 
   navigateToVendorCompanyDetails(String vendorCompanyName, int id) async {
@@ -87,12 +92,11 @@ class FabricPurchaseController extends ChangeNotifier {
         vendorCompanyName: vendorCompanyName,
       ),
     );
-    print("the id $id");
-
     await getAllFabricPurchases(
         vendorCompanyId); // Wait for getAllFabricPurchases to complete
   }
 
+// Gets the purchases by vendor company id
   getAllFabricPurchases(int? vendorCompanyId) async {
     _helperServices.showLoader();
     final response = await FabricPurchaseApiServiceProvider()
@@ -103,13 +107,15 @@ class FabricPurchaseController extends ChangeNotifier {
         _helperServices.showErrorMessage(l),
       },
       (r) {
+        // Gets only with the given vendor company id
+
         allFabricPurchases = r
             .where((fabricPurchase) =>
                 fabricPurchase.vendorcompanyId == vendorCompanyId)
             .toList();
         searchFabricPurchases?.clear();
         searchFabricPurchases?.addAll(allFabricPurchases!);
-        // Calculate the sum of the 'amount' column
+        // Calculate  sum of the a column
 
         sumOfFabricPurchaseTotalDollar =
             calculateSumOfTotalDollar(allFabricPurchases);
@@ -121,16 +127,13 @@ class FabricPurchaseController extends ChangeNotifier {
     );
   }
 
-  // Function to calculate the sum of the 'amount' column from the list of FabricPurchases
-  // Function to calculate the sum of the 'amount' column from the list of FabricPurchases
+  // Function to calculate the sum of the column from the list of FabricPurchases
   double calculateSumOfTotalDollar(List<Data>? fabricPurchases) {
     double sum = 0;
 
     if (fabricPurchases != null) {
       for (var fabricPurchase in fabricPurchases) {
-        // Replace 'amount' with the actual field name from your FabricPurchase model
-        sum +=
-            fabricPurchase.totaldollerprice ?? 0; // Add the 'amount' to the sum
+        sum += fabricPurchase.totaldollerprice ?? 0;
       }
     }
     return sum;
@@ -141,8 +144,7 @@ class FabricPurchaseController extends ChangeNotifier {
 
     if (fabricPurchases != null) {
       for (var fabricPurchase in fabricPurchases) {
-        // Replace 'amount' with the actual field name from your FabricPurchase model
-        sum += fabricPurchase.totalyenprice ?? 0; // Add the 'amount' to the sum
+        sum += fabricPurchase.totalyenprice ?? 0;
       }
     }
     return sum;
@@ -165,10 +167,9 @@ class FabricPurchaseController extends ChangeNotifier {
         "packagephoto": packagePhotoController.text,
         "bankreceiptphoto": bankReceivedPhotoController.text,
         "date": dateController.text,
-        "fabric_id": fabricController.text,
-        "company_id": companyController.text,
-        "vendorcompany_id":
-            vendorCompanyId.toString(), // Use vendorCompanyId directly
+        "fabric_id": selectedFabricIdController.text,
+        "company_id": selectedCompanyIdController.text,
+        "vendorcompany_id": vendorCompanyId.toString(),
         "fabricpurchasecode": fabricCodeController.text,
         "dollerprice": dollarPriceController.text,
         "totalyenprice": totalYenPriceController.text,
@@ -180,11 +181,9 @@ class FabricPurchaseController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
         getAllFabricPurchases(vendorCompanyId!);
-        print(" createMethod all the vendor id $vendorCompanyId");
 
         _helperServices.goBack();
         _helperServices.showMessage(
@@ -217,10 +216,9 @@ class FabricPurchaseController extends ChangeNotifier {
         "packagephoto": packagePhotoController.text,
         "bankreceiptphoto": bankReceivedPhotoController.text,
         "date": dateController.text,
-        "fabric_id": fabricController.text,
-        "company_id": companyController.text,
-        "vendorcompany_id":
-            vendorCompanyId.toString(), // Use vendorCompanyId directly
+        "fabric_id": selectedFabricIdController.text,
+        "company_id": selectedCompanyIdController.text,
+        "vendorcompany_id": vendorCompanyId.toString(),
         "fabricpurchasecode": fabricCodeController.text,
         "dollerprice": dollarPriceController.text,
         "totalyenprice": totalYenPriceController.text,
@@ -251,6 +249,23 @@ class FabricPurchaseController extends ChangeNotifier {
     );
   }
 
+// This method removes  or delete the item without reloading server
+  void deleteItemLocally(int id) {
+    final index = allFabricPurchases!
+        .indexWhere((element) => element.fabricpurchaseId == id);
+    if (index != -1) {
+      allFabricPurchases!.removeAt(index);
+
+      final searchIndex = searchFabricPurchases!
+          .indexWhere((element) => element.fabricpurchaseId == id);
+      if (searchIndex != -1) {
+        searchFabricPurchases!.removeAt(searchIndex);
+      }
+
+      notifyListeners();
+    }
+  }
+
   deleteFabricPurchase(id, index) async {
     _helperServices.showLoader();
     var response = await FabricPurchaseApiServiceProvider()
@@ -269,8 +284,7 @@ class FabricPurchaseController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             ),
-            searchFabricPurchases!.removeAt(index),
-            notifyListeners(),
+            deleteItemLocally(id),
           }
         else if (r == 500)
           {
@@ -303,20 +317,26 @@ class FabricPurchaseController extends ChangeNotifier {
                 element.fabricpurchasecode!
                     .toLowerCase()
                     .contains(searchText) ||
+                element.fabric!.name!.toLowerCase().contains(searchText) ||
+                element.company!.name!.toLowerCase().contains(searchText) ||
                 element.date!.toLowerCase().contains(searchText))
-            // element.!.toLowerCase().contains(searchText))
             .toList(),
       );
     }
     notifyListeners();
   }
 
+  // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateFabricPurchasesData();
+  }
+
   void clearAllControllers() {
-    vendorCompanyNameController.clear();
-    companyController.clear();
-    selectedCompany.clear();
-    selectedFabric.clear();
-    fabricController.clear();
+    selectedFabricIdController.clear();
+    selectedCompanyIdController.clear();
+    selectedCompanyNameController.clear();
+    selectedFabricNameController.clear();
     amountOfBundlesController.clear();
     amountOfMetersController.clear();
     amountOfWarsController.clear();

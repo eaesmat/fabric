@@ -76,5 +76,20 @@
   "first_name": "First Name",
   "last_name": "Last Name",
   "photo": "Picture",
-  "address": "Address"
+  "address": "Address",
+  "receipts": "Receipts",
+  "transactions": "Transactions",
+  "purchases": "Purchases",
+  "dollar": "Dollar",
+  "yen": "Yen",
+  "update_fabric_purchase": "Update Fabric Purchase",
+  "new_purchase": "New Purchase",
+  "fabric_code": "Fabric Code",
+  "exchange_rate": "Exchange Rate",
+  "date": "Date",
+  "bank_receipt_photo": "Bank Receipt Photo",
+  "package_photo": "Package Photo",
+  "item": "Item",
+  "attribute" : "Attributes",
+  "value" : "Values"
 }

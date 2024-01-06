@@ -7,13 +7,13 @@ class TransportDealModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -77,22 +77,22 @@ class Data {
     warcost = _checkDouble(json['warcost']);
     userId = _checkInt(json['user_id']);
     transport = json['transport'] != null
-        ? new Transport.fromJson(json['transport'])
+        ? Transport.fromJson(json['transport'])
         : null;
     fabricpurchase = json['fabricpurchase'] != null
-        ? new Fabricpurchase.fromJson(json['fabricpurchase'])
+        ? Fabricpurchase.fromJson(json['fabricpurchase'])
         : null;
     if (json['container'] != null) {
       container = <ContainerModel>[];
       json['container'].forEach((v) {
-        container!.add(new ContainerModel.fromJson(v));
+        container!.add(ContainerModel.fromJson(v));
       });
     }
     if (json['saraiindeal'] != null) {
       saraiindeal = <Saraiindeal>[];
       json['saraiindeal'].forEach(
         (v) {
-          saraiindeal!.add(new Saraiindeal.fromJson(v));
+          saraiindeal!.add(Saraiindeal.fromJson(v));
         },
       );
     }
@@ -100,32 +100,32 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['transportdeal_id'] = this.transportdealId;
-    data['startdate'] = this.startdate;
-    data['arrivaldate'] = this.arrivaldate;
-    data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['khatamount'] = this.khatamount;
-    data['costperkhat'] = this.costperkhat;
-    data['transport_id'] = this.transportId;
-    data['status'] = this.status;
-    data['duration'] = this.duration;
-    data['bundle'] = this.bundle;
-    data['photo'] = this.photo;
-    data['totalcost'] = this.totalcost;
-    data['warcost'] = this.warcost;
-    data['user_id'] = this.userId;
-    if (this.transport != null) {
-      data['transport'] = this.transport!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['transportdeal_id'] = transportdealId;
+    data['startdate'] = startdate;
+    data['arrivaldate'] = arrivaldate;
+    data['fabricpurchase_id'] = fabricpurchaseId;
+    data['khatamount'] = khatamount;
+    data['costperkhat'] = costperkhat;
+    data['transport_id'] = transportId;
+    data['status'] = status;
+    data['duration'] = duration;
+    data['bundle'] = bundle;
+    data['photo'] = photo;
+    data['totalcost'] = totalcost;
+    data['warcost'] = warcost;
+    data['user_id'] = userId;
+    if (transport != null) {
+      data['transport'] = transport!.toJson();
     }
-    if (this.fabricpurchase != null) {
-      data['fabricpurchase'] = this.fabricpurchase!.toJson();
+    if (fabricpurchase != null) {
+      data['fabricpurchase'] = fabricpurchase!.toJson();
     }
-    if (this.container != null) {
-      data['container'] = this.container!.map((v) => v.toJson()).toList();
+    if (container != null) {
+      data['container'] = container!.map((v) => v.toJson()).toList();
     }
-    if (this.saraiindeal != null) {
-      data['saraiindeal'] = this.saraiindeal!.map((v) => v.toJson()).toList();
+    if (saraiindeal != null) {
+      data['saraiindeal'] = saraiindeal!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -169,11 +169,11 @@ class Transport {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['transport_id'] = this.transportId;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['phone'] = this.phone;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['transport_id'] = transportId;
+    data['name'] = name;
+    data['description'] = description;
+    data['phone'] = phone;
     return data;
   }
 }
@@ -308,12 +308,12 @@ class ContainerModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['container_id'] = this.containerId;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['status'] = this.status;
-    data['transportdeal_id'] = this.transportdealId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['container_id'] = containerId;
+    data['name'] = name;
+    data['description'] = description;
+    data['status'] = status;
+    data['transportdeal_id'] = transportdealId;
     return data;
   }
 }
@@ -341,12 +341,12 @@ class Saraiindeal {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['saraiindeal_id'] = this.saraiindealId;
-    data['indate'] = this.indate;
-    data['transportdeal_id'] = this.transportdealId;
-    data['saraifrom'] = this.saraifrom;
-    data['sarai_id'] = this.saraiId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['saraiindeal_id'] = saraiindealId;
+    data['indate'] = indate;
+    data['transportdeal_id'] = transportdealId;
+    data['saraifrom'] = saraifrom;
+    data['sarai_id'] = saraiId;
     return data;
   }
 }

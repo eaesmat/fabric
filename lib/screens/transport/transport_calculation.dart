@@ -3,9 +3,9 @@ import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
-
+// this screen calculates transport 
 class TransportCalculation extends StatelessWidget {
-  const TransportCalculation({Key? key});
+  const TransportCalculation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,6 @@ class TransportCalculation extends StatelessWidget {
             child: Center(
               child: DataTable(
                 columnSpacing: constraints.maxWidth * 0.4, // Adjust as needed
-                dataRowHeight: 40.0, // Adjust as needed
                 columns: const [
                   DataColumn(
                     label: LocaleText(
@@ -56,7 +55,7 @@ class TransportCalculation extends StatelessWidget {
                   buildDataRow('due_bundle', dueBundles.toStringAsFixed(2),
                       color: Colors.red),
                   buildDataRow('total_payment', totalPayment.toStringAsFixed(2),
-                      color: Colors.green),
+                      color: Colors.green.shade500),
                   buildDataRow('total_cost', totalCost.toStringAsFixed(2),
                       color: Colors.black),
                   buildDataRow('total_bundles', totalBundles.toStringAsFixed(2),

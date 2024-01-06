@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:fabricproject/api/container_api.dart';
 import 'package:fabricproject/api/sarai_api.dart';
 import 'package:fabricproject/api/transport_deal_api.dart';
-
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/transport_deal_model.dart';
 import 'package:fabricproject/screens/transport/transport_details_screen.dart';
@@ -18,7 +19,6 @@ class TransportDealController extends ChangeNotifier {
   TextEditingController selectedSaraiIdController = TextEditingController();
   TextEditingController saraiInDealIdController = TextEditingController();
   TextEditingController saraiInDealDate = TextEditingController();
-
   TextEditingController amountOfBundlesController = TextEditingController();
   TextEditingController durationController = TextEditingController();
   TextEditingController warPriceController = TextEditingController();
@@ -44,6 +44,9 @@ class TransportDealController extends ChangeNotifier {
   String searchText = "";
   bool isAdded = false;
   bool isUpdated = false;
+  bool noContainer = false;
+  bool noSaraInDeal =
+      false; // used to hold the id just to check whether the sarai in deal from update  is null not not
   double sumOfTransportDealTotalCost =
       0; // Variable to hold the sum of the 'totalCost' column
   double sumOfTransportDealTotalBundle =
@@ -58,44 +61,78 @@ class TransportDealController extends ChangeNotifier {
   }
 
   navigateToTransportDealCreate() {
+    containerNameController.clear();
     clearAllControllers();
 
     _helperServices.navigate(const TransportDealCreateScreen());
   }
 
-  navigateToTransportDealEdit(Data data, int transportDealId, containerId,
-      saraiId, saraInDealId, String saraiInDate) async {
-    //   clearAllControllers();
-    await getContainer(transportDealId);
-    await getSarai(saraiId);
-    print(saraiInDate);
+  navigateToTransportDealEdit(Data data, int? transportDealId, containerId,
+      int? saraiId, saraInDealId, String saraiInDate) async {
+    clearAllControllers();
+    containerNameController.clear();
+
+    if (transportDealId != null) {
+      await getContainer(transportDealId);
+    }
+
+    if (saraiId != null) {
+      await getSarai(saraiId);
+    }
+
+    if (saraInDealId == null || saraInDealId == 0) {
+      noSaraInDeal = true;
+      print("if works");
+    } else {
+      saraiInDealIdController.text = saraInDealId.toString();
+      noSaraInDeal = false;
+    }
+    if (containerId == null || containerId == 0) {
+      noContainer = true;
+      print("if works");
+    } else {
+      saraiInDealIdController.text = saraInDealId.toString();
+      noContainer = false;
+    }
+
+    print("indeal id ");
+    print(saraInDealId);
+
+    if (filteredContainers != null && filteredContainers!.isNotEmpty) {
+      print(filteredContainers![0].name);
+      containerNameController.text = filteredContainers![0].name;
+      containerIdController.text =
+          filteredContainers![0].containerId.toString();
+    } else {}
+    print("the lenght");
+    print(saraInDealId);
 
     startDateController.text = data.startdate.toString();
     amountOfBundlesController.text = data.bundle.toString();
     singleKhatPriceController.text = data.costperkhat.toString();
     warPriceController.text = data.warcost.toString();
-    containerNameController.text = filteredContainers?[0].name;
+
     amountOfKhatController.text = data.khatamount.toString();
     totalCostController.text = data.totalcost.toString();
     selectedFabricPurchaseCodeController.text =
         data.fabricpurchase!.fabricpurchasecode.toString();
-    selectedSaraiNameController.text = filteredSarai?[0].name;
+
+    if (filteredSarai != null && filteredSarai!.isNotEmpty) {
+      print(filteredSarai![0].name);
+      selectedSaraiNameController.text = filteredSarai![0].name;
+      selectedSaraiIdController.text = filteredSarai![0].saraiId.toString();
+    } else {
+      // Handle the case where filteredSarai is empty or null
+    }
+
     photoController.text = data.photo.toString();
     durationController.text = data.duration.toString();
     saraiInDealDate.text = saraiInDate;
-
-    saraiInDealIdController.text = saraInDealId.toString();
     selectedFabricPurchaseIdController.text = data.fabricpurchaseId.toString();
-    selectedSaraiIdController.text = filteredSarai![0].saraiId.toString();
-    containerIdController.text = filteredContainers![0].containerId.toString();
 
-    print(selectedFabricPurchaseIdController.text);
-    print(selectedSaraiIdController.text);
-    print(containerIdController.text);
-    print(saraiInDealIdController.text);
     _helperServices.navigate(
       TransportDealEditScreen(
-          transportDealData: data, transportDealId: transportDealId),
+          transportDealData: data, transportDealId: transportDealId ?? 0),
     );
   }
 
@@ -181,9 +218,6 @@ class TransportDealController extends ChangeNotifier {
 
         sumOfTransportDealTotalDueBundle =
             calculateSumOfTotalDueBundles(allTransportDeals);
-        print(sumOfTransportDealTotalCost);
-        print(sumOfTransportDealTotalBundle);
-        print(sumOfTransportDealTotalDueBundle);
 
         _helperServices.goBack();
         notifyListeners();
@@ -216,27 +250,24 @@ class TransportDealController extends ChangeNotifier {
   }
 
   double calculateSumOfTotalDueBundles(List<Data>? transportDeals) {
-  double sum = 0;
+    double sum = 0;
 
-  if (transportDeals != null) {
-    for (var transportDeal in transportDeals) {
-      if (transportDeal.status != "pending") {
-        sum += transportDeal.bundle ?? 0; // Add the 'bundle' to the sum
+    if (transportDeals != null) {
+      for (var transportDeal in transportDeals) {
+        if (transportDeal.status != "pending") {
+          sum += transportDeal.bundle ?? 0; // Add the 'bundle' to the sum
+        }
       }
     }
+    return sum;
   }
-  return sum;
-}
-
 
   int? getLastTransportDealId() {
     if (allTransportDeals != null && allTransportDeals!.isNotEmpty) {
       // Retrieve the last item in the list
       Data lastItem = allTransportDeals!.last;
-
       // Get the transportdeal_id of the last item
       int? lastTransportDealId = lastItem.transportdealId;
-      print(lastTransportDealId);
       return lastTransportDealId;
     } else {
       return null;
@@ -244,6 +275,10 @@ class TransportDealController extends ChangeNotifier {
   }
 
   createTransportDeal() async {
+    print("t ID");
+    print(transportId);
+    print("f ID");
+    print(selectedFabricPurchaseIdController.text);
     _helperServices.showLoader();
 
     var response = await TransportDealApiServiceProvider().createTransportDeal(
@@ -283,6 +318,61 @@ class TransportDealController extends ChangeNotifier {
             color: Pallete.whiteColor,
           ),
         );
+        print("added");
+      },
+    );
+  }
+
+  createTransportDealFromKhalidAccount() async {
+    _helperServices.showLoader();
+
+    var response = await TransportDealApiServiceProvider().createTransportDeal(
+      'add-transport-deal',
+      {
+        "transportdeal_id": 0,
+        "startdate":
+            startDateController.text.isEmpty ? "" : startDateController.text,
+        "arrivaldate": null,
+        "fabricpurchase_id": selectedFabricPurchaseIdController.text,
+        "khatamount": amountOfKhatController.text.isEmpty
+            ? 0
+            : amountOfKhatController.text,
+        "costperkhat": singleKhatPriceController.text.isEmpty
+            ? 0
+            : singleKhatPriceController.text,
+        "transport_id": transportId.toString(),
+        "status": "pending",
+        "duration":
+            durationController.text.isEmpty ? 0 : durationController.text,
+        "bundle": amountOfBundlesController.text.isEmpty
+            ? ""
+            : amountOfBundlesController.text,
+        "photo": photoController.text.isEmpty ? "" : photoController.text,
+        "totalcost":
+            totalCostController.text.isEmpty ? 0 : totalCostController.text,
+        "warcost":
+            warPriceController.text.isEmpty ? 0 : warPriceController.text,
+        "user_id": 1,
+      },
+    );
+    response.fold(
+      (l) {
+        isAdded = false;
+        _helperServices.goBack();
+        _helperServices.showErrorMessage(l);
+      },
+      (r) {
+        getAllTransportDeal(transportId!);
+        isAdded = true;
+        _helperServices.goBack();
+        _helperServices.showMessage(
+          const LocaleText('added'),
+          Colors.green,
+          const Icon(
+            Icons.check,
+            color: Pallete.whiteColor,
+          ),
+        );
       },
     );
   }
@@ -294,6 +384,17 @@ class TransportDealController extends ChangeNotifier {
   }
 
   editTransportDeal(int transportDealId) async {
+    print(transportDealId);
+    print(startDateController.text);
+    print(selectedFabricPurchaseIdController.text);
+    print(amountOfKhatController.text);
+    print(singleKhatPriceController.text);
+    print(transportId);
+    print(durationController.text);
+    print(amountOfBundlesController.text);
+    print(photoController.text);
+    print(totalCostController.text);
+    print(warPriceController.text);
     _helperServices.showLoader();
 
     var response = await TransportDealApiServiceProvider().editTransportDeal(
@@ -419,6 +520,7 @@ class TransportDealController extends ChangeNotifier {
     selectedFabricPurchaseCodeController.clear();
     selectedFabricPurchaseIdController.clear();
     selectedSaraiIdController.clear();
+    selectedSaraiNameController.clear();
     durationController.clear();
     containerIdController.clear();
     selectedFabricPurchaseNameController.clear();
@@ -426,6 +528,7 @@ class TransportDealController extends ChangeNotifier {
     amountOfBundlesController.clear();
     photoController.clear();
     warPriceController.clear();
+    amountOfBundlesController.clear();
   }
 
   void clearKhatCalculatedControllers() {

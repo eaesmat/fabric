@@ -19,13 +19,20 @@ class VendorCompanyListScreen extends StatefulWidget {
 
 class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<VendorCompanyController>(context, listen: false)
+          .resetSearchFilter();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final vendorCompanyController =
-        Provider.of<VendorCompanyController>(context);
     final fabricPurchaseController =
         Provider.of<FabricPurchaseController>(context);
-    final drawController =
-        Provider.of<DrawController>(context);
+    final drawController = Provider.of<DrawController>(context);
 
     return Scaffold(
       backgroundColor: Pallete.whiteColor,
@@ -35,11 +42,28 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
       ),
       body: Column(
         children: [
+          // search part
+
           Consumer<VendorCompanyController>(
             builder: (context, vendorCompanyController, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomTextFieldWithController(
+                  // search Icon to create new item
+
+                  iconBtn: IconButton(
+                    icon: const Icon(
+                      Icons.add_box,
+                      color: Pallete.blueColor,
+                    ),
+                    // create new item here
+
+                    onPressed: () {
+                      // passes search text to the controller
+
+                      vendorCompanyController.navigateToVendorCompanyCreate();
+                    },
+                  ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     vendorCompanyController.searchVendorCompaniesMethod(value);
@@ -48,6 +72,8 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
               );
             },
           ),
+          // data list view
+
           Expanded(
             child: Consumer<VendorCompanyController>(
               builder: (context, vendorCompanyController, child) {
@@ -57,12 +83,21 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
                           0,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data =
-                        vendorCompanyController.searchVendorCompanies![index];
+                    // data holds result of controller
+
+                    final reversedList = vendorCompanyController
+                        .searchVendorCompanies!.reversed
+                        .toList();
+                    final data = reversedList[index];
+                    // custom list tile
                     return ListTileWidget(
+                      // Tile Title
+
                       tileTitle: Text(
                         data.name.toString(),
                       ),
+                      // subtitle
+
                       tileSubTitle: Row(
                         children: [
                           Text(
@@ -74,6 +109,8 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
                           ),
                         ],
                       ),
+                      // trailing hold delete and update buttons
+
                       trail: PopupMenuButton(
                         color: Pallete.whiteColor,
                         child: const Icon(Icons.more_vert_sharp),
@@ -103,6 +140,8 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
                         ],
                         onSelected: (String value) {
                           if (value == "edit") {
+                            // navigates to the edit screen
+
                             vendorCompanyController.navigateToVendorCompanyEdit(
                                 data, data.vendorcompanyId!.toInt());
                           }
@@ -113,15 +152,15 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
                         },
                       ),
                       onTap: () {
+                        // pass the the id and data to the fabric purchase controller on click
                         fabricPurchaseController.navigateToVendorCompanyDetails(
-                          data.name.toString(), data.vendorcompanyId!
-                        );
+                            data.name.toString(), data.vendorcompanyId!);
                         fabricPurchaseController.vendorCompanyId =
                             data.vendorcompanyId!.toInt();
-                            
+
+                        // pass the the id and data to the draw controller on click
                         drawController.navigateToVendorCompanyDetails(
-                          data.name.toString(), data.vendorcompanyId!
-                        );
+                            data.name.toString(), data.vendorcompanyId!);
                         drawController.vendorCompanyId =
                             data.vendorcompanyId!.toInt();
                       },
@@ -132,16 +171,6 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Pallete.blueColor,
-        onPressed: () {
-          vendorCompanyController.navigateToVendorCompanyCreate();
-        },
-        child: const Icon(
-          Icons.add,
-          color: Pallete.whiteColor,
-        ),
       ),
     );
   }

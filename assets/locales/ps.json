@@ -77,5 +77,21 @@
   "first_name": "نوم",
   "last_name": "وروستی نوم (تخلص)",
   "photo": "انځور ",
-  "address": "پته"
+  "address": "پته",
+  "receipts": "رسیدونه",
+  "transactions": "راکړه ورکړه",
+  "purchases": "پیرود",
+  "dollar": "ډالر",
+  "yen": "ین",
+  "update_fabric_purchase": "د پیرود سمون",
+  "new_purchase": "نوی پیرود",
+  "exchange_rate": "د تبادلې نرخ",
+  "fabric_code": "د ټوکر کوډ",
+  "date": "نیټه ",
+  "bank_receipt_photo": "د بانک رسید انځور",
+  "package_photo": "د کڅوړې انځور",
+  "item" : "توکی ",
+  "attribute" : "ځانګړنې",
+  "value" : "ارزښتونه"
+
 }

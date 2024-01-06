@@ -8,23 +8,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class TransportController extends ChangeNotifier {
+  // helper class instance
   final HelperServices _helperServices;
+  // TextEditing Controller to send and receive data from ui
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController desorptionController = TextEditingController();
-  // TextEditingController userController = TextEditingController();
+  // lists to hold data comes from api
+
   List<Data>? allTransports = [];
   List<Data>? searchTransports = [];
+  // this will hold search text field text
   String searchText = "";
 
   TransportController(this._helperServices) {
+    // Gets data at first visit to the ui
     getAllTransports();
   }
   navigateToTransportCreate() {
+    clearAllControllers();
+    // navigate comes to from helper class works as router
+    // navigate to the the create page
     _helperServices.navigate(const TransportCreateScreen());
   }
 
   navigateToTransportEdit(Data data, int id) {
+    clearAllControllers();
+    // passed all the data to the edit screen
     nameController.text = data.name.toString();
     phoneController.text = data.phone.toString();
     desorptionController.text = data.description.toString();
@@ -32,14 +42,23 @@ class TransportController extends ChangeNotifier {
       TransportEditScreen(transportData: data, transportId: id),
     );
   }
+// gets all the data
 
   getAllTransports() async {
     _helperServices.showLoader();
     final response =
         await TransportApiServiceProvider().getTransport('getTransport');
+    // endpoint passed to the api class
+
     response.fold(
-        (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-        (r) {
+        (l) => {
+              // l returns failure with status code to the ui
+
+              _helperServices.goBack(),
+              _helperServices.showErrorMessage(l),
+            }, (r) {
+      // r holds data comes from api with success
+
       allTransports = r;
       _helperServices.goBack();
       updateTransportsData();
@@ -47,8 +66,6 @@ class TransportController extends ChangeNotifier {
   }
 
   createTransport() async {
-    print("create trnsport controller");
-
     _helperServices.showLoader();
 
     var response = await TransportApiServiceProvider().createTransport(
@@ -61,22 +78,21 @@ class TransportController extends ChangeNotifier {
       },
     );
     response.fold(
-        (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-        (r) => {
-              getAllTransports(),
-              _helperServices.goBack(),
-              _helperServices.showMessage(
-                const LocaleText('added'),
-                Colors.green,
-                const Icon(
-                  Icons.check,
-                  color: Pallete.whiteColor,
-                ),
-              ),
-              nameController.clear(),
-              phoneController.clear(),
-              desorptionController.clear(),
-            });
+      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+      (r) => {
+        getAllTransports(),
+        _helperServices.goBack(),
+        _helperServices.showMessage(
+          const LocaleText('added'),
+          Colors.green,
+          const Icon(
+            Icons.check,
+            color: Pallete.whiteColor,
+          ),
+        ),
+        clearAllControllers(),
+      },
+    );
   }
 
   editTransport(int id) async {
@@ -104,11 +120,26 @@ class TransportController extends ChangeNotifier {
             color: Pallete.whiteColor,
           ),
         ),
-        nameController.clear(),
-        phoneController.clear(),
-        desorptionController.clear(),
+        clearAllControllers(),
       },
     );
+  }
+
+  // This method removes  or delete the item without reloading server
+  void deleteItemLocally(int id) {
+    final index =
+        allTransports!.indexWhere((element) => element.transportId == id);
+    if (index != -1) {
+      allTransports!.removeAt(index);
+
+      final searchIndex =
+          searchTransports!.indexWhere((element) => element.transportId == id);
+      if (searchIndex != -1) {
+        searchTransports!.removeAt(searchIndex);
+      }
+
+      notifyListeners();
+    }
   }
 
   deleteTransport(id, index) async {
@@ -129,8 +160,7 @@ class TransportController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             ),
-            searchTransports!.removeAt(index),
-            notifyListeners(),
+            deleteItemLocally(id),
           }
         else if (r == 500)
           {
@@ -151,6 +181,7 @@ class TransportController extends ChangeNotifier {
     searchText = name;
     updateTransportsData();
   }
+// updates data ui according entered search text
 
   updateTransportsData() {
     searchTransports?.clear();
@@ -158,6 +189,8 @@ class TransportController extends ChangeNotifier {
       searchTransports?.addAll(allTransports!);
     } else {
       searchTransports?.addAll(
+        // search filter is applied on these columns
+
         allTransports!
             .where((element) =>
                 element.name!.toLowerCase().contains(searchText) ||
@@ -167,5 +200,17 @@ class TransportController extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // Reset the search text
+  void resetSearchFilter() {
+    searchText = '';
+    updateTransportsData();
+  }
+
+  void clearAllControllers() {
+    nameController.clear();
+    phoneController.clear();
+    desorptionController.clear();
   }
 }

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class FabricDetailsBottomSheet extends StatelessWidget {
+  // gets this dat from the fabric purchase list screen directly
   final Data data;
   final String fabricName;
 
-  FabricDetailsBottomSheet({required this.data, required this.fabricName});
+  const FabricDetailsBottomSheet(
+      {super.key, required this.data, required this.fabricName});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class FabricDetailsBottomSheet extends StatelessWidget {
                     text: fabricName,
                   ),
                 ),
+                // data table to show the details
                 DataTable(
                   columns: const [
                     DataColumn(
@@ -50,12 +53,13 @@ class FabricDetailsBottomSheet extends StatelessWidget {
                     ),
                   ],
                   rows: [
-                    buildDataRow('code', data.fabricpurchasecode.toString()),
+                    buildDataRow(
+                        'vendor_company', data.vendorcompany!.name.toString()),
+                    buildDataRow(
+                        'fabric_code', data.fabricpurchasecode.toString()),
                     buildDataRow('item', data.fabric!.name.toString()),
                     buildDataRow('marka', data.company!.marka.toString()),
-                    // buildDataRow('Company', widget.vendorCompanyName),
                     buildDataRow('bundle', data.bundle.toString()),
-                    // Add more rows as needed
                     buildDataRow('meter', data.meter.toString()),
                     buildDataRow('war', data.war.toString()),
                     buildDataRow('yen_price', data.yenprice.toString()),

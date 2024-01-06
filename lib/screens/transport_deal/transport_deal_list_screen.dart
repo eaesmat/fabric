@@ -33,13 +33,14 @@ class _TransportDealListScreenState extends State<TransportDealListScreen> {
               padding: const EdgeInsets.only(top: 8.0),
               child: CustomTextFieldWithController(
                 iconBtn: IconButton(
-                    icon: const Icon(
-                      Icons.add_box,
-                      color: Pallete.blueColor,
-                    ),
-                    onPressed: () {
-                      transportDealController.navigateToTransportDealCreate();
-                    }),
+                  icon: const Icon(
+                    Icons.add_box,
+                    color: Pallete.blueColor,
+                  ),
+                  onPressed: () {
+                    transportDealController.navigateToTransportDealCreate();
+                  },
+                ),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
                   transportDealController.searchTransportDealMethod(value);
@@ -136,15 +137,36 @@ class _TransportDealListScreenState extends State<TransportDealListScreen> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
+                          final containerId = data.container != null &&
+                                  data.container!.isNotEmpty
+                              ? data.container![0].containerId!.toInt()
+                              : null;
+
+                          final saraiId = data.saraiindeal != null &&
+                                  data.saraiindeal!.isNotEmpty
+                              ? data.saraiindeal![0].saraiId
+                              : null;
+
+                          final saraiInDealId = data.saraiindeal != null &&
+                                  data.saraiindeal!.isNotEmpty
+                              ? data.saraiindeal![0].saraiindealId
+                              : null;
+
+                          final saraiInDate = data.saraiindeal != null &&
+                                  data.saraiindeal!.isNotEmpty
+                              ? data.saraiindeal![0].indate.toString()
+                              : '';
+
                           transportDealController.navigateToTransportDealEdit(
                             data,
                             data.transportdealId!.toInt(),
-                            data.container?[0].containerId!.toInt(),
-                            data.saraiindeal?[0].saraiId,
-                            data.saraiindeal?[0].saraiindealId,
-                            data.saraiindeal![0].indate.toString(),
+                            containerId,
+                            saraiId,
+                            saraiInDealId,
+                            saraiInDate,
                           );
                         }
+
                         if (value == "delete") {
                           transportDealController.deleteTransportDeal(
                               data.transportdealId, index);

@@ -62,13 +62,18 @@ class _CustomTextFieldWithControllerState
                 return widget.customValidator?.call(value);
               },
               decoration: InputDecoration(
+                labelStyle: TextStyle(
+                  color: widget.isDisabled != null && widget.isDisabled!
+                      ? Pallete
+                          .disabledBorder // Use Pallete.blackColor when disabled
+                      : Pallete
+                          .blueColor, // Use Pallete.blueColor when enabled or null
+                  fontSize: 14,
+                ),
                 // enabled: widget.isDisabled,
                 prefixIcon: widget.iconBtn,
                 label: widget.lblText,
-                labelStyle: const TextStyle(
-                  color: Pallete.blueColor,
-                  fontSize: 14,
-                ),
+
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 10,
                 ),
@@ -93,6 +98,7 @@ class _CustomTextFieldWithControllerState
                     width: 1.0,
                   ),
                 ),
+
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(

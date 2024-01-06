@@ -90,7 +90,9 @@ class _FabricDesignDetailsScreenState extends State<FabricDesignDetailsScreen> {
           const SizedBox(width: 8),
           LocaleText(
             text,
+            
             style: TextStyle(
+               fontSize: 12,
               color: _selectedIndex == index
                   ? Pallete.blueColor
                   : Pallete.blackColor,

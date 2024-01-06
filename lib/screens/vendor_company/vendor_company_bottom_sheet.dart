@@ -1,9 +1,6 @@
 import 'package:fabricproject/controller/all_draw_controller.dart';
-import 'package:fabricproject/controller/draw_controller.dart';
-import 'package:fabricproject/controller/forex_controller.dart';
-import 'package:fabricproject/controller/khalid_draw_controller.dart';
-import 'package:fabricproject/controller/khalid_draw_controller.dart';
-import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.dart';
+import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -11,29 +8,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class ForexBottomSheet extends StatefulWidget {
-  const ForexBottomSheet({super.key});
+class VendorCompanyBottomSheet extends StatefulWidget {
+  const VendorCompanyBottomSheet({super.key});
 
   @override
-  State<ForexBottomSheet> createState() => _ForexBottomSheetState();
+  State<VendorCompanyBottomSheet> createState() =>
+      _VendorCompanyBottomSheetState();
 }
 
-class _ForexBottomSheetState extends State<ForexBottomSheet> {
-   @override
+class _VendorCompanyBottomSheetState extends State<VendorCompanyBottomSheet> {
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      Provider.of<ForexController>(context, listen: false).resetSearchFilter();
+      Provider.of<VendorCompanyController>(context, listen: false)
+          .resetSearchFilter();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    // controllers
-    final forexController = Provider.of<ForexController>(context);
-    final drawController = Provider.of<DrawController>(context);
+    // controller provider
+    // fabric purchase controller to pass the selected id to the fabric purchase controller
+    final vendorCompanyController =
+        Provider.of<VendorCompanyController>(context);
+    final allFabricPurchaseController =
+        Provider.of<AllFabricPurchaseController>(context);
     final allDrawController = Provider.of<AllDrawController>(context);
-    final khalidDrawController = Provider.of<KhalidDrawController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -49,8 +51,9 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                // search textfield
+                // search text filed
                 child: CustomTextFieldWithController(
+                  // create button in the search text filed
                   iconBtn: IconButton(
                     icon: const Icon(
                       size: 30,
@@ -58,66 +61,51 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                       color: Pallete.blueColor,
                     ),
                     onPressed: () {
-                      // search Icon to create new item
-                      forexController.navigateToForexCreate();
+                      // to create new
+                      vendorCompanyController.navigateToVendorCompanyCreate();
                     },
                   ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
-                    // Passes search text to the controller
-                    forexController.searchForexMethod(value);
+                    // searches item
+                    vendorCompanyController.searchVendorCompaniesMethod(value);
                   },
                 ),
               ),
               const SizedBox(height: 20.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: forexController.searchForex?.length ?? 0,
+                itemCount:
+                    vendorCompanyController.searchVendorCompanies?.length ?? 0,
                 itemBuilder: (context, index) {
-                  final reversedList =
-                      forexController.searchForex!.reversed.toList();
+                  // data gets data from controller
+                  final reversedList = vendorCompanyController
+                      .searchVendorCompanies!.reversed
+                      .toList();
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      
                       // Pass item id when clicked
-                      allDrawController.forexController.text =
-                          data.sarafiId!.toString();
+                      allDrawController.selectedVendorCompanyIdController.text =
+                          data.vendorcompanyId!.toString();
                       // Pass name when clicked
-                      allDrawController.selectedForexController.text =
-                          '${data.fullname}';
-
-                      drawController.forexController.text =
-                          data.sarafiId!.toString();
+                      allDrawController.selectedVendorCompanyNameController
+                          .text = '${data.name}';
+                      // Pass item id when clicked
+                      allFabricPurchaseController.selectedVendorCompanyId.text =
+                          data.vendorcompanyId!.toString();
                       // Pass name when clicked
-                      drawController.selectedForexController.text =
-                          '${data.fullname}';
-
-                      khalidDrawController.forexController.text =
-                          data.sarafiId!.toString();
-                      // Pass name when clicked
-                      khalidDrawController.selectedForexController.text =
-                          '${data.fullname}';
+                      allFabricPurchaseController
+                          .selectedVendorCompanyName.text = '${data.name}';
                       Navigator.pop(context);
                     },
-                    lead: CircleAvatar(
-                      backgroundColor: Pallete.blueColor,
-                      child: Text(
-                        data.shopno.toString(),
-                        style: const TextStyle(color: Pallete.whiteColor),
-                      ),
+                    // Tile Title
+
+                    tileTitle: Text(
+                      data.name.toString(),
                     ),
-                    tileTitle: Row(
-                      children: [
-                        Text(
-                          data.fullname.toString(),
-                        ),
-                        const Spacer(),
-                        Text(
-                          data.phone.toString(),
-                        ),
-                      ],
-                    ),
+                    // subtitle
+
                     tileSubTitle: Row(
                       children: [
                         Text(
@@ -125,11 +113,12 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                         ),
                         const Spacer(),
                         Text(
-                          data.location.toString(),
+                          data.phone.toString(),
                         ),
                       ],
                     ),
-                    // menu button for delete and update actions
+                    // trailing hold delete and update buttons
+
                     trail: PopupMenuButton(
                       color: Pallete.whiteColor,
                       child: const Icon(Icons.more_vert_sharp),
@@ -159,13 +148,14 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          // navigates to edit screen with item id
-                          forexController.navigateToForexEdit(
-                              data, data.sarafiId!.toInt());
+                          // navigates to the edit screen
+
+                          vendorCompanyController.navigateToVendorCompanyEdit(
+                              data, data.vendorcompanyId!.toInt());
                         }
-                        // delete the item
                         if (value == "delete") {
-                          forexController.deleteForex(data.sarafiId, index);
+                          vendorCompanyController.deleteVendorCompany(
+                              data.vendorcompanyId, index);
                         }
                       },
                     ),

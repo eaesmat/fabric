@@ -5,8 +5,9 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
-
+// this class uses tab bar to show three screens
 class TransportDetailsScreen extends StatefulWidget {
+  // gets this data from the controller class
   final int transportId;
   final String transportName;
   const TransportDetailsScreen({
@@ -80,6 +81,7 @@ class _TransportDetailsScreenState extends State<TransportDetailsScreen> {
           LocaleText(
             text,
             style: TextStyle(
+               fontSize: 12,
               color: _selectedIndex == index
                   ? Pallete.blueColor
                   : Pallete.blackColor,

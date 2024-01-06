@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/draw_controller.dart';
+import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -6,26 +6,22 @@ import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class DrawListScreen extends StatefulWidget {
-  final int vendorCompanyId;
-  final String vendorCompanyName;
-  const DrawListScreen(
-      {Key? key,
-      required this.vendorCompanyId,
-      required this.vendorCompanyName})
-      : super(key: key);
+class AllDrawListScreen extends StatefulWidget {
+  const AllDrawListScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<DrawListScreen> createState() => _DrawListScreenState();
+  State<AllDrawListScreen> createState() => _AllDrawListScreenState();
 }
 
-class _DrawListScreenState extends State<DrawListScreen> {
+class _AllDrawListScreenState extends State<AllDrawListScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Consumer<DrawController>(
-          builder: (context, drawController, child) {
+        Consumer<AllDrawController>(
+          builder: (context, allDrawController, child) {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: CustomTextFieldWithController(
@@ -35,24 +31,24 @@ class _DrawListScreenState extends State<DrawListScreen> {
                       color: Pallete.blueColor,
                     ),
                     onPressed: () {
-                      drawController.navigateToDrawCreate();
+                      allDrawController.navigateToDrawCreate();
                     }),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
-                  drawController.searchDrawsMethod(value);
+                  allDrawController.searchDrawsMethod(value);
                 },
               ),
             );
           },
         ),
         Expanded(
-          child: Consumer<DrawController>(
-            builder: (context, drawController, child) {
+          child: Consumer<AllDrawController>(
+            builder: (context, allDrawController, child) {
               return ListView.builder(
-                itemCount: drawController.searchDraws?.length ?? 0,
+                itemCount: allDrawController.searchDraws?.length ?? 0,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final data = drawController.searchDraws![index];
+                  final data = allDrawController.searchDraws![index];
                   return ListTileWidget(
                     lead: CircleAvatar(
                       backgroundColor: Pallete.blueColor,
@@ -64,7 +60,7 @@ class _DrawListScreenState extends State<DrawListScreen> {
                     tileTitle: Row(
                       children: [
                         Text(
-                          "${data.sarafi!.fullname}",
+                          "${data.sarafi?.fullname}",
                         ),
                         const Spacer(),
                         Text(
@@ -137,11 +133,11 @@ class _DrawListScreenState extends State<DrawListScreen> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          drawController.navigateToDrawEdit(
+                          allDrawController.navigateToDrawEdit(
                               data, data.drawId!.toInt());
                         }
                         if (value == "delete") {
-                          drawController.deleteDraw(data.drawId, index);
+                          allDrawController.deleteDraw(data.drawId, index);
                         }
                       },
                     ),

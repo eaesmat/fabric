@@ -179,11 +179,6 @@ class _TransportDealEditScreenState extends State<TransportDealEditScreen> {
                         // Inside the method where the transport deal is created
                         // Inside the method where the transport deal is created
 
-                        int saraiInDealId = int.parse(transportDealController
-                            .saraiInDealIdController.text);
-
-                        int containerId = int.parse(
-                            transportDealController.containerIdController.text);
                         await transportDealController
                             .editTransportDeal(widget.transportDealId);
                         Navigator.pop(context);
@@ -191,21 +186,12 @@ class _TransportDealEditScreenState extends State<TransportDealEditScreen> {
                             transportDealController.transportId);
 
                         if (transportDealController.isUpdated) {
-                          // container data
-
                           containerController.nameController.text =
                               transportDealController
                                   .containerNameController.text;
+
                           containerController.transportDealController.text =
                               widget.transportDealId.toString();
-                          // sarai data
-
-                          print("ids =");
-                          print(containerId);
-                          print(saraiInDealId);
-                          saraiInDealController.saraiIdController.text =
-                              transportDealController
-                                  .selectedSaraiIdController.text;
 
                           saraiInDealController.inDateController.text =
                               transportDealController.saraiInDealDate.text;
@@ -213,11 +199,43 @@ class _TransportDealEditScreenState extends State<TransportDealEditScreen> {
                           saraiInDealController.transportDealIdController.text =
                               widget.transportDealId.toString();
 
-                          
+                          saraiInDealController.saraiIdController.text =
+                              transportDealController
+                                  .selectedSaraiIdController.text;
+                          // container data
+                          print("worked");
+                          if (transportDealController.noSaraInDeal == true) {
+                            print("must create sarai");
+                            await saraiInDealController.createSaraiInDeal();
+                          } else {
+                            int saraiInDealId = int.parse(
+                                transportDealController
+                                    .saraiInDealIdController.text);
+                            print("must update sarai");
+                            print(saraiInDealId);
+                            await saraiInDealController
+                                .editSaraiInDeal(saraiInDealId);
+                          }
 
-                          await containerController.editContainer(containerId);
-                          await saraiInDealController
-                              .editSaraiInDeal(saraiInDealId);
+                          // container data
+                          print("worked");
+                          if (transportDealController.noContainer == true) {
+                            print("must create container");
+                            await containerController.createContainer();
+                          } else {
+                            int containerId = int.parse(transportDealController
+                                .containerIdController.text);
+
+                            print("must update container");
+                            print(containerId);
+                            await containerController
+                                .editContainer(containerId);
+                          }
+
+                          transportDealController.clearAllControllers();
+
+                          // // sarai data
+
                           await transportDealController
                               .refreshTransportDealData();
                         }

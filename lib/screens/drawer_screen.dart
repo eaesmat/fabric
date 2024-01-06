@@ -1,15 +1,14 @@
 // drawer_widget.dart
 
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_list_screen.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.dart';
 import 'package:fabricproject/screens/company/company_list_screen.dart';
 import 'package:fabricproject/screens/customer/customer_list_screen.dart';
-import 'package:fabricproject/screens/external_companies_list_screen.dart';
 import 'package:fabricproject/screens/fabric/fabric_list_screen.dart';
 import 'package:fabricproject/screens/forex/forex_list_screen.dart';
 import 'package:fabricproject/screens/sarai/sarai_list_screen.dart';
-import 'package:fabricproject/screens/sarai_screen.dart';
 import 'package:fabricproject/screens/transport/transport_list_screen.dart';
 import 'package:fabricproject/screens/vendor_company/vendor_company_list_screen.dart';
-import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/expansion_tile.dart';
 import 'package:fabricproject/widgets/list_tile_item_widget.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -42,18 +41,26 @@ class DrawerScreen extends StatelessWidget {
 // User profile ends
 
 // Khalid section
-            const ListTileWidget(
-              lead: FaIcon(
+            ExpansionTileItemWidget(
+              callBack: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const KhalidDetailsScreen(),
+                  ),
+                );
+              },
+              lead: const FaIcon(
                 FontAwesomeIcons.user,
                 size: 20,
               ),
-              tileTitle: LocaleText('khalid_account'),
+              tileTitle: const LocaleText('khalid_account'),
             ),
 // Khalid section ends
 
 // General Settings
             ExpansionTileWidget(
-              lead: FaIcon(
+              lead: const FaIcon(
                 FontAwesomeIcons.gear,
                 size: 20,
               ),
@@ -110,8 +117,8 @@ class DrawerScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  lead: FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
-                  tileTitle: LocaleText('ٰvendor_companies'),
+                  lead: const FaIcon(FontAwesomeIcons.buildingWheat, size: 18),
+                  tileTitle: const LocaleText('ٰvendor_companies'),
                 ),
                 ExpansionTileItemWidget(
                   callBack: () {
@@ -125,7 +132,6 @@ class DrawerScreen extends StatelessWidget {
                   lead: Icon(Icons.local_shipping),
                   tileTitle: LocaleText('ٰtransport'),
                 ),
-               
                 ExpansionTileItemWidget(
                   callBack: () {
                     Navigator.push(

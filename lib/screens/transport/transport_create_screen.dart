@@ -20,6 +20,8 @@ class _TransportCreateScreenState extends State<TransportCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // gets and sends data to the controller using
+
     final transportController = Provider.of<TransportController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
@@ -40,19 +42,17 @@ class _TransportCreateScreenState extends State<TransportCreateScreen> {
                   CustomTextFieldWithController(
                     lblText: const LocaleText('name'),
                     controller: transportController.nameController,
-                    // customValidator: customFormValidator,
+                    // This comes from helper method to validate the field
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     controller: transportController.phoneController,
                     lblText: const LocaleText('phone'),
-                    //  customValidator: customFormValidator
                   ),
                   CustomTextFieldWithController(
                     controller: transportController.desorptionController,
                     lblText: const LocaleText('description'),
-                    // customValidator: customFormValidator,
                   ),
                   CustomButton(
                     btnWidth: 1,
@@ -66,6 +66,8 @@ class _TransportCreateScreenState extends State<TransportCreateScreen> {
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
+                      // if form is validate will be created
+
                       if (formKey.currentState!.validate()) {
                         transportController.createTransport();
                         Navigator.pop(context);

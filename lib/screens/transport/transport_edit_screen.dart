@@ -10,6 +10,8 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class TransportEditScreen extends StatefulWidget {
+  // gets this data from controller
+
   final Data transportData;
   final int transportId;
 
@@ -25,6 +27,8 @@ class _TransportEditScreenState extends State<TransportEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // gets and sends data to the controller using
+
     final transportController = Provider.of<TransportController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
@@ -45,19 +49,17 @@ class _TransportEditScreenState extends State<TransportEditScreen> {
                   CustomTextFieldWithController(
                     lblText: const LocaleText('name'),
                     controller: transportController.nameController,
-                    // customValidator: customFormValidator,
+                    // This comes from helper method to validate the field
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     controller: transportController.phoneController,
                     lblText: const LocaleText('phone'),
-                    //  customValidator: customFormValidator
                   ),
                   CustomTextFieldWithController(
                     controller: transportController.desorptionController,
                     lblText: const LocaleText('description'),
-                    // customValidator: customFormValidator,
                   ),
                   CustomButton(
                     btnWidth: 1,
@@ -72,6 +74,7 @@ class _TransportEditScreenState extends State<TransportEditScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
+                        // if form is validate will be edited
                         transportController.editTransport(widget.transportId);
                         Navigator.pop(context);
                       }

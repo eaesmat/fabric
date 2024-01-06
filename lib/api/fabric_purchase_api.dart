@@ -5,9 +5,11 @@ import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
 class FabricPurchaseApiServiceProvider {
+  // baseURL comes from the constant class
   final String _baseURL = baseURL;
-
+// Data is is a type comes from the Model class
   Future<Either<String, List<Data>>> getFabricPurchase(
+      // gets the endpoint from the controller class
       String apiEndpoint) async {
     try {
       var response = await http.get(

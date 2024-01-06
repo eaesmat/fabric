@@ -2,7 +2,7 @@ import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/model/vendor_company_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_button.dart';
+import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +10,19 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class VendorCompanyEditScreen extends StatefulWidget {
+  // gets this data from controller
+
   final Data vendorCompanyData;
   final int vendorCompanyId;
 
   const VendorCompanyEditScreen(
-      {super.key, required this.vendorCompanyData, required this.vendorCompanyId});
+      {super.key,
+      required this.vendorCompanyData,
+      required this.vendorCompanyId});
 
   @override
-  State<VendorCompanyEditScreen> createState() => _VendorCompanyEditScreenState();
+  State<VendorCompanyEditScreen> createState() =>
+      _VendorCompanyEditScreenState();
 }
 
 class _VendorCompanyEditScreenState extends State<VendorCompanyEditScreen> {
@@ -25,7 +30,10 @@ class _VendorCompanyEditScreenState extends State<VendorCompanyEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final vendorCompanyController = Provider.of<VendorCompanyController>(context);
+    // gets and sends data to the controller using
+
+    final vendorCompanyController =
+        Provider.of<VendorCompanyController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
@@ -45,21 +53,19 @@ class _VendorCompanyEditScreenState extends State<VendorCompanyEditScreen> {
                   CustomTextFieldWithController(
                     lblText: const LocaleText('name'),
                     controller: vendorCompanyController.nameController,
-                    // customValidator: customFormValidator,
+                    // This comes from helper method to validate the field
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     controller: vendorCompanyController.phoneController,
                     lblText: const LocaleText('phone'),
-                    //  customValidator: customFormValidator
                   ),
                   CustomTextFieldWithController(
                     controller: vendorCompanyController.desorptionController,
                     lblText: const LocaleText('description'),
-                    // customValidator: customFormValidator,
                   ),
-                  CustomButton(
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
                       Icons.check,
@@ -72,7 +78,12 @@ class _VendorCompanyEditScreenState extends State<VendorCompanyEditScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        vendorCompanyController.editVendorCompany(widget.vendorCompanyId);
+                        // if form is validate will be edited
+
+                        vendorCompanyController
+                            // passes the id to the controller to all edit method
+
+                            .editVendorCompany(widget.vendorCompanyId);
                         Navigator.pop(context);
                       }
                     },

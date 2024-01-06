@@ -18,8 +18,18 @@ class TransportListScreen extends StatefulWidget {
 
 class _TransportListScreenState extends State<TransportListScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Reset search filter after the build cycle is complete
+      Provider.of<TransportController>(context, listen: false)
+          .resetSearchFilter();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final transportController = Provider.of<TransportController>(context);
+    // controller providers to send and get data from
     final transportDealController =
         Provider.of<TransportDealController>(context);
     final transportPayment = Provider.of<TransportPaymentController>(context);
@@ -31,19 +41,36 @@ class _TransportListScreenState extends State<TransportListScreen> {
       ),
       body: Column(
         children: [
+          // search part
+
           Consumer<TransportController>(
             builder: (context, transportController, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomTextFieldWithController(
+                  // create new item here
+                  iconBtn: IconButton(
+                    icon: const Icon(
+                      size: 30,
+                      Icons.add_box_rounded,
+                      color: Pallete.blueColor,
+                    ),
+                    onPressed: () {
+                      // search Icon to create new item
+                      transportController.navigateToTransportCreate();
+                    },
+                  ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
+                    // passes search text to the controller
                     transportController.searchTransportsMethod(value);
                   },
                 ),
               );
             },
           ),
+          // data list view
+
           Expanded(
             child: Consumer<TransportController>(
               builder: (context, transportController, child) {
@@ -51,15 +78,20 @@ class _TransportListScreenState extends State<TransportListScreen> {
                   itemCount: transportController.searchTransports?.length ?? 0,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data = transportController.searchTransports![index];
+                    // data holds result of controller
+
+                    final reversedList =
+                        transportController.searchTransports!.reversed.toList();
+                    final data = reversedList[index];
                     return ListTileWidget(
                       onTap: () {
+                        // pass the id and name to the transport deal controller
                         transportDealController
                             .navigateToTransportDealDetailsScreen(
                                 data.name.toString(), data.transportId!);
                         transportDealController.transportId =
                             data.transportId!.toInt();
-
+// pass name and id to the transport payment controller
                         transportPayment.navigateToTransportDealDetailsScreen(
                           data.name.toString(),
                           data.transportId!.toInt(),
@@ -82,6 +114,7 @@ class _TransportListScreenState extends State<TransportListScreen> {
                           ),
                         ],
                       ),
+                      // delete and update operations happens here
                       trail: PopupMenuButton(
                         color: Pallete.whiteColor,
                         child: const Icon(Icons.more_vert_sharp),
@@ -127,16 +160,6 @@ class _TransportListScreenState extends State<TransportListScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Pallete.blueColor,
-        onPressed: () {
-          transportController.navigateToTransportCreate();
-        },
-        child: const Icon(
-          Icons.add,
-          color: Pallete.whiteColor,
-        ),
       ),
     );
   }

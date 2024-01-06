@@ -15,6 +15,18 @@ String? customValidator(String? value, Locale currentLocale) {
   }
   return null;
 }
+String? showShopIfNoSarafi(String? value, Locale currentLocale) {
+  if (value == null || value.isEmpty) {
+    if (currentLocale.languageCode == 'en') {
+      return 'Shop';
+    } else if (currentLocale.languageCode == 'fa') {
+      return 'دوکان ';
+    } else if (currentLocale.languageCode == 'ps') {
+      return 'هټۍ';
+    }
+  }
+  return null;
+}
 
 Color getColorFromName(String colorName) {
   switch (colorName.toLowerCase()) {

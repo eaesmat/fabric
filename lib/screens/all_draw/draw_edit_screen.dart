@@ -1,39 +1,40 @@
-import 'package:fabricproject/controller/fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_draw_controller.dart';
+import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/screens/company/company_bottom_sheet.dart';
-import 'package:fabricproject/screens/fabric/fabric_bottom_sheet.dart';
+import 'package:fabricproject/model/draw_model.dart';
+import 'package:fabricproject/screens/forex/forex_bottom_sheet.dart';
+import 'package:fabricproject/screens/vendor_company/vendor_company_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/custom_button.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/date_picker.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
-import 'package:fabricproject/widgets/meter_convertor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class FabricPurchaseCreateScreen extends StatefulWidget {
-  const FabricPurchaseCreateScreen({super.key});
+class AllDrawEditScreen extends StatefulWidget {
+  final Data drawData;
+  final int drawId;
+  const AllDrawEditScreen(
+      {super.key, required this.drawData, required this.drawId});
 
   @override
-  State<FabricPurchaseCreateScreen> createState() =>
-      _FabricPurchaseCreateScreenState();
+  State<AllDrawEditScreen> createState() => _AllDrawEditScreenState();
 }
 
-class _FabricPurchaseCreateScreenState
-    extends State<FabricPurchaseCreateScreen> {
+class _AllDrawEditScreenState extends State<AllDrawEditScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    // controller provider
-    final fabricPurchaseController =
-        Provider.of<FabricPurchaseController>(context);
+    final allDrawController = Provider.of<AllDrawController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'new_purchase'),
+        title: const LocaleTexts(localeText: 'update_draw'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -45,14 +46,43 @@ class _FabricPurchaseCreateScreenState
               key: formKey,
               child: Column(
                 children: [
-                  // company bottom sheet to select the company
+                  CustomTextFieldWithController(
+                    lblText: const LocaleText('dollar_price'),
+                    controller: allDrawController.dollarPriceController,
+                    // customValidator: customFormValidator,
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
+                  ),
+                  CustomTextFieldWithController(
+                    controller: allDrawController.yenPriceController,
+                    lblText: const LocaleText('yen_price'),
+                    //  customValidator: customFormValidator
+                  ),
+                  CustomTextFieldWithController(
+                    controller: allDrawController.exchangeRateController,
+                    lblText: const LocaleText('exchange_rate'),
+                    // customValidator: customFormValidator,
+                  ),
+                  CustomTextFieldWithController(
+                    controller: allDrawController.descriptionController,
+                    lblText: const LocaleText('description'),
+                    // customValidator: customFormValidator,
+                  ),
+                  CustomTextFieldWithController(
+                    controller: allDrawController.bankPhotoController,
+                    lblText: const LocaleText('photo'),
+                    // customValidator: customFormValidator,
+                  ),
+                  DatePicker(
+                    controller: allDrawController.dateController,
+                  ),
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const CompanyBottomSheet();
+                          return const ForexBottomSheet();
                         },
                       );
                     },
@@ -60,23 +90,22 @@ class _FabricPurchaseCreateScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: fabricPurchaseController.selectedCompanyNameController,
+                      controller: allDrawController.selectedForexController,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
                         color: Pallete.blueColor,
                       ),
-                      lblText: const LocaleText('companies'),
+                      lblText: const LocaleText('forex'),
                     ),
                   ),
-                  // fabric bottom sheet to select the fabrics
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const FabricBottomSheet();
+                          return const VendorCompanyBottomSheet();
                         },
                       );
                     },
@@ -85,49 +114,14 @@ class _FabricPurchaseCreateScreenState
                           customValidator(value, currentLocale),
                       isDisabled: true,
                       controller:
-                          fabricPurchaseController.selectedFabricNameController,
+                          allDrawController.selectedVendorCompanyNameController,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
                         color: Pallete.blueColor,
                       ),
-                      lblText: const LocaleText('fabrics'),
+                      lblText: const LocaleText('vendor_companies'),
                     ),
-                  ),
-                  CustomTextFieldWithController(
-                    customValidator: (value) =>
-                        customValidator(value, currentLocale),
-                    lblText: const LocaleText('bundle'),
-                    controller:
-                        fabricPurchaseController.amountOfBundlesController,
-                  ),
-                  const MeterConvertor(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DatePicker(
-                          controller: fabricPurchaseController.dateController,
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomTextFieldWithController(
-                          customValidator: (value) =>
-                              customValidator(value, currentLocale),
-                          lblText: const LocaleText('fabric_code'),
-                          controller:
-                              fabricPurchaseController.fabricCodeController,
-                        ),
-                      ),
-                    ],
-                  ),
-                  CustomTextFieldWithController(
-                    lblText: const LocaleText('bank_receipt_photo'),
-                    controller:
-                        fabricPurchaseController.bankReceivedPhotoController,
-                  ),
-                  CustomTextFieldWithController(
-                    lblText: const LocaleText('package_photo'),
-                    controller: fabricPurchaseController.packagePhotoController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -136,14 +130,13 @@ class _FabricPurchaseCreateScreenState
                       color: Pallete.whiteColor,
                     ),
                     btnText: const LocaleText(
-                      'create',
+                      'update',
                       style: TextStyle(color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
-                      // Check if the selected company is not empty
                       if (formKey.currentState!.validate()) {
-                        fabricPurchaseController.createFabricPurchase();
+                        allDrawController.editDraw(widget.drawId);
                         Navigator.pop(context);
                       }
                     },

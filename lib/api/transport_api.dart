@@ -5,8 +5,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
 class TransportApiServiceProvider {
+  // this base url comes from the class constant
   final String _baseURL = baseURL;
-
+// data is the type comes from the model class
   Future<Either<String, List<Data>>> getTransport(String apiEndpoint) async {
     try {
       var response = await http.get(

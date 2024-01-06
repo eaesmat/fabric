@@ -1,4 +1,5 @@
-import 'package:fabricproject/controller/draw_controller.dart';
+import 'package:fabricproject/controller/khalid_draw_controller.dart';
+import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -6,26 +7,24 @@ import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class DrawListScreen extends StatefulWidget {
-  final int vendorCompanyId;
-  final String vendorCompanyName;
-  const DrawListScreen(
-      {Key? key,
-      required this.vendorCompanyId,
-      required this.vendorCompanyName})
-      : super(key: key);
+class KhalidDrawListScreen extends StatefulWidget {
+  const KhalidDrawListScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<DrawListScreen> createState() => _DrawListScreenState();
+  State<KhalidDrawListScreen> createState() => _KhalidDrawListScreenState();
 }
 
-class _DrawListScreenState extends State<DrawListScreen> {
+class _KhalidDrawListScreenState extends State<KhalidDrawListScreen> {
   @override
   Widget build(BuildContext context) {
+    Locale currentLocale = Localizations.localeOf(context);
+
     return Column(
       children: [
-        Consumer<DrawController>(
-          builder: (context, drawController, child) {
+        Consumer<KhalidDrawController>(
+          builder: (context, khalidDrawController, child) {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: CustomTextFieldWithController(
@@ -35,36 +34,38 @@ class _DrawListScreenState extends State<DrawListScreen> {
                       color: Pallete.blueColor,
                     ),
                     onPressed: () {
-                      drawController.navigateToDrawCreate();
+                      khalidDrawController.navigateToDrawCreate();
                     }),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
-                  drawController.searchDrawsMethod(value);
+                  khalidDrawController.searchDrawsMethod(value);
                 },
               ),
             );
           },
         ),
         Expanded(
-          child: Consumer<DrawController>(
-            builder: (context, drawController, child) {
+          child: Consumer<KhalidDrawController>(
+            builder: (context, khalidDrawController, child) {
               return ListView.builder(
-                itemCount: drawController.searchDraws?.length ?? 0,
+                itemCount: khalidDrawController.searchDraws?.length ?? 0,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final data = drawController.searchDraws![index];
+                  final data = khalidDrawController.searchDraws![index];
                   return ListTileWidget(
                     lead: CircleAvatar(
                       backgroundColor: Pallete.blueColor,
                       child: Text(
-                         "${data.photo}",
+                        "${data.photo}",
                         style: const TextStyle(color: Pallete.whiteColor),
                       ),
                     ),
                     tileTitle: Row(
                       children: [
                         Text(
-                          "${data.sarafi!.fullname}",
+                          data.sarafi?.fullname ??
+                              showShopIfNoSarafi(
+                                  data.sarafi?.fullname, currentLocale)!,
                         ),
                         const Spacer(),
                         Text(
@@ -85,22 +86,6 @@ class _DrawListScreenState extends State<DrawListScreen> {
                                 LocaleText('dollar_price'),
                                 Text(
                                   data.doller.toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                LocaleText('yen_price'),
-                                Text(
-                                  data.yen.toString(),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                LocaleText('exchnage'),
-                                Text(
-                                  data.exchangerate.toString(),
                                 ),
                               ],
                             ),
@@ -137,11 +122,11 @@ class _DrawListScreenState extends State<DrawListScreen> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          drawController.navigateToDrawEdit(
+                          khalidDrawController.navigateToDrawEdit(
                               data, data.drawId!.toInt());
                         }
                         if (value == "delete") {
-                          drawController.deleteDraw(data.drawId, index);
+                          khalidDrawController.deleteDraw(data.drawId, index);
                         }
                       },
                     ),

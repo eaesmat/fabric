@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
 import 'package:fabricproject/controller/container_controller.dart';
@@ -8,6 +9,7 @@ import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
+import 'package:fabricproject/controller/khalid_draw_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
@@ -84,11 +86,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AllFabricPurchaseController>(
           create: (_) => AllFabricPurchaseController(HelperServices.instance),
         ),
+        ChangeNotifierProvider<AllDrawController>(
+          create: (_) => AllDrawController(HelperServices.instance),
+        ),
         ChangeNotifierProvider<TransportPaymentController>(
           create: (_) => TransportPaymentController(HelperServices.instance),
         ),
         ChangeNotifierProvider<SaraiInDealController>(
           create: (_) => SaraiInDealController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<KhalidDrawController>(
+          create: (_) => KhalidDrawController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

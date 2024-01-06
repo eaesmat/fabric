@@ -41,7 +41,7 @@
   "added": "ایجاد گردید",
   "deleted": "حذف گردید",
   "updated": "ویرایش گردید",
-  "parent" :"دارای معلومات مربوطه میباشد٬ حذف نگردید",
+  "parent": "دارای معلومات مربوطه میباشد٬ حذف نگردید",
 
   "forex": "صرافی",
   "search": "جستجو",
@@ -77,5 +77,21 @@
   "first_name": "اسم",
   "last_name": "تخلص",
   "photo": "تصویر",
-  "address": "آدرس"
+  "address": "آدرس",
+  "receipts": "رسیدات",
+  "transactions": "معاملات",
+  "purchases": "خریدها",
+  "dollar": "دالر",
+  "yen": "ین",
+  "update_fabric_purchase": "ویرایش خریداری تکه",
+  "new_purchase": "خرید جدید",
+  "fabric_code": " کود تکه",
+  "exchange_rate": "نرخ تبادله ",
+  "date": "تاریخ ",
+  "bank_receipt_photo": "عکس رسید بانک ",
+  "package_photo": "عکس بسته بندی ",
+  "item" : "جنس",
+  "attribute" : "کلیدها",
+  "value" : "ارزش ها"
 }
+ 

@@ -1,5 +1,4 @@
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
-import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_details.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter/material.dart';

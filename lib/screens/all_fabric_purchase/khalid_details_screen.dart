@@ -1,29 +1,28 @@
+import 'package:fabricproject/screens/all_draw/draw_list_screen.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_list_screen.dart';
 import 'package:fabricproject/screens/draw/draw_calculation_screen.dart';
 import 'package:fabricproject/screens/draw/draw_list_screen.dart';
-import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_list_screen.dart';
+import 'package:fabricproject/screens/khalid_draw/khalid_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 // this screen comes up on vendor company click
-class VendorCompanyDetailsListScreen extends StatefulWidget {
+class KhalidDetailsScreen extends StatefulWidget {
   // gets the data from the controller
-  final int vendorCompanyId;
-  final String vendorCompanyName;
-  const VendorCompanyDetailsListScreen(
-      {Key? key,
-      required this.vendorCompanyId,
-      required this.vendorCompanyName})
-      : super(key: key);
+
+  const KhalidDetailsScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<VendorCompanyDetailsListScreen> createState() =>
-      _VendorCompanyDetailsListScreenState();
+  State<KhalidDetailsScreen> createState() => _KhalidDetailsScreenState();
 }
 
-class _VendorCompanyDetailsListScreenState
-    extends State<VendorCompanyDetailsListScreen> {
+class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
   // Track the selected tab index
   int _selectedIndex = 0;
 
@@ -33,7 +32,9 @@ class _VendorCompanyDetailsListScreenState
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: CustomTextTitle(text: widget.vendorCompanyName),
+          title: const LocaleTexts(
+            localeText: 'khalid_account',
+          ),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize:
@@ -49,27 +50,25 @@ class _VendorCompanyDetailsListScreenState
                   });
                 },
                 tabs: [
-                  _buildTab(Icons.list_alt_outlined, 'purchases', 0),
+                  _buildTab(Icons.list_alt_sharp, 'purchases', 0),
                   _buildTab(Icons.draw, 'receipts', 1),
-                  _buildTab(Icons.account_balance_wallet, 'transactions', 2),
+                  _buildTab(Icons.fact_check_sharp, 'withdrawal', 2),
                 ],
               ),
             ),
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             // gets three screens in here
 
-            FabricPurchaseListScreen(
-              vendorCompanyId: widget.vendorCompanyId,
-              vendorCompanyName: widget.vendorCompanyName,
-            ),
-            DrawListScreen(
-              vendorCompanyId: widget.vendorCompanyId,
-              vendorCompanyName: widget.vendorCompanyName,
-            ),
-            const DrawCalculation(),
+            AllFabricPurchaseListScreen(),
+            // DrawListScreen(
+            //   vendorCompanyId: widget.vendorCompanyId,
+            //   vendorCompanyName: widget.vendorCompanyName,
+            // ),
+            AllDrawListScreen(),
+            KhalidDrawListScreen(),
           ],
         ),
       ),
