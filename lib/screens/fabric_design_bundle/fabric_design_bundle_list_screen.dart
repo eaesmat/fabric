@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
+import 'package:fabricproject/controller/pati_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -24,6 +25,8 @@ class _FabricDesignBundleListScreenState
     extends State<FabricDesignBundleListScreen> {
   @override
   Widget build(BuildContext context) {
+    final patiController = Provider.of<PatiController>(context);
+
     return Column(
       children: [
         Consumer<FabricDesignBundleController>(
@@ -61,6 +64,15 @@ class _FabricDesignBundleListScreenState
                   final data = fabricDesignBundleController
                       .searchFabricDesignBundles![index];
                   return ListTileWidget(
+                    onTap: () {
+                      // pass the fabric Id to the fabric design controller
+                      patiController.navigateToPatiListScreen(
+                        data.designbundleId!.toInt(),
+                        widget.fabricDesignId,
+                        widget.fabricDesignName,
+                      );
+                      print(widget.fabricDesignName.toString());
+                    },
                     lead: CircleAvatar(
                       backgroundColor: Pallete.blueColor,
                       child: Text(

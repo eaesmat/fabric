@@ -20,12 +20,14 @@ class TransportDealController extends ChangeNotifier {
   TextEditingController saraiInDealIdController = TextEditingController();
   TextEditingController saraiInDealDate = TextEditingController();
   TextEditingController amountOfBundlesController = TextEditingController();
+  TextEditingController transportIdController = TextEditingController();
   TextEditingController durationController = TextEditingController();
   TextEditingController warPriceController = TextEditingController();
   TextEditingController totalCostController = TextEditingController();
   TextEditingController selectedFabricPurchaseIdController =
       TextEditingController();
   TextEditingController singleKhatPriceController = TextEditingController();
+  TextEditingController statusController = TextEditingController();
   TextEditingController selectedFabricPurchaseNameController =
       TextEditingController();
   TextEditingController containerIdController = TextEditingController();
@@ -39,6 +41,9 @@ class TransportDealController extends ChangeNotifier {
   int? transportId;
   List<Data>? allTransportDeals = [];
   List<Data>? searchTransportDeals = [];
+  List<Data>? searchTransportDealsWithNoFilter = [];
+  List<Data>? allTransportDealsWithNoFilter = [];
+
   List? filteredContainers;
   List? filteredSarai;
   String searchText = "";
@@ -204,12 +209,25 @@ class TransportDealController extends ChangeNotifier {
         _helperServices.showErrorMessage(l),
       },
       (r) {
+        print("The deal lenght");
+        print(r.length);
+        allTransportDealsWithNoFilter = r
+            .where((transportDeal) => transportDeal.status == 'pending')
+            .toList();
+        ;
+        // goBack pops the current stack
+        searchTransportDealsWithNoFilter?.clear();
+        searchTransportDealsWithNoFilter
+            ?.addAll(allTransportDealsWithNoFilter!);
+        print("the no filter lenght");
+        print(searchTransportDealsWithNoFilter!.length);
         allTransportDeals = r
             .where((transportDeal) => transportDeal.transportId == transportId)
             .toList();
         searchTransportDeals?.clear();
         searchTransportDeals?.addAll(allTransportDeals!);
-
+        print("the  filter lenght");
+        print(searchTransportDeals!.length);
         sumOfTransportDealTotalCost =
             calculateSumOfTotalCost(allTransportDeals);
 
@@ -275,10 +293,6 @@ class TransportDealController extends ChangeNotifier {
   }
 
   createTransportDeal() async {
-    print("t ID");
-    print(transportId);
-    print("f ID");
-    print(selectedFabricPurchaseIdController.text);
     _helperServices.showLoader();
 
     var response = await TransportDealApiServiceProvider().createTransportDeal(
@@ -323,60 +337,6 @@ class TransportDealController extends ChangeNotifier {
     );
   }
 
-  createTransportDealFromKhalidAccount() async {
-    _helperServices.showLoader();
-
-    var response = await TransportDealApiServiceProvider().createTransportDeal(
-      'add-transport-deal',
-      {
-        "transportdeal_id": 0,
-        "startdate":
-            startDateController.text.isEmpty ? "" : startDateController.text,
-        "arrivaldate": null,
-        "fabricpurchase_id": selectedFabricPurchaseIdController.text,
-        "khatamount": amountOfKhatController.text.isEmpty
-            ? 0
-            : amountOfKhatController.text,
-        "costperkhat": singleKhatPriceController.text.isEmpty
-            ? 0
-            : singleKhatPriceController.text,
-        "transport_id": transportId.toString(),
-        "status": "pending",
-        "duration":
-            durationController.text.isEmpty ? 0 : durationController.text,
-        "bundle": amountOfBundlesController.text.isEmpty
-            ? ""
-            : amountOfBundlesController.text,
-        "photo": photoController.text.isEmpty ? "" : photoController.text,
-        "totalcost":
-            totalCostController.text.isEmpty ? 0 : totalCostController.text,
-        "warcost":
-            warPriceController.text.isEmpty ? 0 : warPriceController.text,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        isAdded = false;
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-      },
-      (r) {
-        getAllTransportDeal(transportId!);
-        isAdded = true;
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-      },
-    );
-  }
-
   // Method to refresh transport deal data after insertion
   Future<void> refreshTransportDealData() async {
     await getAllTransportDeal(transportId); // Refresh data
@@ -384,17 +344,6 @@ class TransportDealController extends ChangeNotifier {
   }
 
   editTransportDeal(int transportDealId) async {
-    print(transportDealId);
-    print(startDateController.text);
-    print(selectedFabricPurchaseIdController.text);
-    print(amountOfKhatController.text);
-    print(singleKhatPriceController.text);
-    print(transportId);
-    print(durationController.text);
-    print(amountOfBundlesController.text);
-    print(photoController.text);
-    print(totalCostController.text);
-    print(warPriceController.text);
     _helperServices.showLoader();
 
     var response = await TransportDealApiServiceProvider().editTransportDeal(
@@ -426,6 +375,68 @@ class TransportDealController extends ChangeNotifier {
       (r) {
         _helperServices.goBack();
         isUpdated = true;
+        _helperServices.showMessage(
+          const LocaleText('updated'),
+          Colors.green,
+          const Icon(
+            Icons.check,
+            color: Pallete.whiteColor,
+          ),
+        );
+
+        // clearAllControllers();
+      },
+    );
+  }
+
+  editTransportDealStatusReceived(int transportDealId, Data data) async {
+    int transportId = data.transportId!.toInt();
+    DateTime selectedDate = DateTime.now();
+    String currentDate =
+        "${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
+    startDateController.text = data.startdate.toString();
+
+    amountOfKhatController.text = data.khatamount.toString();
+    singleKhatPriceController.text = data.costperkhat.toString();
+    transportIdController.text = data.transportId.toString();
+    selectedFabricPurchaseIdController.text = data.fabricpurchaseId.toString();
+    durationController.text = data.duration.toString();
+    amountOfBundlesController.text = data.bundle.toString();
+    photoController.text = data.photo.toString();
+    totalCostController.text = data.totalcost.toString();
+    warPriceController.text = data.warcost.toString();
+
+    _helperServices.showLoader();
+
+    var response = await TransportDealApiServiceProvider().editTransportDeal(
+      'update-transport-deal?$transportDealId',
+      {
+        "transportdeal_id": transportDealId,
+        "startdate": startDateController.text,
+        "arrivaldate": currentDate,
+        "fabricpurchase_id": selectedFabricPurchaseIdController.text,
+        "khatamount": amountOfKhatController.text,
+        "costperkhat": singleKhatPriceController.text,
+        "transport_id": transportIdController.text,
+        "status": "received",
+        "duration": durationController.text,
+        "bundle": amountOfBundlesController.text,
+        "photo": photoController.text,
+        "totalcost": totalCostController.text,
+        "warcost": warPriceController.text,
+        "user_id": 1,
+      },
+    );
+    response.fold(
+      (l) {
+        _helperServices.goBack();
+        _helperServices.showErrorMessage(l);
+        isUpdated = false;
+      },
+      (r) {
+        _helperServices.goBack();
+        isUpdated = true;
+        getAllTransportDeal(transportId);
         print("transport deal success ");
         _helperServices.showMessage(
           const LocaleText('updated'),
@@ -480,15 +491,47 @@ class TransportDealController extends ChangeNotifier {
   searchTransportDealMethod(String name) {
     searchText = name;
     updateTransportDealData();
+    updateTransportDealDataWithNoFilter();
+  }
+
+  searchTransportDealWithNoFilterMethod(String name) {
+    searchText = name;
+    updateTransportDealDataWithNoFilter();
   }
 
   updateTransportDealData() {
     searchTransportDeals?.clear();
+    searchTransportDealsWithNoFilter?.clear();
+
     if (searchText.isEmpty) {
       searchTransportDeals?.addAll(allTransportDeals!);
     } else {
       searchTransportDeals?.addAll(
         allTransportDeals!
+            .where((element) =>
+                element.fabricpurchase!.fabricpurchasecode!
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.arrivaldate!.toLowerCase().contains(searchText) ||
+                element.fabricpurchase!.fabricpurchasecode!
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.startdate!.toLowerCase().contains(searchText))
+            // element.!.toLowerCase().contains(searchText))
+            .toList(),
+      );
+    }
+    notifyListeners();
+  }
+
+  updateTransportDealDataWithNoFilter() {
+    searchTransportDealsWithNoFilter?.clear();
+
+    if (searchText.isEmpty) {
+      searchTransportDealsWithNoFilter?.addAll(allTransportDealsWithNoFilter!);
+    } else {
+      searchTransportDealsWithNoFilter?.addAll(
+        allTransportDealsWithNoFilter!
             .where((element) =>
                 element.fabricpurchase!.fabricpurchasecode!
                     .toLowerCase()
