@@ -10,6 +10,8 @@ import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/controller/khalid_draw_controller.dart';
+import 'package:fabricproject/controller/pati_controller.dart';
+import 'package:fabricproject/controller/pati_design_color_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
@@ -97,6 +99,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<KhalidDrawController>(
           create: (_) => KhalidDrawController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<PatiDesignColorController>(
+          create: (_) => PatiDesignColorController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<PatiController>(
+          create: (_) => PatiController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

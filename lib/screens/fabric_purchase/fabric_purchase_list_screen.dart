@@ -48,14 +48,15 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
               // Search text filed
               child: CustomTextFieldWithController(
                 iconBtn: IconButton(
-                    icon: const Icon(
-                      Icons.add_box,
-                      color: Pallete.blueColor,
-                    ),
-                    onPressed: () {
-                      // navigate to new create screen
-                      fabricPurchaseController.navigateToFabricPurchaseCreate();
-                    }),
+                  icon: const Icon(
+                    Icons.add_box,
+                    color: Pallete.blueColor,
+                  ),
+                  onPressed: () {
+                    // navigate to new create screen
+                    fabricPurchaseController.navigateToFabricPurchaseCreate();
+                  },
+                ),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
                   // pass the data to the search method controller
