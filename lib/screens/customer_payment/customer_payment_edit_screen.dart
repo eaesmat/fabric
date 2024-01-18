@@ -1,33 +1,40 @@
-import 'package:fabricproject/controller/customer_controller.dart';
-import 'package:fabricproject/helper/helper_methods.dart';
+import 'package:fabricproject/controller/customer_payment_controller.dart';
+import 'package:fabricproject/model/customer_payment_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
+import 'package:fabricproject/widgets/date_picker.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class CustomerCreateScreen extends StatefulWidget {
-  const CustomerCreateScreen({super.key});
+class CustomerPaymentEditScreen extends StatefulWidget {
+  final Data customerPaymentData;
+  final int customerPaymentId;
+  const CustomerPaymentEditScreen(
+      {super.key,
+      required this.customerPaymentData,
+      required this.customerPaymentId});
 
   @override
-  State<CustomerCreateScreen> createState() => _CustomerCreateScreenState();
+  State<CustomerPaymentEditScreen> createState() =>
+      _CustomerPaymentEditScreenState();
 }
 
-class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
+class _CustomerPaymentEditScreenState extends State<CustomerPaymentEditScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     // controller provider instance
 
-    final customerController = Provider.of<CustomerController>(context);
-    Locale currentLocale = Localizations.localeOf(context);
+    final customerPaymentController =
+        Provider.of<CustomerPaymentController>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_customer'),
+        title: const LocaleTexts(localeText: 'update_customer_payment'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -40,34 +47,25 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
               child: Column(
                 children: [
                   CustomTextFieldWithController(
-                    lblText: const LocaleText('first_name'),
-                    controller: customerController.firstNameController,
-                    customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                    controller:
+                        customerPaymentController.amountDollarController,
+                    lblText: const LocaleText('dollar'),
                   ),
                   CustomTextFieldWithController(
-                    controller: customerController.lastNameController,
-                    lblText: const LocaleText('last_name'),
+                    controller:
+                        customerPaymentController.amountAfghaniController,
+                    lblText: const LocaleText('AFN'),
                   ),
                   CustomTextFieldWithController(
-                    controller: customerController.brunchController,
-                    lblText: const LocaleText('brunch'),
+                    lblText: const LocaleText('person'),
+                    controller: customerPaymentController.personController,
                   ),
                   CustomTextFieldWithController(
-                    controller: customerController.provinceController,
-                    lblText: const LocaleText('province'),
+                    controller: customerPaymentController.descriptionController,
+                    lblText: const LocaleText('description'),
                   ),
-                  CustomTextFieldWithController(
-                    controller: customerController.phoneController,
-                    lblText: const LocaleText('phone'),
-                  ),
-                  CustomTextFieldWithController(
-                    controller: customerController.addressController,
-                    lblText: const LocaleText('address'),
-                  ),
-                  CustomTextFieldWithController(
-                    controller: customerController.photoController,
-                    lblText: const LocaleText('photo'),
+                  DatePicker(
+                    controller: customerPaymentController.dateController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -76,13 +74,13 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
                       color: Pallete.whiteColor,
                     ),
                     btnText: const LocaleText(
-                      'create',
+                      'update',
                       style: TextStyle(color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        customerController.createCustomer();
+                        customerPaymentController.editCustomerPayment(widget.customerPaymentId);
                         Navigator.pop(context);
                       }
                     },

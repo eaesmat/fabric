@@ -2,7 +2,7 @@ import 'package:fabricproject/controller/customer_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/model/customer_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_button.dart';
+import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -45,26 +45,35 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                   CustomTextFieldWithController(
                     lblText: const LocaleText('first_name'),
                     controller: customerController.firstNameController,
-                    // customValidator: customFormValidator,
+                    // comes from helper validates the field
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     controller: customerController.lastNameController,
                     lblText: const LocaleText('last_name'),
-                    //  customValidator: customFormValidator
                   ),
                   CustomTextFieldWithController(
-                    controller: customerController.photoController,
-                    lblText: const LocaleText('photo'),
-                    // customValidator: customFormValidator,
+                    controller: customerController.brunchController,
+                    lblText: const LocaleText('brunch'),
+                  ),
+                  CustomTextFieldWithController(
+                    controller: customerController.provinceController,
+                    lblText: const LocaleText('province'),
+                  ),
+                  CustomTextFieldWithController(
+                    controller: customerController.phoneController,
+                    lblText: const LocaleText('phone'),
                   ),
                   CustomTextFieldWithController(
                     controller: customerController.addressController,
                     lblText: const LocaleText('address'),
-                    // customValidator: customFormValidator,
                   ),
-                  CustomButton(
+                  CustomTextFieldWithController(
+                    controller: customerController.photoController,
+                    lblText: const LocaleText('photo'),
+                  ),
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
                       Icons.check,
@@ -78,7 +87,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         customerController.editCustomer(widget.customerId);
-                      Navigator.pop(context);
+                        Navigator.pop(context);
                       }
                     },
                   ),
