@@ -2,6 +2,9 @@ import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
 import 'package:fabricproject/controller/container_controller.dart';
+import 'package:fabricproject/controller/customer_deal_controller.dart';
+import 'package:fabricproject/controller/customer_deals_controller.dart';
+import 'package:fabricproject/controller/customer_payment_controller.dart';
 import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
@@ -105,6 +108,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<PatiController>(
           create: (_) => PatiController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<CustomerDealController>(
+          create: (_) => CustomerDealController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<CustomerPaymentController>(
+          create: (_) => CustomerPaymentController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<CustomerDealsController>(
+          create: (_) => CustomerDealsController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(
