@@ -1,47 +1,49 @@
+import 'package:fabricproject/api/dokan_in_pati_api.dart';
 import 'package:fabricproject/api/sarai_in_fabric_api.dart';
 import 'package:fabricproject/helper/helper.dart';
-import 'package:fabricproject/model/sarai_in_fabric_model.dart';
-import 'package:fabricproject/screens/sarai_item_list/all_sarai_in_fabric.dart';
-import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_in_details_screen.dart';
+import 'package:fabricproject/screens/dokan_pati/all_dokan_pati_in.dart';
 import 'package:flutter/material.dart';
+import 'package:fabricproject/model/dokan_pati_in_model.dart';
 
-class SaraiInFabricController extends ChangeNotifier {
+class DokanInPatiController extends ChangeNotifier {
   // helper class instance
   final HelperServices _helperServices;
   // lists to hold data comes from api
-  List<Data>? allSaraiInFabric = [];
-  List<Data>? searchSaraiInFabrics = [];
+  List<Data>? allDokanPati = [];
+  List<Data>? searchDokanInPati = [];
   // this will hold search text field text
   String searchText = "";
 
-  SaraiInFabricController(this._helperServices) {
+  DokanInPatiController(this._helperServices) {
     // Gets data at first visit to the ui
   }
 
-  navigateToAllSaraiInFabric() async {
+  navigateToAllDokanPatiIn() async {
     _helperServices.navigate(
-      const AllSaraiInFabric(),
+      // this is the screen to show all the dokan pati ins
+      const AllDokanPatiIn(),
     );
 
     // await getAllSaraiOutFabrics(
     //     fabricId, saraiId); // Wait for getAllFabricPurchases to complete
   }
 
-  navigateToSaraiInFabricDetails(Data data) async {
-    _helperServices.navigate(
-      SaraiFabricInDetailsBottomSheet(data: data),
-    );
+  navigateToDokanInPatiDetails(Data data) async {
+    // _helperServices.navigate(
+    //   // SaraiFabricInDetailsBottomSheet(data: data),
+    // );
 
     // await getAllSaraiOutFabrics(
     //     fabricId, saraiId); // Wait for getAllFabricPurchases to complete
   }
 
 // gets all the data
-  getAllSaraiFabrics(int fabricId, saraiId) async {
+// as dokan is type of sarai I used dokan instead but this is sarai id with type dokan
+  getAllDokanPatiIn(int fabricId, dokanId) async {
     _helperServices.showLoader();
     // endpoint passed to the api class
-    final response = await SaraiInFabricApiServiceProvider().getSaraiInFabric(
-        'getSaraiInFabric?fabric_id=$fabricId&sarai_id=$saraiId');
+    final response = await DokanInPatiApiServiceProvider().getDokanInPati(
+        'getDokanPatiInOut?sarai_id=$dokanId&fabric_id=$fabricId&actionPati=saraiPageLoadInPati');
     response.fold(
         (l) => {
 // l returns failure with status code to the ui
@@ -49,38 +51,38 @@ class SaraiInFabricController extends ChangeNotifier {
               _helperServices.showErrorMessage(l),
             }, (r) {
 // r holds data comes from api with success
-      allSaraiInFabric = r;
+      allDokanPati = r;
       // goBack pops the current stack
       _helperServices.goBack();
-      searchSaraiInFabrics?.clear();
-      searchSaraiInFabrics?.addAll(allSaraiInFabric!);
+      searchDokanInPati?.clear();
+      searchDokanInPati?.addAll(allDokanPati!);
       // this methods assign the recent data to the search List
       // updateForexData();
       notifyListeners();
     });
   }
 
-  searchSaraiFabricsMethod(String name) {
+  searchDokanInPatiMethod(String name) {
     searchText = name;
-    updateSaraiFabricsData();
+    updateDokanPatiInData();
   }
 
 // updates data ui according entered search text
-  updateSaraiFabricsData() {
-    searchSaraiInFabrics?.clear();
+  updateDokanPatiInData() {
+    searchDokanInPati?.clear();
     if (searchText.isEmpty) {
-      searchSaraiInFabrics?.addAll(allSaraiInFabric!);
+      searchDokanInPati?.addAll(allDokanPati!);
     } else {
-      searchSaraiInFabrics?.addAll(
-        allSaraiInFabric!
+      searchDokanInPati?.addAll(
+        allDokanPati!
             .where((element) =>
                 // search filter is applied on these columns
-                element.fabricpurchasecode!
+                element.inDate!
                     .toLowerCase()
                     .contains(searchText) ||
-                element.bundlename!.toLowerCase().contains(searchText) ||
-                element.status!.toLowerCase().contains(searchText) ||
-                element.indate!.toLowerCase().contains(searchText))
+                element.fabricPurchaseCode!.toLowerCase().contains(searchText) ||
+                element.patiName!.toLowerCase().contains(searchText) ||
+                element.patiWar!.toString().toLowerCase().contains(searchText))
             .toList(),
       );
     }
@@ -89,8 +91,8 @@ class SaraiInFabricController extends ChangeNotifier {
 
   // Reset the search text
   void resetSearchFilter() {
-    allSaraiInFabric?.clear();
-    searchSaraiInFabrics?.clear();
+    allDokanPati?.clear();
+    searchDokanInPati?.clear();
     notifyListeners();
   }
 }

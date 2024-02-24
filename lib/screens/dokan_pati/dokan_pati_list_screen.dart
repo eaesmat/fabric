@@ -1,31 +1,30 @@
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
-import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/sarai_item_controller.dart';
-import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
-import 'package:fabricproject/widgets/sarai_in_fabric_widget.dart';
 import 'package:fabricproject/widgets/sarai_fabric_card_widget.dart';
-import 'package:fabricproject/widgets/sarai_out_fabric_widget.dart';
+import 'package:fabricproject/widgets/sarai_in_fabric_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class DokanPatiScreen extends StatefulWidget {
+class DokanPatiListScreen extends StatefulWidget {
   final int dokanId;
-  const DokanPatiScreen({Key? key, required this.dokanId}) : super(key: key);
+  const DokanPatiListScreen({Key? key, required this.dokanId})
+      : super(key: key);
 
   @override
-  State<DokanPatiScreen> createState() => _DokanPatiScreenState();
+  State<DokanPatiListScreen> createState() => _DokanPatiListScreenState();
 }
 
-class _DokanPatiScreenState extends State<DokanPatiScreen> {
-  // int? outFabricId;
-  // String? outDokanId;
-  // int? inFabricId;
-  // String? inDokanId;
+class _DokanPatiListScreenState extends State<DokanPatiListScreen> {
+  int? outFabricId;
+  String? outDokanId;
+  int? inFabricId;
+  int? inDokanId;
   final HelperServices helper = HelperServices.instance;
 
   @override
@@ -33,7 +32,7 @@ class _DokanPatiScreenState extends State<DokanPatiScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      // Provider.of<SaraiInFabricController>(context, listen: false)
+      Provider.of<DokanInPatiController>(context, listen: false);
       //     .resetSearchFilter();
       Provider.of<DokanPatiController>(context, listen: false)
           .resetSearchFilter();
@@ -44,18 +43,17 @@ class _DokanPatiScreenState extends State<DokanPatiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final saraiInFabricController =
-        Provider.of<SaraiInFabricController>(context);
-    final saraiOutFabricController =
-        Provider.of<SaraiOutFabricController>(context);
+    final dokanInPatiController = Provider.of<DokanInPatiController>(context);
+    // final saraiOutFabricController =
+    //     Provider.of<SaraiOutFabricController>(context);
 
     final screenWidth = MediaQuery.of(context).size.width;
 
     return CustomRefreshIndicator(
       onRefresh: () async {
         // Implement your refresh logic here
-        await Provider.of<SaraiItemController>(context, listen: false)
-            .getAllSaraiItems(widget.dokanId);
+        await Provider.of<DokanPatiController>(context, listen: false)
+            .getDokanPati(widget.dokanId);
       },
       child: SingleChildScrollView(
         child: Column(
@@ -101,15 +99,17 @@ class _DokanPatiScreenState extends State<DokanPatiScreen> {
                                 inDate: data.indate.toString(),
                                 totalPati: data.totalpati.toString(),
                                 onGreenButtonPressed: () {
-                                  // if (data.fabricId != null &&
-                                  //     data.inbundle != 0) {
-                                  //   inFabricId = data.fabricId!.toInt();
-                                  //   inDokanId = data.saraiId;
-                                  //   saraiInFabricController.getAllSaraiFabrics(
-                                  //     data.fabricId!.toInt(),
-                                  //     data.saraiId,
-                                  //   );
-                                  // }
+                                  if (data.fabricId != null &&
+                                      data.inpati != 0) {
+                                    inFabricId = data.fabricId!.toInt();
+                                    inDokanId = int.parse(
+                                      data.saraiId.toString(),
+                                    );
+                                    dokanInPatiController.getAllDokanPatiIn(
+                                      data.fabricId!.toInt(),
+                                      data.saraiId,
+                                    );
+                                  }
                                 },
                                 onRedButtonPressed: () {
                                   // if (data.fabricId != null &&
@@ -152,21 +152,21 @@ class _DokanPatiScreenState extends State<DokanPatiScreen> {
                     alignment: Alignment.centerLeft,
                     child: IconButton(
                       onPressed: () {
-                        // if (inFabricId != null &&
-                        //     inFabricId != 0 &&
-                        //     inDokanId != null &&
-                        //     inDokanId != 0) {
-                        //   saraiInFabricController.navigateToAllSaraiInFabric();
-                        // } else {
-                        //   helper.showMessage(
-                        //     const LocaleText('select_fabric_first'),
-                        //     Colors.deepOrange,
-                        //     const Icon(
-                        //       Icons.warning,
-                        //       color: Pallete.whiteColor,
-                        //     ),
-                        //   );
-                        // }
+                        if (inFabricId != null &&
+                            inFabricId != 0 &&
+                            inDokanId != null &&
+                            inDokanId != 0) {
+                          dokanInPatiController.navigateToAllDokanPatiIn();
+                        } else {
+                          helper.showMessage(
+                            const LocaleText('select_fabric_first'),
+                            Colors.deepOrange,
+                            const Icon(
+                              Icons.warning,
+                              color: Pallete.whiteColor,
+                            ),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.all_out_outlined, size: 30),
                       color: Colors.green,
@@ -181,50 +181,51 @@ class _DokanPatiScreenState extends State<DokanPatiScreen> {
             ),
 
             // // search part 2
-            // Consumer<SaraiInFabricController>(
-            //   builder: (context, saraiInFabricController, child) {
-            //     return Container(
-            //       height: screenWidth *
-            //           0.4, // Adjust the height based on screen width
-            //       child: saraiInFabricController
-            //                   .searchSaraiInFabrics?.isNotEmpty ==
-            //               true
-            //           ? ListView.builder(
-            //               itemCount: saraiInFabricController
-            //                   .searchSaraiInFabrics!.length,
-            //               scrollDirection: Axis.horizontal,
-            //               itemBuilder: (context, index) {
-            //                 final reversedList = saraiInFabricController
-            //                     .searchSaraiInFabrics!.reversed
-            //                     .toList();
-            //                 final data = reversedList[index];
-            //                 return Padding(
-            //                   padding: const EdgeInsets.all(8.0),
-            //                   child: SaraiInFabricWidget(
-            //                     title: data.fabricpurchasecode.toString(),
-            //                     backgroundColor: Pallete.whiteColor,
-            //                     bundle: data.bundletoop.toString(),
-            //                     indate: data.indate.toString(),
-            //                   ),
-            //                 );
-            //               },
-            //             )
-            //           : Center(
-            //               child: Image.asset(
-            //                 'assets/images/noData.png',
-            //                 width: screenWidth *
-            //                     0.4, // Set the width based on screen width
-            //                 height: screenWidth *
-            //                     0.4, // Set the height based on screen width
-            //               ),
-            //             ),
-            //     );
-            //   },
-            // ),
+            Consumer<DokanInPatiController>(
+              builder: (context, dokanInPatiController, child) {
+                return SizedBox(
+                  height: screenWidth *
+                      0.5, // Adjust the height based on screen width
+                  child: dokanInPatiController.searchDokanInPati?.isNotEmpty ==
+                          true
+                      ? ListView.builder(
+                          itemCount:
+                              dokanInPatiController.searchDokanInPati!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final reversedList = dokanInPatiController
+                                .searchDokanInPati!.reversed
+                                .toList();
+                            final data = reversedList[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SaraiInFabricWidget(
+                                title: data.fabricPurchaseCode.toString(),
+                                backgroundColor: Pallete.whiteColor,
+                                patiName: data.patiName.toString(),
+                                bundle: data.bundleName.toString(),
+                                indate: data.inDate.toString(),
+                                patiWar: data.patiWar.toString(),
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Image.asset(
+                            'assets/images/noData.png',
+                            width: screenWidth *
+                                0.4, // Set the width based on screen width
+                            height: screenWidth *
+                                0.4, // Set the height based on screen width
+                          ),
+                        ),
+                );
+              },
+            ),
 
-            // const SizedBox(
-            //   height: 20,
-            // ),
+            const SizedBox(
+              height: 20,
+            ),
 
             // // search part 3
             // Row(

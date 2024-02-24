@@ -1,5 +1,5 @@
-import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
-import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_in_details_screen.dart';
+import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
+import 'package:fabricproject/screens/dokan_pati/dokan_pati_in_details_screen.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -7,18 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class AllSaraiInFabric extends StatefulWidget {
+class AllDokanPatiIn extends StatefulWidget {
   // gets this data from controller
 
-  const AllSaraiInFabric({
+  const AllDokanPatiIn({
     super.key,
   });
 
   @override
-  State<AllSaraiInFabric> createState() => _AllSaraiInFabricState();
+  State<AllDokanPatiIn> createState() => _AllDokanPatiInState();
 }
 
-class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
+class _AllDokanPatiInState extends State<AllDokanPatiIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +29,8 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
       body: Column(
         children: [
           // search part
-          Consumer<SaraiInFabricController>(
-            builder: (context, saraiInFabricController, child) {
+          Consumer<DokanInPatiController>(
+            builder: (context, dokanInPatiController, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomTextFieldWithController(
@@ -39,7 +39,7 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // passes search text to the controller
-                    saraiInFabricController.searchSaraiFabricsMethod(value);
+                    dokanInPatiController.searchDokanInPatiMethod(value);
                   },
                 ),
               );
@@ -47,10 +47,10 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
           ),
           // data list view
           Expanded(
-            child: Consumer<SaraiInFabricController>(
-              builder: (context, saraiInFabricController, child) {
+            child: Consumer<DokanInPatiController>(
+              builder: (context, dokanInPatiController, child) {
                 final searchSaraiInFabric =
-                    saraiInFabricController.searchSaraiInFabrics ?? [];
+                    dokanInPatiController.searchDokanInPati ?? [];
 
                 if (searchSaraiInFabric.isNotEmpty) {
                   return ListView.builder(
@@ -67,7 +67,7 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
                             context: context,
                             isScrollControlled: true,
                             builder: (BuildContext context) {
-                              return SaraiFabricInDetailsBottomSheet(
+                              return DokanPatiInDetailsBottomSheet(
                                 // pass the these data to the widget
                                 data: data,
                               );
@@ -80,11 +80,11 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
                         tileTitle: Row(
                           children: [
                             Text(
-                              data.fabricpurchasecode.toString(),
+                              data.fabricPurchaseCode.toString(),
                             ),
                             const Spacer(),
                             Text(
-                              data.indate.toString(),
+                              data.inDate.toString(),
                             ),
                           ],
                         ),
@@ -92,11 +92,11 @@ class _AllSaraiInFabricState extends State<AllSaraiInFabric> {
                         tileSubTitle: Row(
                           children: [
                             Text(
-                              data.bundlename.toString(),
+                              data.bundleName.toString(),
                             ),
                             const Spacer(),
                             Text(
-                              data.bundletoop.toString(),
+                              data.patiName.toString(),
                             ),
                           ],
                         ),

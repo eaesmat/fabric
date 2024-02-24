@@ -73,7 +73,7 @@ class _SaraiDetailsScreenState extends State<SaraiDetailsScreen> {
     switch (widget.saraiType) {
       case 'دوکان':
         return [
-          DokanPatiScreen(dokanId: widget.saraiId),
+          DokanPatiListScreen(dokanId: widget.saraiId),
           SaraiTransferScreen(saraiId: widget.saraiId.toInt()),
           Container(color: Colors.green),
         ];

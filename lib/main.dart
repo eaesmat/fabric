@@ -2,6 +2,7 @@ import 'package:fabricproject/api/sarai_out_fabric_api.dart';
 import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
@@ -32,6 +33,7 @@ import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
+import 'package:fabricproject/model/dokan_pati_in_model.dart';
 import 'package:fabricproject/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -147,12 +149,13 @@ class MyApp extends StatelessWidget {
               SaraiFabricBundleSelectController(HelperServices.instance),
         ),
         ChangeNotifierProvider<TransferBundlesController>(
-          create: (_) =>
-              TransferBundlesController(HelperServices.instance),
+          create: (_) => TransferBundlesController(HelperServices.instance),
         ),
         ChangeNotifierProvider<DokanPatiController>(
-          create: (_) =>
-              DokanPatiController(HelperServices.instance),
+          create: (_) => DokanPatiController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<DokanInPatiController>(
+          create: (_) => DokanInPatiController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

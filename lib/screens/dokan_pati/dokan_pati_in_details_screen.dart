@@ -1,12 +1,12 @@
-import 'package:fabricproject/model/sarai_in_fabric_model.dart';
+import 'package:fabricproject/model/dokan_pati_in_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class SaraiFabricInDetailsBottomSheet extends StatelessWidget {
+class DokanPatiInDetailsBottomSheet extends StatelessWidget {
   final Data data;
 
-  const SaraiFabricInDetailsBottomSheet({
+  const DokanPatiInDetailsBottomSheet({
     Key? key,
     required this.data,
   }) : super(key: key);
@@ -46,19 +46,23 @@ class SaraiFabricInDetailsBottomSheet extends StatelessWidget {
                   rows: [
                     buildDataRow(
                       LocaleText('fabric_code'),
-                      Text(data.fabricpurchasecode.toString()),
+                      Text(data.fabricPurchaseCode.toString()),
                     ),
                     buildDataRow(
                       LocaleText('indate'),
-                      Text(data.indate.toString()),
+                      Text(data.inDate.toString()),
                     ),
                     buildDataRow(
                       LocaleText('bundle_name'),
-                      Text(data.bundlename.toString()),
+                      Text(data.bundleName.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('bundle'),
-                      Text(data.bundletoop.toString()),
+                      LocaleText('pati_name'),
+                      Text(data.patiName.toString()),
+                    ),
+                    buildDataRow(
+                      LocaleText('pati_war'),
+                      Text(data.patiWar.toString()),
                     ),
                    
                     

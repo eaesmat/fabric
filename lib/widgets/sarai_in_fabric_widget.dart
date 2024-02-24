@@ -6,6 +6,8 @@ class SaraiInFabricWidget extends StatelessWidget {
   final Color backgroundColor;
   final String indate;
   final String bundle;
+  final String? patiName;
+  final String? patiWar;
 
   const SaraiInFabricWidget({
     Key? key,
@@ -13,6 +15,8 @@ class SaraiInFabricWidget extends StatelessWidget {
     required this.backgroundColor,
     required this.indate,
     required this.bundle,
+    this.patiName,
+    this.patiWar,
   }) : super(key: key);
 
   @override
@@ -32,9 +36,11 @@ class SaraiInFabricWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildInfoRow(Icons.barcode_reader, title),
-                _buildInfoRow(Icons.calendar_month, indate),
-                _buildInfoRow(Icons.view_module, bundle),
+                if (title != null) _buildInfoRow(Icons.barcode_reader, title),
+                if (patiName != null) _buildInfoRow(Icons.view_module, patiName!),
+                if (indate != null) _buildInfoRow(Icons.calendar_month, indate),
+                if (bundle != null) _buildInfoRow(Icons.view_module, bundle),
+                if (patiWar != null) _buildInfoRow(Icons.view_module, patiWar!),
               ],
             ),
           ),
@@ -51,7 +57,8 @@ class SaraiInFabricWidget extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: Pallete.blackColor, size: 20,
+            color: Pallete.blackColor,
+            size: 20,
           ),
           Text(
             text,
