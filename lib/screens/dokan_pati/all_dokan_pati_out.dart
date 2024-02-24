@@ -1,28 +1,24 @@
-import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
-import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_out_details_screen.dart';
-import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_drop_down_button.dart';
+import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
+import 'package:fabricproject/screens/dokan_pati/dokan_pati_out_details_screen.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
-import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class AllSaraiOutFabric extends StatefulWidget {
+class AllDokanPatiOut extends StatefulWidget {
   // gets this data from controller
 
-  const AllSaraiOutFabric({
+  const AllDokanPatiOut({
     super.key,
   });
 
   @override
-  State<AllSaraiOutFabric> createState() => _AllSaraiOutFabricState();
+  State<AllDokanPatiOut> createState() => _AllSaraiOutFabricState();
 }
 
-class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
+class _AllSaraiOutFabricState extends State<AllDokanPatiOut> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +29,8 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
       body: Column(
         children: [
           // search part
-          Consumer<SaraiOutFabricController>(
-            builder: (context, saraiOutFabricController, child) {
+          Consumer<DokanOutPatiController>(
+            builder: (context, dokanOutPatiController, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomTextFieldWithController(
@@ -43,7 +39,7 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // passes search text to the controller
-                    saraiOutFabricController.searchSaraiFabricsMethod(value);
+                    dokanOutPatiController.searchDokanOutPatiMethod(value);
                   },
                 ),
               );
@@ -51,10 +47,10 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
           ),
           // data list view
           Expanded(
-            child: Consumer<SaraiOutFabricController>(
-              builder: (context, saraiOutFabricController, child) {
+            child: Consumer<DokanOutPatiController>(
+              builder: (context, dokanOutPatiController, child) {
                 final searchCompanies =
-                    saraiOutFabricController.searchSaraiOutFabrics ?? [];
+                    dokanOutPatiController.searchDokanOutPati ?? [];
 
                 if (searchCompanies.isNotEmpty) {
                   return ListView.builder(
@@ -70,7 +66,7 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
                             context: context,
                             isScrollControlled: true,
                             builder: (BuildContext context) {
-                              return SaraiFabricOutDetailsBottomSheet(
+                              return DokanPatiOutDetailsBottomSheet(
                                 // pass the these data to the widget
                                 data: data,
                               );
@@ -82,11 +78,11 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
                         tileTitle: Row(
                           children: [
                             Text(
-                              data.fabricpurchasecode.toString(),
+                              data.fabricPurchaseCode.toString(),
                             ),
                             const Spacer(),
                             Text(
-                              data.indate.toString(),
+                              data.outDate.toString(),
                             ),
                           ],
                         ),
@@ -94,11 +90,11 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
                         tileSubTitle: Row(
                           children: [
                             Text(
-                              data.bundlename.toString(),
+                              data.bundleName.toString(),
                             ),
                             const Spacer(),
                             Text(
-                              data.bundletoop.toString(),
+                              data.patiName.toString(),
                             ),
                           ],
                         ),

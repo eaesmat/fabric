@@ -8,10 +8,14 @@ class SaraiOutFabricWidget extends StatelessWidget {
   final String bundle;
   final String outDate;
   final String outPlace;
+  final String? patiName;
+  final String? patiWar;
 
   const SaraiOutFabricWidget({
     Key? key,
     required this.title,
+    this.patiName,
+    this.patiWar,
     required this.backgroundColor,
     required this.indate,
     required this.bundle,
@@ -36,11 +40,15 @@ class SaraiOutFabricWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildInfoRow(Icons.barcode_reader, title),
-                _buildInfoRow(Icons.calendar_month, indate),
-                _buildInfoRow(Icons.view_module, bundle),
-                _buildInfoRow(Icons.calendar_month, outDate),
-                _buildInfoRow(Icons.location_on, outPlace),
+                if (title != null) _buildInfoRow(Icons.barcode_reader, title),
+                if (indate != null) _buildInfoRow(Icons.calendar_month, indate),
+                if (bundle != null) _buildInfoRow(Icons.view_module, bundle),
+                if (patiWar != null) _buildInfoRow(Icons.view_module, patiWar.toString()),
+                if (patiName != null) _buildInfoRow(Icons.view_module, patiName.toString()),
+                if (outDate != null)
+                  _buildInfoRow(Icons.calendar_month, outDate),
+                if (outPlace != null)
+                  _buildInfoRow(Icons.location_on, outPlace),
               ],
             ),
           ),
@@ -57,7 +65,8 @@ class SaraiOutFabricWidget extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: Pallete.blackColor,size: 20,
+            color: Pallete.blackColor,
+            size: 20,
           ),
           Text(
             text,

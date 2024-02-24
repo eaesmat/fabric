@@ -1,12 +1,12 @@
-import 'package:fabricproject/model/sarai_out_fabric_model.dart';
+import 'package:fabricproject/model/dokan_pati_out_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class SaraiFabricOutDetailsBottomSheet extends StatelessWidget {
+class DokanPatiOutDetailsBottomSheet extends StatelessWidget {
   final Data data;
 
-  const SaraiFabricOutDetailsBottomSheet({
+  const DokanPatiOutDetailsBottomSheet({
     Key? key,
     required this.data,
   }) : super(key: key);
@@ -46,34 +46,28 @@ class SaraiFabricOutDetailsBottomSheet extends StatelessWidget {
                   rows: [
                     buildDataRow(
                       LocaleText('fabric_code'),
-                      Text(data.fabricpurchasecode.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('indate'),
-                      Text(data.indate.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('bundle_name'),
-                      Text(data.bundlename.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('bundle'),
-                      Text(data.bundletoop.toString()),
+                      Text(data.fabricPurchaseCode.toString()),
                     ),
                     buildDataRow(
                       LocaleText('out_date'),
-                      Text(data.outdate.toString()),
+                      Text(data.outDate.toString()),
+                    ),
+                    buildDataRow(
+                      LocaleText('bundle_name'),
+                      Text(data.bundleName.toString()),
+                    ),
+                    buildDataRow(
+                      LocaleText('pati_name'),
+                      Text(data.patiName.toString()),
+                    ),
+                    buildDataRow(
+                      LocaleText('pati_war'),
+                      Text(data.patiWar.toString()),
                     ),
                     buildDataRow(
                       LocaleText('out_place'),
                       Text(
-                        (data.saraitoname != null)
-                            ? data.saraitoname.toString()
-                            : (data.customername != null)
-                                ? data.customername.toString()
-                                : (data.branchname != null)
-                                    ? data.branchname.toString()
-                                    : 'N/A', // Or any default value you prefer
+                        data.placeTo.toString(),
                       ),
                     ),
                   ],

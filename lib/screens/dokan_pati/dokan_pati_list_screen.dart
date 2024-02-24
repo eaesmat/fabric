@@ -1,11 +1,12 @@
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
-import 'package:fabricproject/controller/sarai_item_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/sarai_fabric_card_widget.dart';
 import 'package:fabricproject/widgets/sarai_in_fabric_widget.dart';
+import 'package:fabricproject/widgets/sarai_out_fabric_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -36,16 +37,15 @@ class _DokanPatiListScreenState extends State<DokanPatiListScreen> {
       //     .resetSearchFilter();
       Provider.of<DokanPatiController>(context, listen: false)
           .resetSearchFilter();
-      // Provider.of<SaraiOutFabricController>(context, listen: false)
-      //     .resetSearchFilter();
+      Provider.of<DokanOutPatiController>(context, listen: false)
+          .resetSearchFilter();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final dokanInPatiController = Provider.of<DokanInPatiController>(context);
-    // final saraiOutFabricController =
-    //     Provider.of<SaraiOutFabricController>(context);
+    final dokanOutPatiController = Provider.of<DokanOutPatiController>(context);
 
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -112,16 +112,15 @@ class _DokanPatiListScreenState extends State<DokanPatiListScreen> {
                                   }
                                 },
                                 onRedButtonPressed: () {
-                                  // if (data.fabricId != null &&
-                                  //     data.outbundle != 0) {
-                                  //   outFabricId = data.fabricId!.toInt();
-                                  //   outDokanId = data.saraiId.toString();
-                                  //   saraiOutFabricController
-                                  //       .getAllSaraiOutFabrics(
-                                  //     data.fabricId!.toInt(),
-                                  //     data.saraiId,
-                                  //   );
-                                  // }
+                                  if (data.fabricId != null &&
+                                      data.inpati != 0) {
+                                    outFabricId = data.fabricId!.toInt();
+                                    outDokanId = data.saraiId.toString();
+                                    dokanOutPatiController.getAllDokanPatiOut(
+                                      data.fabricId!.toInt(),
+                                      data.saraiId,
+                                    );
+                                  }
                                 },
                               ),
                             );
@@ -228,93 +227,90 @@ class _DokanPatiListScreenState extends State<DokanPatiListScreen> {
             ),
 
             // // search part 3
-            // Row(
-            //   children: [
-            //     Padding(
-            //       padding: EdgeInsets.symmetric(
-            //         horizontal: screenWidth *
-            //             0.0001, // Adjust the padding based on screen width
-            //       ),
-            //       child: Align(
-            //         alignment: Alignment.centerLeft,
-            //         child: IconButton(
-            //           onPressed: () {
-            //             if (outFabricId != null &&
-            //                 outFabricId != 0 &&
-            //                 outDokanId != null &&
-            //                 outDokanId != 0) {
-            //               saraiOutFabricController
-            //                   .navigateToAllSaraiOutFabric();
-            //             } else {
-            //               helper.showMessage(
-            //                 const LocaleText('select_fabric_first'),
-            //                 Colors.deepOrange,
-            //                 const Icon(
-            //                   Icons.warning,
-            //                   color: Pallete.whiteColor,
-            //                 ),
-            //               );
-            //             }
-            //           },
-            //           icon: Icon(Icons.all_out_outlined, size: 30),
-            //           color: Pallete.redColor,
-            //         ),
-            //       ),
-            //     ),
-            //     LocaleText(
-            //       'view_all',
-            //       style: TextStyle(color: Pallete.redColor),
-            //     ),
-            //   ],
-            // ),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth *
+                        0.0001, // Adjust the padding based on screen width
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () {
+                        if (outFabricId != null &&
+                            outFabricId != 0 &&
+                            outDokanId != null &&
+                            outDokanId != 0) {
+                          dokanOutPatiController.navigateToAllDokanPatiOut();
+                        } else {
+                          helper.showMessage(
+                            const LocaleText('select_fabric_first'),
+                            Colors.deepOrange,
+                            const Icon(
+                              Icons.warning,
+                              color: Pallete.whiteColor,
+                            ),
+                          );
+                        }
+                      },
+                      icon: Icon(Icons.all_out_outlined, size: 30),
+                      color: Pallete.redColor,
+                    ),
+                  ),
+                ),
+                LocaleText(
+                  'view_all',
+                  style: TextStyle(color: Pallete.redColor),
+                ),
+              ],
+            ),
 
-            // // search part 4
-            // Consumer<SaraiOutFabricController>(
-            //   builder: (context, saraiOutFabricController, child) {
-            //     return Container(
-            //       height: screenWidth *
-            //           0.6, // Adjust the height based on screen width
-            //       child: saraiOutFabricController
-            //                   .searchSaraiOutFabrics?.isNotEmpty ==
-            //               true
-            //           ? ListView.builder(
-            //               itemCount: saraiOutFabricController
-            //                   .searchSaraiOutFabrics!.length,
-            //               scrollDirection: Axis.horizontal,
-            //               itemBuilder: (context, index) {
-            //                 final reversedList = saraiOutFabricController
-            //                     .searchSaraiOutFabrics!.reversed
-            //                     .toList();
-            //                 final data = reversedList[index];
-            //                 return Padding(
-            //                   padding: const EdgeInsets.all(8.0),
-            //                   child: SaraiOutFabricWidget(
-            //                     title: data.fabricpurchasecode.toString(),
-            //                     backgroundColor: Pallete.whiteColor,
-            //                     bundle: data.bundletoop.toString(),
-            //                     indate: data.indate.toString(),
-            //                     outDate: data.outdate.toString(),
-            //                     outPlace: (data.saraitoname != null)
-            //                         ? data.saraitoname.toString()
-            //                         : (data.customername != null)
-            //                             ? data.customername.toString()
-            //                             : data.branchname.toString(),
-            //                   ),
-            //                 );
-            //               },
-            //             )
-            //           : Center(
-            //               child: Image.asset(
-            //                 'assets/images/noData.png',
-            //                 width: screenWidth *
-            //                     0.4, // Set the width based on screen width
-            //                 height: screenWidth *
-            //                     0.4, // Set the height based on screen width
-            //               ),
-            //             ),
-            //     );
-            //   },
-            // ),
+            // search part 4
+            Consumer<DokanOutPatiController>(
+              builder: (context, dokanOutPatiController, child) {
+                return Container(
+                  height: screenWidth *
+                      0.7, // Adjust the height based on screen width
+                  child: dokanOutPatiController
+                              .searchDokanOutPati?.isNotEmpty ==
+                          true
+                      ? ListView.builder(
+                          itemCount:
+                              dokanOutPatiController.searchDokanOutPati!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final reversedList = dokanOutPatiController
+                                .searchDokanOutPati!.reversed
+                                .toList();
+                            final data = reversedList[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SaraiOutFabricWidget(
+                                title: data.fabricPurchaseCode.toString(),
+                                backgroundColor: Pallete.whiteColor,
+                                bundle: data.bundleName.toString(),
+                                indate: data.outDate.toString(),
+                                outDate: data.outDate.toString(),
+                                outPlace: data.placeTo.toString(),
+                                patiName: data.patiName.toString(),
+                                patiWar: data.patiWar.toString(),
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Image.asset(
+                            'assets/images/noData.png',
+                            width: screenWidth *
+                                0.4, // Set the width based on screen width
+                            height: screenWidth *
+                                0.4, // Set the height based on screen width
+                          ),
+                        ),
+                );
+              },
+            ),
           ],
         ),
       ),
