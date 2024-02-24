@@ -43,6 +43,15 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: CustomTextFieldWithController(
+                  iconBtn: IconButton(
+                    icon: const Icon(
+                      Icons.add_box,
+                      color: Pallete.blueColor,
+                    ),
+                    onPressed: () {
+                      fabricDesignController.navigateToFabricDesignCreate();
+                    },
+                  ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     fabricDesignController.searchFabricDesignMethod(value);
@@ -136,16 +145,6 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Pallete.blueColor,
-        onPressed: () {
-          fabricDesignController.navigateToFabricDesignCreate();
-        },
-        child: const Icon(
-          Icons.add,
-          color: Pallete.whiteColor,
-        ),
       ),
     );
   }

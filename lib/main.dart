@@ -1,5 +1,11 @@
+import 'package:fabricproject/api/sarai_out_fabric_api.dart';
 import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_controller.dart';
+import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
+import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
+import 'package:fabricproject/controller/sarai_item_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
 import 'package:fabricproject/controller/container_controller.dart';
 import 'package:fabricproject/controller/customer_deal_controller.dart';
@@ -17,9 +23,12 @@ import 'package:fabricproject/controller/pati_controller.dart';
 import 'package:fabricproject/controller/pati_design_color_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
+import 'package:fabricproject/controller/sarai_marka_controller.dart';
+import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
 import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transport_payment_controller.dart';
+import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
@@ -117,6 +126,33 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CustomerDealsController>(
           create: (_) => CustomerDealsController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiItemController>(
+          create: (_) => SaraiItemController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiInFabricController>(
+          create: (_) => SaraiInFabricController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiOutFabricController>(
+          create: (_) => SaraiOutFabricController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiMarkaController>(
+          create: (_) => SaraiMarkaController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiFabricPurchaseController>(
+          create: (_) => SaraiFabricPurchaseController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<SaraiFabricBundleSelectController>(
+          create: (_) =>
+              SaraiFabricBundleSelectController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<TransferBundlesController>(
+          create: (_) =>
+              TransferBundlesController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<DokanPatiController>(
+          create: (_) =>
+              DokanPatiController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

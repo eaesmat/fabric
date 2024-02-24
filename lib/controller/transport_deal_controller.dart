@@ -5,6 +5,7 @@ import 'package:fabricproject/api/sarai_api.dart';
 import 'package:fabricproject/api/transport_deal_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/transport_deal_model.dart';
+import 'package:fabricproject/screens/sarai/sarai_details_screen.dart';
 import 'package:fabricproject/screens/transport/transport_details_screen.dart';
 import 'package:fabricproject/screens/transport_deal/transport_deal_create_screen.dart';
 import 'package:fabricproject/screens/transport_deal/transport_deal_edit_screen.dart';
@@ -43,6 +44,8 @@ class TransportDealController extends ChangeNotifier {
   List<Data>? searchTransportDeals = [];
   List<Data>? searchTransportDealsWithNoFilter = [];
   List<Data>? allTransportDealsWithNoFilter = [];
+  List<Data>? allReceiptTransportDeals = [];
+  List<Data>? searchAllReceiptTransportDeals = [];
 
   List? filteredContainers;
   List? filteredSarai;
@@ -199,6 +202,49 @@ class TransportDealController extends ChangeNotifier {
         transportId); // Wait for getAllFabricPurchases to complete
   }
 
+  // navigateToSaraiDetailsScreen(String saraiName, int saraiId) async {
+  //   clearAllControllers();
+
+  //   _helperServices.navigate(
+  //     SaraiDetailsScreen(
+  //       saraiId: saraiId,
+  //       saraiName: saraiName,
+  //     ),
+  //   );
+
+  //   await getAllReceiptTransportDeals(
+  //       saraiId); // Wait for getAllFabricPurchases to complete
+  // }
+
+  getAllReceiptTransportDeals(int saraiId) async {
+    _helperServices.showLoader();
+    final response = await TransportDealApiServiceProvider()
+        .getTransportDeal('getTransportDeal');
+    response.fold(
+      (l) => {
+        _helperServices.goBack(),
+        _helperServices.showErrorMessage(l),
+      },
+      (r) {
+        print("The deal lenght");
+        print(r.length);
+      
+        allReceiptTransportDeals = r
+            .where((transportDeal) =>
+                transportDeal.status != 'pending' &&
+                transportDeal.arrivaldate != null &&
+                transportDeal.saraiindeal!
+                    .any((saraiInDeal) => saraiInDeal.saraiId == saraiId))
+            .toList();
+        searchAllReceiptTransportDeals?.clear();
+        searchAllReceiptTransportDeals?.addAll(allReceiptTransportDeals!);
+
+        _helperServices.goBack();
+        notifyListeners();
+      },
+    );
+  }
+
   getAllTransportDeal(int? transportId) async {
     _helperServices.showLoader();
     final response = await TransportDealApiServiceProvider()
@@ -214,7 +260,15 @@ class TransportDealController extends ChangeNotifier {
         allTransportDealsWithNoFilter = r
             .where((transportDeal) => transportDeal.status == 'pending')
             .toList();
-        ;
+        allReceiptTransportDeals = r
+            .where((transportDeal) =>
+                transportDeal.status != 'pending' &&
+                transportDeal.arrivaldate != null &&
+                transportDeal.saraiindeal!
+                    .any((saraiInDeal) => saraiInDeal.saraiId == 1))
+            .toList();
+        searchAllReceiptTransportDeals?.clear();
+        searchAllReceiptTransportDeals?.addAll(allReceiptTransportDeals!);
         // goBack pops the current stack
         searchTransportDealsWithNoFilter?.clear();
         searchTransportDealsWithNoFilter
@@ -491,7 +545,6 @@ class TransportDealController extends ChangeNotifier {
   searchTransportDealMethod(String name) {
     searchText = name;
     updateTransportDealData();
-    updateTransportDealDataWithNoFilter();
   }
 
   searchTransportDealWithNoFilterMethod(String name) {
@@ -499,9 +552,37 @@ class TransportDealController extends ChangeNotifier {
     updateTransportDealDataWithNoFilter();
   }
 
+  searchAllReceiptTransportDealsMethod(String name) {
+    searchText = name;
+    updateTransportDealDataWithNoFilter();
+  }
+
+  updateSearchAllReceiptTransportDeals() {
+    searchAllReceiptTransportDeals?.clear();
+
+    if (searchText.isEmpty) {
+      searchAllReceiptTransportDeals?.addAll(allReceiptTransportDeals!);
+    } else {
+      searchAllReceiptTransportDeals?.addAll(
+        allReceiptTransportDeals!
+            .where((element) =>
+                element.fabricpurchase!.fabricpurchasecode!
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.arrivaldate!.toLowerCase().contains(searchText) ||
+                element.fabricpurchase!.fabricpurchasecode!
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.startdate!.toLowerCase().contains(searchText))
+            // element.!.toLowerCase().contains(searchText))
+            .toList(),
+      );
+    }
+    notifyListeners();
+  }
+
   updateTransportDealData() {
     searchTransportDeals?.clear();
-    searchTransportDealsWithNoFilter?.clear();
 
     if (searchText.isEmpty) {
       searchTransportDeals?.addAll(allTransportDeals!);

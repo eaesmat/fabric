@@ -52,6 +52,7 @@ class Pallete {
       visualDensity: VisualDensity.compact,
       // Else theme will be use
     ),
+    
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(

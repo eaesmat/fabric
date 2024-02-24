@@ -1,6 +1,7 @@
 import 'package:fabricproject/controller/customer_deal_controller.dart';
 import 'package:fabricproject/controller/customer_deals_controller.dart';
 import 'package:fabricproject/controller/customer_payment_controller.dart';
+import 'package:fabricproject/screens/customer/customer_details_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -92,9 +93,11 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     // Loop through customerdeal for both properties
                     if (data.customerdeal != null) {
                       for (var customerDeal in data.customerdeal!) {
-                        totalCostSumDollar += customerDeal.totalcostdollar ?? 0;
-                        totalCostSumAfghani +=
-                            customerDeal.totalcostafghani ?? 0;
+                        if (customerDeal.currency == 'doller') {
+                          totalCostSumDollar += customerDeal.totalcost ?? 0;
+                        } else if (customerDeal.currency == "afghani") {
+                          totalCostSumAfghani += customerDeal.totalcost ?? 0;
+                        }
                       }
                     }
 
@@ -102,7 +105,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     if (data.customerpayment != null) {
                       for (var customerPayment in data.customerpayment!) {
                         totalPaymentSumDollar +=
-                            customerPayment.amountdollar ?? 0;
+                            customerPayment.amountdoller ?? 0;
                         totalPaymentSumAfghani +=
                             customerPayment.amountafghani ?? 0;
                       }
@@ -110,11 +113,23 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
 
                     // Calculate the result for both properties
                     int resultDollar =
-                        totalPaymentSumDollar - totalCostSumDollar;
+                        totalCostSumDollar - totalPaymentSumDollar;
                     int resultAfghani =
-                        totalPaymentSumAfghani - totalCostSumAfghani;
+                        totalCostSumAfghani - totalPaymentSumAfghani;
 
                     return ListTileWidget(
+                      onLongPress: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) {
+                            return CustomerDetailsBottomSheet(
+                                // pass the these data to the widget
+                                data: data,
+                                customerName: data.firstname.toString());
+                          },
+                        );
+                      },
                       onTap: () {
                         // pass the the id and data to the fabric purchase controller on click
                         customerDealController.navigateToCustomerDealDetailsScreen(
@@ -127,7 +142,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                             .navigateToCustomerPaymentDetailsScreen(
                                 '${data.firstname?.toString() ?? ''} ${data.lastname?.toString() ?? ''}',
                                 data.customerId!);
-                        customerDealController.customerId =
+                        customerPaymentController.customerId =
                             data.customerId!.toInt();
 
                         customerDealsController

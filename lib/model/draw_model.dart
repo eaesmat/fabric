@@ -13,7 +13,7 @@ class DrawModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -68,7 +68,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data = Map<String, dynamic>();
+  final Map<String, dynamic> data = <String, dynamic>{};
   data['draw_id'] = drawId;
   data['draw_date'] = drawDate;
   data['doller'] = doller;
@@ -111,7 +111,7 @@ class Vendorcompany {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['vendorcompany_id'] = vendorcompanyId;
     data['name'] = name;
     data['phone'] = phone;
@@ -147,7 +147,7 @@ class Sarafi {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['sarafi_id'] = sarafiId;
     data['fullname'] = fullname;
     data['description'] = description;

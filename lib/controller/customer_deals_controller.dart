@@ -8,8 +8,8 @@ class CustomerDealsController extends ChangeNotifier {
   final HelperServices _helperServices;
 
   int? customerId;
-  List<GetCustomerTransaction>? allCustomersDeals = [];
-  List<GetCustomerTransaction>? searchCustomersDeals = [];
+  List<Data>? allCustomersDeals = [];
+  List<Data>? searchCustomersDeals = [];
   String searchText = "";
 
   CustomerDealsController(
@@ -28,8 +28,7 @@ class CustomerDealsController extends ChangeNotifier {
       ),
     );
 
-    await getAllCustomerDeals(
-        customerId); // Wait for getAllFabricPurchases to complete
+    await getAllCustomerDeals(customerId);
   }
 
   getAllCustomerDeals(int? customerId) async {
@@ -42,7 +41,7 @@ class CustomerDealsController extends ChangeNotifier {
         _helperServices.showErrorMessage(l),
       },
       (r) {
-        allCustomersDeals = r.getCustomerTransaction;
+        allCustomersDeals = r.data;
         searchCustomersDeals?.clear();
         searchCustomersDeals?.addAll(allCustomersDeals!);
 
@@ -66,11 +65,31 @@ class CustomerDealsController extends ChangeNotifier {
       searchCustomersDeals?.addAll(
         allCustomersDeals!
             .where((element) =>
-                element.row!.toString().toLowerCase().contains(searchText) ||
-                element.row!.doller.toString().toLowerCase().contains(searchText) ||
-                element.row!.afghani.toString().toLowerCase().contains(searchText) ||
-                element.row!.begaknumber.toString().toLowerCase().contains(searchText) ||
-                element.row!.date!.toLowerCase().contains(searchText))
+                element.type.toString().toLowerCase().contains(searchText) ||
+                element.date.toString().toLowerCase().contains(searchText) ||
+                element.begaknumber
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.afghani.toString().toLowerCase().contains(searchText) ||
+                element.doller.toString().toLowerCase().contains(searchText) ||
+                element.balanceAfghani
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.balanceAfghani
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.afghaniPayment
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.dollerPayment
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.date.toString().toLowerCase().contains(searchText))
             .toList(),
       );
     }

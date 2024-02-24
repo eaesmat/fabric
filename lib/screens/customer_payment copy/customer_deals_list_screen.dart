@@ -18,7 +18,7 @@ class _CustomerDealsListScreenState extends State<CustomerDealsListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
       Provider.of<CustomerDealsController>(context, listen: false)
           .resetSearchFilter();
@@ -35,10 +35,8 @@ class _CustomerDealsListScreenState extends State<CustomerDealsListScreen> {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: CustomTextFieldWithController(
-// create new item here
                 iconBtn: IconButton(
                   icon: const Icon(
-                    size: 30,
                     Icons.add_box_rounded,
                     color: Pallete.blueColor,
                   ),
@@ -66,28 +64,28 @@ class _CustomerDealsListScreenState extends State<CustomerDealsListScreen> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   // data holds result of controller
-                  final reversedList = customerDealsController
-                      .searchCustomersDeals!.reversed
-                      .toList();
-                  final data = reversedList[index];
+                  final data =
+                      customerDealsController.searchCustomersDeals![index];
                   return ListTileWidget(
                     // circular avatar
                     lead: CircleAvatar(
                       backgroundColor: Pallete.blueColor,
-                      child: Text(
-                        data.row!.date.toString(),
-                        style: const TextStyle(color: Pallete.whiteColor),
-                      ),
+                      child: data.type == "فروش"
+                          ? const Icon(Icons.shopping_bag_rounded,
+                              color: Pallete.whiteColor)
+                          : const Icon(Icons.draw, color: Pallete.whiteColor),
                     ),
+
                     // Tile Title
                     tileTitle: Text(
-                      data.row!.afghani.toString(),
+                      data.begaknumber?.toString() ?? '',
                     ),
+
                     // subtitle
                     tileSubTitle: Row(
                       children: [
                         Text(
-                          data.balanceAfghani.toString(),
+                          data.date.toString(),
                         ),
                         const Spacer(),
                         Text(

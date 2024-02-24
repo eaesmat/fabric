@@ -3,10 +3,11 @@ import 'package:fabricproject/constants/api_url.dart';
 import 'package:fabricproject/model/draw_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
-
 class DrawApiServiceProvider {
   final String _baseURL = baseURL;
-
+// return either data or status
+// accept end point from controller class
+// base url comes from constant class
   Future<Either<String, List<Data>>> getDraw(String apiEndpoint) async {
     try {
       var response = await http.get(
@@ -16,11 +17,12 @@ class DrawApiServiceProvider {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
         final draw = DrawModel.fromJson(jsonResponse);
-
+// returns data if success
         return right(
           draw.data!,
         );
       } else {
+// return status code if no success
         return left(" ${response.statusCode}");
       }
     } catch (e) {

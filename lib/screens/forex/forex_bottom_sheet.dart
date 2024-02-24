@@ -2,8 +2,6 @@ import 'package:fabricproject/controller/all_draw_controller.dart';
 import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/controller/khalid_draw_controller.dart';
-import 'package:fabricproject/controller/khalid_draw_controller.dart';
-import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -165,7 +163,7 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
                         }
                         // delete the item
                         if (value == "delete") {
-                          forexController.deleteForex(data.sarafiId, index);
+                          forexController.deleteForex(data.sarafiId!.toInt(), index);
                         }
                       },
                     ),

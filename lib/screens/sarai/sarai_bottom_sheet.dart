@@ -1,5 +1,6 @@
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -31,6 +32,8 @@ class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
     // fabric purchase controller to pass the selected id to the fabric purchase controller
     final transportDealController =
         Provider.of<TransportDealController>(context);
+    final transferBundlesController =
+        Provider.of<TransferBundlesController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -84,12 +87,18 @@ class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
                       transportDealController.selectedSaraiNameController.text =
                           data.name!.toString();
 
+                      transferBundlesController.selectedSaraiToIdController
+                          .text = data.saraiId.toString();
+                      transferBundlesController.selectedSaraiToNameController
+                          .text = data.name.toString();
+
                       Navigator.pop(context);
                     },
                     tileTitle: Row(
                       children: [
                         Text(
-                          data.name.toString(),
+                          "${data.name}  [ ${data.type} ]",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
                         Text(

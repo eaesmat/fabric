@@ -1,6 +1,7 @@
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/model/sarai_model.dart';
+import 'package:fabricproject/screens/sarai/sarai_types_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -66,6 +67,29 @@ class _SaraiEditScreenState extends State<SaraiEditScreen> {
                     controller: saraiController.locationController,
                     lblText: const LocaleText('location'),
                     // customValidator: customFormValidator,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return const SaraiTypesButtonSheet();
+                        },
+                      );
+                    },
+                    child: CustomTextFieldWithController(
+                      customValidator: (value) =>
+                          customValidator(value, currentLocale),
+                      isDisabled: true,
+                      controller: saraiController.typeController,
+                      iconBtn: const Icon(
+                        size: 30,
+                        Icons.add_box_rounded,
+                        color: Pallete.blueColor,
+                      ),
+                      lblText: const LocaleText('type'),
+                    ),
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,

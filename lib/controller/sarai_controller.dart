@@ -1,6 +1,7 @@
 import 'package:fabricproject/api/sarai_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/sarai_model.dart';
+import 'package:fabricproject/screens/sarai/sarai_details_screen.dart';
 import 'package:fabricproject/screens/sarai/sarai_edit_screen.dart';
 import 'package:fabricproject/screens/sarai/sarai_create_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -15,6 +16,7 @@ class SaraiController extends ChangeNotifier {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
   // to store  api call response data
   List<Data>? allSarais = [];
   List<Data>? searchSarais = [];
@@ -43,10 +45,24 @@ class SaraiController extends ChangeNotifier {
     descriptionController.text = data.description.toString();
     phoneController.text = data.phone.toString();
     locationController.text = data.location.toString();
+    typeController.text = data.type.toString();
     _helperServices.navigate(
       SaraiEditScreen(
         saraiData: data,
         saraiId: id,
+      ),
+    );
+  }
+
+  navigateToSaraiDetailsScreen(
+      String saraiName, int saraiId, String saraiType) async {
+    clearAllControllers();
+
+    _helperServices.navigate(
+      SaraiDetailsScreen(
+        saraiId: saraiId,
+        saraiName: saraiName,
+        saraiType: saraiType,
       ),
     );
   }
@@ -87,6 +103,7 @@ class SaraiController extends ChangeNotifier {
         "description": descriptionController.text,
         "phone": phoneController.text,
         "location": locationController.text,
+        "type": typeController.text,
       },
     );
     response.fold(
@@ -117,6 +134,7 @@ class SaraiController extends ChangeNotifier {
         "description": descriptionController.text,
         "phone": phoneController.text,
         "location": locationController.text,
+        "type": typeController.text,
       },
     );
     response.fold(
@@ -208,6 +226,7 @@ class SaraiController extends ChangeNotifier {
                   element.name!.toLowerCase().contains(searchText) ||
                   element.description!.toLowerCase().contains(searchText) ||
                   element.phone!.toLowerCase().contains(searchText) ||
+                  element.type!.toLowerCase().contains(searchText) ||
                   element.location!.toLowerCase().contains(searchText),
             )
             .toList(),
@@ -227,5 +246,6 @@ class SaraiController extends ChangeNotifier {
     descriptionController.clear();
     phoneController.clear();
     locationController.clear();
+    typeController.clear();
   }
 }

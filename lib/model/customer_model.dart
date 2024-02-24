@@ -99,11 +99,15 @@ class Customerdeal {
   int? bundlecount;
   int? paticount;
   int? totalwar;
-  int? totalcostdollar;
+  int? totalcost;
   int? begaknumber;
   String? date;
   int? userId;
-  int? totalcostafghani;
+  String? currency;
+  int? begakpayment;
+  int? begakdue;
+  String? begakphoto;
+  String? description;
 
   Customerdeal(
       {this.customerdealId,
@@ -111,11 +115,15 @@ class Customerdeal {
       this.bundlecount,
       this.paticount,
       this.totalwar,
-      this.totalcostdollar,
+      this.totalcost,
       this.begaknumber,
       this.date,
       this.userId,
-      this.totalcostafghani});
+      this.currency,
+      this.begakpayment,
+      this.begakdue,
+      this.begakphoto,
+      this.description});
 
   Customerdeal.fromJson(Map<String, dynamic> json) {
     customerdealId = json['customerdeal_id'];
@@ -123,11 +131,15 @@ class Customerdeal {
     bundlecount = json['bundlecount'];
     paticount = json['paticount'];
     totalwar = json['totalwar'];
-    totalcostdollar = json['totalcostdollar'];
+    totalcost = json['totalcost'];
     begaknumber = json['begaknumber'];
     date = json['date'];
     userId = json['user_id'];
-    totalcostafghani = json['totalcostafghani'];
+    currency = json['currency'];
+    begakpayment = json['begakpayment'];
+    begakdue = json['begakdue'];
+    begakphoto = json['begakphoto'];
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,11 +149,15 @@ class Customerdeal {
     data['bundlecount'] = this.bundlecount;
     data['paticount'] = this.paticount;
     data['totalwar'] = this.totalwar;
-    data['totalcostdollar'] = this.totalcostdollar;
+    data['totalcost'] = this.totalcost;
     data['begaknumber'] = this.begaknumber;
     data['date'] = this.date;
     data['user_id'] = this.userId;
-    data['totalcostafghani'] = this.totalcostafghani;
+    data['currency'] = this.currency;
+    data['begakpayment'] = this.begakpayment;
+    data['begakdue'] = this.begakdue;
+    data['begakphoto'] = this.begakphoto;
+    data['description'] = this.description;
     return data;
   }
 }
@@ -151,7 +167,7 @@ class Customerpayment {
   String? date;
   String? person;
   String? description;
-  int? amountdollar;
+  int? amountdoller;
   int? customerId;
   int? userId;
   int? amountafghani;
@@ -161,7 +177,7 @@ class Customerpayment {
       this.date,
       this.person,
       this.description,
-      this.amountdollar,
+      this.amountdoller,
       this.customerId,
       this.userId,
       this.amountafghani});
@@ -171,7 +187,7 @@ class Customerpayment {
     date = json['date'];
     person = json['person'];
     description = json['description'];
-    amountdollar = json['amountdollar'];
+    amountdoller = json['amountdoller'];
     customerId = json['customer_id'];
     userId = json['user_id'];
     amountafghani = json['amountafghani'];
@@ -183,7 +199,7 @@ class Customerpayment {
     data['date'] = this.date;
     data['person'] = this.person;
     data['description'] = this.description;
-    data['amountdollar'] = this.amountdollar;
+    data['amountdoller'] = this.amountdoller;
     data['customer_id'] = this.customerId;
     data['user_id'] = this.userId;
     data['amountafghani'] = this.amountafghani;

@@ -1,78 +1,80 @@
 class CustomerDealsModel {
-  List<GetCustomerTransaction>? getCustomerTransaction;
+  List<Data>? data;
 
-  CustomerDealsModel({this.getCustomerTransaction});
+  CustomerDealsModel({this.data});
 
   CustomerDealsModel.fromJson(Map<String, dynamic> json) {
-    if (json['getCustomerTransaction'] != null) {
-      getCustomerTransaction = <GetCustomerTransaction>[];
-      json['getCustomerTransaction'].forEach((v) {
-        getCustomerTransaction!.add(GetCustomerTransaction.fromJson(v));
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (getCustomerTransaction != null) {
-      data['getCustomerTransaction'] =
-          getCustomerTransaction!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class GetCustomerTransaction {
-  Row? row;
+class Data {
+  String? type;
+  String? date;
+  int? begaknumber;
+  dynamic afghani; // Changed type to dynamic
+  dynamic doller; // Changed type to dynamic
+  int? afghaniPayment;
+  int? dollerPayment;
   int? balanceDoller;
   int? balanceAfghani;
+  int? afghaniPurchase;
+  int? dollerPurchase;
 
-  GetCustomerTransaction({this.row, this.balanceDoller, this.balanceAfghani});
+  Data({
+    this.type,
+    this.date,
+    this.begaknumber,
+    this.afghani,
+    this.doller,
+    this.afghaniPayment,
+    this.dollerPayment,
+    this.balanceDoller,
+    this.balanceAfghani,
+    this.afghaniPurchase,
+    this.dollerPurchase,
+  });
 
-  GetCustomerTransaction.fromJson(Map<String, dynamic> json) {
-    row = json['row'] != null ? Row.fromJson(json['row']) : null;
-    balanceDoller = json['balanceDoller'];
-    balanceAfghani = json['balanceAfghani'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (row != null) {
-      data['row'] = row!.toJson();
-    }
-    data['balanceDoller'] = balanceDoller;
-    data['balanceAfghani'] = balanceAfghani;
-    return data;
-  }
-}
-
-class Row {
-  int? id;
-  String? date;
-  String? begaknumber;
-  int? doller;
-  int? afghani;
-  String? type;
-
-  Row({this.id, this.date, this.begaknumber, this.doller, this.afghani, this.type});
-
-  Row.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Data.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
     date = json['date'];
     begaknumber = json['begaknumber'];
-    doller = json['doller'];
     afghani = json['afghani'];
-    type = json['type'];
+    doller = json['doller'];
+    afghaniPayment = json['afghaniPayment'];
+    dollerPayment = json['dollerPayment'];
+    balanceDoller = json['balanceDoller'];
+    balanceAfghani = json['balanceAfghani'];
+    afghaniPurchase = json['afghaniPurchase'];
+    dollerPurchase = json['dollerPurchase'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = type;
     data['date'] = date;
     data['begaknumber'] = begaknumber;
-    data['doller'] = doller;
     data['afghani'] = afghani;
-    data['type'] = type;
+    data['doller'] = doller;
+    data['afghaniPayment'] = afghaniPayment;
+    data['dollerPayment'] = dollerPayment;
+    data['balanceDoller'] = balanceDoller;
+    data['balanceAfghani'] = balanceAfghani;
+    data['afghaniPurchase'] = afghaniPurchase;
+    data['dollerPurchase'] = dollerPurchase;
     return data;
   }
 }

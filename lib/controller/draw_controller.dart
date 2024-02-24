@@ -1,3 +1,4 @@
+// Import necessary dependencies and files
 import 'package:fabricproject/api/draw_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/draw_model.dart';
@@ -7,8 +8,11 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
+// Define a class for DrawController that extends ChangeNotifier
 class DrawController extends ChangeNotifier {
   final HelperServices _helperServices;
+
+  // Controllers to send and get data to the UI
   TextEditingController dateController = TextEditingController();
   TextEditingController yenPriceController = TextEditingController();
   TextEditingController selectedForexController = TextEditingController();
@@ -18,29 +22,34 @@ class DrawController extends ChangeNotifier {
   TextEditingController vendorCompanyController = TextEditingController();
   TextEditingController forexController = TextEditingController();
   TextEditingController bankPhotoController = TextEditingController();
-  double sumOfDrawTotalDollar = 0; // Variable to hold the sum of the  column
-  double sumOfDrawTotalYen = 0; // Variable to hold the sum of the column
 
+  // Variables to hold the sum of the columns
+  double sumOfDrawTotalDollar = 0;
+  double sumOfDrawTotalYen = 0;
+
+  // Vendor company id to get data based on
   int? vendorCompanyId;
+
+  // To hold API response as data
   List<Data>? allDraws = [];
   List<Data>? searchDraws = [];
   String searchText = "";
 
-  DrawController(
-    this._helperServices,
-  ) {
+  // Constructor to initialize the DrawController
+  DrawController(this._helperServices) {
     getAllDraws(vendorCompanyId);
   }
 
+  // Navigate to the DrawCreateScreen
   navigateToDrawCreate() {
     clearAllControllers();
-
     _helperServices.navigate(const DrawCreateScreen());
   }
 
+  // Navigate to the DrawEditScreen with provided data and id
   navigateToDrawEdit(Data data, int id) {
     clearAllControllers();
-
+    // Set controller values with data
     selectedForexController.text = ("${data.sarafi!.fullname}");
     forexController.text = data.sarafiId.toString();
     dateController.text = data.drawDate.toString();
@@ -57,13 +66,14 @@ class DrawController extends ChangeNotifier {
     ));
   }
 
+  // Navigate to VendorCompanyDetails with provided name and id
   navigateToVendorCompanyDetails(String vendorCompanyName, int id) async {
     clearAllControllers();
     vendorCompanyId = id;
-    await getAllDraws(
-        vendorCompanyId); // Wait for getAllFabricPurchases to complete
+    await getAllDraws(vendorCompanyId);
   }
 
+  // Create a draw using API
   createDraw() async {
     _helperServices.showLoader();
 
@@ -94,7 +104,6 @@ class DrawController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
         getAllDraws(vendorCompanyId!);
@@ -113,6 +122,7 @@ class DrawController extends ChangeNotifier {
     );
   }
 
+  // Edit a draw using API
   editDraw(int drawId) async {
     _helperServices.showLoader();
 
@@ -143,7 +153,6 @@ class DrawController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
         getAllDraws(vendorCompanyId!);
@@ -162,6 +171,7 @@ class DrawController extends ChangeNotifier {
     );
   }
 
+  // Delete an item locally from the list
   void deleteItemLocally(int id) {
     final index = allDraws!.indexWhere((element) => element.drawId == id);
     if (index != -1) {
@@ -177,6 +187,7 @@ class DrawController extends ChangeNotifier {
     }
   }
 
+  // Delete a draw using API
   deleteDraw(id, index) async {
     _helperServices.showLoader();
     var response =
@@ -215,6 +226,7 @@ class DrawController extends ChangeNotifier {
     );
   }
 
+  // Get all draws from the API based on vendor company id
   getAllDraws(int? vendorCompanyId) async {
     _helperServices.showLoader();
     final response = await DrawApiServiceProvider().getDraw('getDraw');
@@ -222,31 +234,30 @@ class DrawController extends ChangeNotifier {
       (l) => {
         _helperServices.goBack(),
         _helperServices.showErrorMessage(l),
-        print(l),
       },
       (r) {
         allDraws =
             r.where((draw) => draw.vendorcompanyId == vendorCompanyId).toList();
         searchDraws?.clear();
         searchDraws?.addAll(allDraws!);
-        // Calculate the sum of the 'amount' column
 
+        // Calculate the sum of the 'amount' column
         sumOfDrawTotalDollar = calculateSumOfTotalDollar(allDraws);
         sumOfDrawTotalYen = calculateSumOfTotalYen(allDraws);
+
         _helperServices.goBack();
         notifyListeners();
       },
     );
   }
 
-  // Function to calculate the sum of the 'amount' column from the list of FabricPurchases
+  // Function to calculate the sum of the 'amount' column from the list of draws
   double calculateSumOfTotalDollar(List<Data>? draws) {
     double sum = 0;
 
     if (draws != null) {
       for (var draw in draws) {
-        // Replace 'amount' with the actual field name from your FabricPurchase model
-        sum += draw.doller ?? 0; // Add the 'amount' to the sum
+        sum += draw.doller ?? 0;
       }
     }
     return sum;
@@ -257,18 +268,19 @@ class DrawController extends ChangeNotifier {
 
     if (draws != null) {
       for (var draw in draws) {
-        // Replace 'amount' with the actual field name from your FabricPurchase model
-        sum += draw.yen ?? 0; // Add the 'amount' to the sum
+        sum += draw.yen ?? 0;
       }
     }
     return sum;
   }
 
+  // Search draws based on provided name
   searchDrawsMethod(String name) {
     searchText = name;
     updateDrawsData();
   }
 
+  // Update draws data based on search text
   updateDrawsData() {
     searchDraws?.clear();
     if (searchText.isEmpty) {
@@ -286,6 +298,7 @@ class DrawController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Clear values of all controllers
   void clearAllControllers() {
     dateController.clear();
     dollarPriceController.clear();
