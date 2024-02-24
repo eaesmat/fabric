@@ -1,12 +1,15 @@
+// Import necessary dependencies and files
 import 'dart:convert';
 import 'package:fabricproject/constants/api_url.dart';
 import 'package:fabricproject/model/fabric_design_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
+// Class responsible for handling API calls related to fabric designs
 class FabricDesignApiServiceProvider {
   final String _baseURL = baseURL;
 
+  // Function to fetch fabric designs from the API
   Future<Either<String, List<Data>>> getFabricDesign(String apiEndpoint) async {
     try {
       var response = await http.get(
@@ -30,6 +33,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
+  // Function to create a new fabric design through the API
   Future<Either<String, int>> createFabricDesign(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
@@ -52,6 +56,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
+  // Function to edit an existing fabric design through the API
   Future<Either<String, int>> editFabricDesign(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
@@ -75,6 +80,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
+  // Function to delete a fabric design through the API
   Future<Either<String, int>> deleteFabricDesign(String apiEndpoint) async {
     try {
       final response = await http.delete(Uri.parse(_baseURL + apiEndpoint));

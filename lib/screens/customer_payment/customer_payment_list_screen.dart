@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/customer_payment_controller.dart';
+import 'package:fabricproject/screens/customer_payment/customer_payment_details_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -60,46 +61,37 @@ class _CustomerPaymentListScreenState extends State<CustomerPaymentListScreen> {
                       customerPaymentController.searchCustomersPayments![index];
 
                   return ListTileWidget(
-                    // onLongPress: () {
-                    //   showModalBottomSheet(
-                    //     context: context,
-                    //     isScrollControlled: true,
-                    //     builder: (BuildContext context) {
-                    //       List<ContainerModel> containers =
-                    //           (data.container ?? []).cast<ContainerModel>();
-
-                    //       return TransportItemDetailsBottomSheet(
-                    //         data: data,
-                    //         transportName: data.transport!.name.toString(),
-                    //         containerList: containers,
-                    //       );
-                    //     },
-                    //   );
-                    // },
-                    // lead: CircleAvatar(
-                    //   backgroundColor: Pallete.blueColor,
-                    //   child: Text(
-                    //     data.duration.toString(),
-                    //     style: const TextStyle(color: Pallete.whiteColor),
-                    //   ),
-                    // ),
+                    onLongPress: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return CustomerPaymentDetailsBottomSheet(
+                            // pass the these data to the widget
+                            data: data,
+                          );
+                        },
+                      );
+                    },
                     tileTitle: Row(
                       children: [
                         Text(
-                          "${data.customerId}",
+                          "${data.person}",
                         ),
                         const Spacer(),
-                        Text(data.amountafghani.toString()),
+                        Text(
+                          data.amountafghani?.toString() ?? '',
+                        ),
                       ],
                     ),
                     tileSubTitle: Row(
                       children: [
                         Text(
-                          data.amountdollar.toString(),
+                          data.date.toString(),
                         ),
                         const Spacer(),
                         Text(
-                          data.date.toString(),
+                          data.amountdoller?.toString() ?? '',
                         ),
                       ],
                     ),

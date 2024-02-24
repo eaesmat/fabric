@@ -27,11 +27,15 @@ class Data {
   int? bundlecount;
   int? paticount;
   int? totalwar;
-  int? totalcostdollar;
+  int? totalcost;
   int? begaknumber;
   String? date;
   int? userId;
-  int? totalcostafghani;
+  String? currency;
+  int? begakpayment;
+  int? begakdue;
+  String? begakphoto;
+  String? description;
   Customer? customer;
 
   Data(
@@ -40,11 +44,15 @@ class Data {
       this.bundlecount,
       this.paticount,
       this.totalwar,
-      this.totalcostdollar,
+      this.totalcost,
       this.begaknumber,
       this.date,
       this.userId,
-      this.totalcostafghani,
+      this.currency,
+      this.begakpayment,
+      this.begakdue,
+      this.begakphoto,
+      this.description,
       this.customer});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -53,11 +61,15 @@ class Data {
     bundlecount = json['bundlecount'];
     paticount = json['paticount'];
     totalwar = json['totalwar'];
-    totalcostdollar = json['totalcostdollar'];
+    totalcost = json['totalcost'];
     begaknumber = json['begaknumber'];
     date = json['date'];
     userId = json['user_id'];
-    totalcostafghani = json['totalcostafghani'];
+    currency = json['currency'];
+    begakpayment = json['begakpayment'];
+    begakdue = json['begakdue'];
+    begakphoto = json['begakphoto'];
+    description = json['description'];
     customer = json['customer'] != null
         ? new Customer.fromJson(json['customer'])
         : null;
@@ -70,11 +82,15 @@ class Data {
     data['bundlecount'] = this.bundlecount;
     data['paticount'] = this.paticount;
     data['totalwar'] = this.totalwar;
-    data['totalcostdollar'] = this.totalcostdollar;
+    data['totalcost'] = this.totalcost;
     data['begaknumber'] = this.begaknumber;
     data['date'] = this.date;
     data['user_id'] = this.userId;
-    data['totalcostafghani'] = this.totalcostafghani;
+    data['currency'] = this.currency;
+    data['begakpayment'] = this.begakpayment;
+    data['begakdue'] = this.begakdue;
+    data['begakphoto'] = this.begakphoto;
+    data['description'] = this.description;
     if (this.customer != null) {
       data['customer'] = this.customer!.toJson();
     }

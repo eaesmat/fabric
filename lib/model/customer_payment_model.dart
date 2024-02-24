@@ -26,7 +26,7 @@ class Data {
   String? date;
   String? person;
   String? description;
-  int? amountdollar;
+  int? amountdoller;
   int? customerId;
   int? userId;
   int? amountafghani;
@@ -37,7 +37,7 @@ class Data {
       this.date,
       this.person,
       this.description,
-      this.amountdollar,
+      this.amountdoller,
       this.customerId,
       this.userId,
       this.amountafghani,
@@ -48,7 +48,7 @@ class Data {
     date = json['date'];
     person = json['person'];
     description = json['description'];
-    amountdollar = json['amountdollar'];
+    amountdoller = json['amountdoller'];
     customerId = json['customer_id'];
     userId = json['user_id'];
     amountafghani = json['amountafghani'];
@@ -63,7 +63,7 @@ class Data {
     data['date'] = this.date;
     data['person'] = this.person;
     data['description'] = this.description;
-    data['amountdollar'] = this.amountdollar;
+    data['amountdoller'] = this.amountdoller;
     data['customer_id'] = this.customerId;
     data['user_id'] = this.userId;
     data['amountafghani'] = this.amountafghani;

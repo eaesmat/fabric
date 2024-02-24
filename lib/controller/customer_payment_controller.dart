@@ -34,7 +34,7 @@ class CustomerPaymentController extends ChangeNotifier {
 
   navigateToCustomerPaymentEdit(int customerPaymentId, Data data) async {
     clearAllControllers();
-    amountDollarController.text = data.amountdollar.toString();
+    amountDollarController.text = data.amountdoller.toString();
     amountAfghaniController.text = data.amountafghani.toString();
     personController.text = data.person.toString();
     descriptionController.text = data.description.toString();
@@ -210,7 +210,7 @@ class CustomerPaymentController extends ChangeNotifier {
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||
-                element.amountdollar
+                element.amountdoller
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||

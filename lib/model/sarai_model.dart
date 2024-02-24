@@ -27,6 +27,7 @@ class Data {
   String? location;
   String? description;
   String? phone;
+  String? type;
 
   Data({this.saraiId, this.name, this.location, this.description, this.phone});
 
@@ -36,6 +37,7 @@ class Data {
     location = json['location'];
     description = json['description'];
     phone = json['phone'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,7 @@ class Data {
     data['location'] = this.location;
     data['description'] = this.description;
     data['phone'] = this.phone;
+    data['type'] = this.type;
     return data;
   }
 }

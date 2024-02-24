@@ -7,13 +7,13 @@ class FabricDesignModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -58,33 +58,33 @@ class Data {
     designname = json['designname'];
     userId = json['user_id'];
     fabricpurchase = json['fabricpurchase'] != null
-        ? new Fabricpurchase.fromJson(json['fabricpurchase'])
+        ? Fabricpurchase.fromJson(json['fabricpurchase'])
         : null;
     if (json['fabricdesigncolor'] != null) {
       fabricdesigncolor = <Fabricdesigncolor>[];
       json['fabricdesigncolor'].forEach((v) {
-        fabricdesigncolor!.add(new Fabricdesigncolor.fromJson(v));
+        fabricdesigncolor!.add(Fabricdesigncolor.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricdesign_id'] = this.fabricdesignId;
-    data['name'] = this.name;
-    data['bundle'] = this.bundle;
-    data['war'] = this.war;
-    data['toop'] = this.toop;
-    data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['designimage'] = this.designimage;
-    data['designname'] = this.designname;
-    data['user_id'] = this.userId;
-    if (this.fabricpurchase != null) {
-      data['fabricpurchase'] = this.fabricpurchase!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['fabricdesign_id'] = fabricdesignId;
+    data['name'] = name;
+    data['bundle'] = bundle;
+    data['war'] = war;
+    data['toop'] = toop;
+    data['fabricpurchase_id'] = fabricpurchaseId;
+    data['designimage'] = designimage;
+    data['designname'] = designname;
+    data['user_id'] = userId;
+    if (fabricpurchase != null) {
+      data['fabricpurchase'] = fabricpurchase!.toJson();
     }
-    if (this.fabricdesigncolor != null) {
+    if (fabricdesigncolor != null) {
       data['fabricdesigncolor'] =
-          this.fabricdesigncolor!.map((v) => v.toJson()).toList();
+          fabricdesigncolor!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -153,25 +153,25 @@ class Fabricpurchase {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['bundle'] = this.bundle;
-    data['meter'] = this.meter;
-    data['war'] = this.war;
-    data['yenprice'] = this.yenprice;
-    data['yenexchange'] = this.yenexchange;
-    data['ttcommission'] = this.ttcommission;
-    data['packagephoto'] = this.packagephoto;
-    data['bankreceiptphoto'] = this.bankreceiptphoto;
-    data['date'] = this.date;
-    data['fabric_id'] = this.fabricId;
-    data['company_id'] = this.companyId;
-    data['vendorcompany_id'] = this.vendorcompanyId;
-    data['fabricpurchasecode'] = this.fabricpurchasecode;
-    data['dollerprice'] = this.dollerprice;
-    data['totalyenprice'] = this.totalyenprice;
-    data['totaldollerprice'] = this.totaldollerprice;
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['fabricpurchase_id'] = fabricpurchaseId;
+    data['bundle'] = bundle;
+    data['meter'] = meter;
+    data['war'] = war;
+    data['yenprice'] = yenprice;
+    data['yenexchange'] = yenexchange;
+    data['ttcommission'] = ttcommission;
+    data['packagephoto'] = packagephoto;
+    data['bankreceiptphoto'] = bankreceiptphoto;
+    data['date'] = date;
+    data['fabric_id'] = fabricId;
+    data['company_id'] = companyId;
+    data['vendorcompany_id'] = vendorcompanyId;
+    data['fabricpurchasecode'] = fabricpurchasecode;
+    data['dollerprice'] = dollerprice;
+    data['totalyenprice'] = totalyenprice;
+    data['totaldollerprice'] = totaldollerprice;
+    data['user_id'] = userId;
     return data;
   }
 }
@@ -208,15 +208,15 @@ class Fabricdesigncolor {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricdesigncolor_id'] = this.fabricdesigncolorId;
-    data['colorname'] = this.colorname;
-    data['fabricdesign_id'] = this.fabricdesignId;
-    data['toop'] = this.toop;
-    data['war'] = this.war;
-    data['bundle'] = this.bundle;
-    data['photo'] = this.photo;
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['fabricdesigncolor_id'] = fabricdesigncolorId;
+    data['colorname'] = colorname;
+    data['fabricdesign_id'] = fabricdesignId;
+    data['toop'] = toop;
+    data['war'] = war;
+    data['bundle'] = bundle;
+    data['photo'] = photo;
+    data['user_id'] = userId;
     return data;
   }
 }

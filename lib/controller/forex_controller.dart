@@ -8,168 +8,188 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class ForexController extends ChangeNotifier {
-  // is the instance of helper class
   final HelperServices _helperServices;
-  // The are used to get and send data to the ui
   TextEditingController fullNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController shopNoController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  //Get all the data from api calls
-  List<Data>? allForex = [];
-  // Used to filter data
-  List<Data>? searchForex = [];
-  // Used to get search text in the ui
+  List<Data> allForex = [];
+  List<Data> searchForex = [];
   String searchText = "";
 
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedForex = [];
+
   ForexController(this._helperServices) {
-    // Get all the data when  visits to the page
     getAllForex();
   }
 
   navigateToForexCreate() {
-    // To clear textEditing controllers data
     clearAllControllers();
-    // navigate is helper method from helper class to used to navigate pages
     _helperServices.navigate(const ForexCreateScreen());
   }
 
-// this method is called in ui to get data and id in order to edit the item
   navigateToForexEdit(Data data, int id) {
     clearAllControllers();
-    // Assigned all these columns to the edit screen using these controllers
-    fullNameController.text = data.fullname.toString();
-    descriptionController.text = data.description.toString();
-    phoneController.text = data.phone.toString();
-    shopNoController.text = data.shopno.toString();
-    locationController.text = data.location.toString();
-    // This is navigating to the edit screen
+    fullNameController.text = data.fullname ?? '';
+    descriptionController.text = data.description ?? '';
+    phoneController.text = data.phone ?? '';
+    shopNoController.text = data.shopno ?? '';
+    locationController.text = data.location ?? '';
     _helperServices.navigate(
       ForexEditScreen(
-        // These are the edit screen required vars called from its constructor
         forexData: data,
         forexId: id,
       ),
     );
   }
 
-// Gets all the the data from api
-  getAllForex() async {
+  Future<void> getAllForex() async {
     _helperServices.showLoader();
-    // This is api calls provider class
-    final response = await ForexApiServiceProvider().getForex('getSarafi');
-    // fpDart package method used to handles error and success cases
-    response.fold(
-      // L fpDart means left or api call failed case
-      (l) => {
-        // goBack pops the current stack
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      // R fpDart means Right or api call success case will bring the data in it from api
-      (r) {
-        allForex = r;
-        // goBack pops the current stack
-        _helperServices.goBack();
-        searchForex?.clear();
-        searchForex?.addAll(allForex!);
-        // this methods assign the recent data to the search List
-        // updateForexData();
-        notifyListeners();
-      },
-    );
+    try {
+      final response = await ForexApiServiceProvider().getForex('getSarafi');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allForex = r;
+          searchForex = List.from(allForex);
+          cachedForex = List.from(allForex); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createForex() async {
+  Future<void> createForex() async {
     _helperServices.showLoader();
+    try {
+      final response = await ForexApiServiceProvider().createForex(
+        'add-sarafi',
+        {
+          "sarafi_id": 0,
+          "fullname": fullNameController.text,
+          "description": descriptionController.text,
+          "phone": phoneController.text,
+          "shopno": shopNoController.text,
+          "location": locationController.text,
+        },
+      );
 
-    var response = await ForexApiServiceProvider().createForex(
-      // endPoint passed to the api call class
-      'add-sarafi',
-      {
-        "sarafi_id": 0,
-        "fullname": fullNameController.text,
-        "description": descriptionController.text,
-        "phone": phoneController.text,
-        "shopno": shopNoController.text,
-        "location": locationController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllForex(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllForex();
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editForex(int id) async {
+  Future<void> editForex(int id) async {
     _helperServices.showLoader();
-    var response = await ForexApiServiceProvider().editForex(
-      'update-sarafi?sarafi_id=$id',
-      {
-        "sarafi_id": id,
-        "fullname": fullNameController.text,
-        "description": descriptionController.text,
-        "phone": phoneController.text,
-        "shopno": shopNoController.text,
-        "location": locationController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllForex(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response = await ForexApiServiceProvider().editForex(
+        'update-sarafi?sarafi_id=$id',
+        {
+          "sarafi_id": id,
+          "fullname": fullNameController.text,
+          "description": descriptionController.text,
+          "phone": phoneController.text,
+          "shopno": shopNoController.text,
+          "location": locationController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+
+          updateForexLocally(
+            id,
+            Data(
+              sarafiId: id,
+              fullname: fullNameController.text,
+              description: descriptionController.text,
+              phone: phoneController.text,
+              shopno: shopNoController.text,
+              location: locationController.text,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-// This method remove the or delete the item without reloading server
-  void deleteItemLocally(int id) {
-    final index = allForex!.indexWhere((element) => element.sarafiId == id);
+  void updateForexLocally(int id, Data updatedData) {
+    int index = allForex.indexWhere((element) => element.sarafiId == id);
     if (index != -1) {
-      allForex!.removeAt(index);
-
-      final searchIndex =
-          searchForex!.indexWhere((element) => element.sarafiId == id);
-      if (searchIndex != -1) {
-        searchForex!.removeAt(searchIndex);
+      allForex[index] = updatedData;
+      int cacheIndex =
+          cachedForex.indexWhere((element) => element.sarafiId == id);
+      if (cacheIndex != -1) {
+        cachedForex[cacheIndex] = updatedData; // Update cache
       }
-
+      int searchIndex =
+          searchForex.indexWhere((element) => element.sarafiId == id);
+      if (searchIndex != -1) {
+        searchForex[searchIndex] = updatedData; // Update search list
+      }
       notifyListeners();
     }
   }
 
-  deleteForex(id, index) async {
+  Future<void> deleteForex(int id, int index) async {
     _helperServices.showLoader();
-    var response = await ForexApiServiceProvider()
-        .deleteForex('delete-sarafi?sarafi_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await ForexApiServiceProvider()
+          .deleteForex('delete-sarafi?sarafi_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -177,13 +197,9 @@ class ForexController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        // 500 comes if there is related data in other tables
-        // We have to no delete
-        else if (r == 500)
-          {
+            );
+            deleteItemLocally(id);
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -191,47 +207,70 @@ class ForexController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-// gets value from search textField ForexController in ui
-  searchForexMethod(String text) {
+  void searchForexMethod(String text) {
     searchText = text;
     updateForexData();
   }
 
-// updates data into the ui according to the search text
-  updateForexData() {
-    searchForex?.clear();
+  void updateForexData() {
+    searchForex.clear();
     if (searchText.isEmpty) {
-      searchForex?.addAll(allForex!);
+      searchForex.addAll(cachedForex);
     } else {
-      searchForex?.addAll(
-        allForex!
+      searchForex.addAll(
+        cachedForex
             .where(
               (element) =>
-                  // All the columns search filter is applied on
-                  element.fullname!.toLowerCase().contains(searchText) ||
-                  element.description!.toLowerCase().contains(searchText) ||
-                  element.phone!.toLowerCase().contains(searchText) ||
-                  element.shopno!.toLowerCase().contains(searchText) ||
-                  element.location!.toLowerCase().contains(searchText),
+                  (element.fullname
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.description
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.phone
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.shopno
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.location
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false),
             )
             .toList(),
       );
     }
     notifyListeners();
   }
-   // Reset the search text
+
   void resetSearchFilter() {
     searchText = '';
     updateForexData();
   }
 
-  clearAllControllers() {
+  void deleteItemLocally(int id) {
+    allForex.removeWhere((element) => element.sarafiId == id);
+    cachedForex.removeWhere((element) => element.sarafiId == id);
+    searchForex.removeWhere((element) => element.sarafiId == id);
+    notifyListeners();
+  }
+
+  void clearAllControllers() {
     fullNameController.clear();
     descriptionController.clear();
     phoneController.clear();

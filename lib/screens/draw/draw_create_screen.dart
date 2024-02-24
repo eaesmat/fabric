@@ -1,8 +1,9 @@
+// Import necessary dependencies and files
 import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/forex/forex_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_button.dart';
+import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/date_picker.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
+// Define a StatefulWidget for DrawCreateScreen
 class DrawCreateScreen extends StatefulWidget {
   const DrawCreateScreen({super.key});
 
@@ -17,13 +19,15 @@ class DrawCreateScreen extends StatefulWidget {
   State<DrawCreateScreen> createState() => _DrawCreateScreenState();
 }
 
+// Define the state for _DrawCreateScreenState
 class _DrawCreateScreenState extends State<DrawCreateScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    // Get the DrawController from the Provider
     final drawController = Provider.of<DrawController>(context);
-
+    // Get the current locale for validation
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
@@ -43,29 +47,24 @@ class _DrawCreateScreenState extends State<DrawCreateScreen> {
                   CustomTextFieldWithController(
                     lblText: const LocaleText('dollar_price'),
                     controller: drawController.dollarPriceController,
-                    // customValidator: customFormValidator,
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     controller: drawController.yenPriceController,
                     lblText: const LocaleText('yen_price'),
-                    //  customValidator: customFormValidator
                   ),
                   CustomTextFieldWithController(
                     controller: drawController.exchangeRateController,
                     lblText: const LocaleText('exchange_rate'),
-                    // customValidator: customFormValidator,
                   ),
                   CustomTextFieldWithController(
                     controller: drawController.descriptionController,
                     lblText: const LocaleText('description'),
-                    // customValidator: customFormValidator,
                   ),
                   CustomTextFieldWithController(
                     controller: drawController.bankPhotoController,
                     lblText: const LocaleText('photo'),
-                    // customValidator: customFormValidator,
                   ),
                   DatePicker(
                     controller: drawController.dateController,
@@ -93,7 +92,7 @@ class _DrawCreateScreenState extends State<DrawCreateScreen> {
                       lblText: const LocaleText('forex'),
                     ),
                   ),
-                  CustomButton(
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
                       Icons.check,

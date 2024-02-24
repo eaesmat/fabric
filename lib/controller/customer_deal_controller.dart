@@ -215,7 +215,7 @@ class CustomerDealController extends ChangeNotifier {
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||
-                element.totalcostdollar
+                element.totalwar
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||
@@ -223,7 +223,11 @@ class CustomerDealController extends ChangeNotifier {
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||
-                element.totalcostafghani
+                element.currency
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchText) ||
+                element.totalcost
                     .toString()
                     .toLowerCase()
                     .contains(searchText) ||

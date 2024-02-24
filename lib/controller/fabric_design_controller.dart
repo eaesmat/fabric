@@ -1,3 +1,4 @@
+// Import necessary dependencies and files
 import 'package:fabricproject/api/fabric_design_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_model.dart';
@@ -8,8 +9,11 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
+// Controller class responsible for managing the state and logic related to fabric designs
 class FabricDesignController extends ChangeNotifier {
   final HelperServices _helperServices;
+
+  // Text editing controllers for various input fields
   TextEditingController nameController = TextEditingController();
   TextEditingController amountOfBundlesController = TextEditingController();
   TextEditingController amountOfWarsController = TextEditingController();
@@ -17,25 +21,27 @@ class FabricDesignController extends ChangeNotifier {
   TextEditingController designImageController = TextEditingController();
   TextEditingController designNameController = TextEditingController();
 
+  // Variables to store fabric purchase information and fabric designs
   int? fabricPurchaseId;
   List<Data>? allFabricDesigns = [];
   List<Data>? searchFabricDesigns = [];
   String searchText = "";
 
-  FabricDesignController(
-    this._helperServices,
-  ) {
+  // Constructor to initialize the controller with helper services and fetch initial data
+  FabricDesignController(this._helperServices) {
     getAllFabricDesigns(fabricPurchaseId);
   }
 
+  // Navigation function to the fabric design create screen
   navigateToFabricDesignCreate() {
     clearAllControllers();
-
     _helperServices.navigate(const FabricDesignCreateScreen());
   }
 
+  // Navigation function to the fabric design edit screen
   navigateToFabricDesignEdit(Data data, int id) {
     clearAllControllers();
+    // Populate controllers with existing data for editing
     nameController.text = data.name.toString();
     amountOfBundlesController.text = data.bundle.toString();
     amountOfWarsController.text = data.war.toString();
@@ -49,11 +55,10 @@ class FabricDesignController extends ChangeNotifier {
     ));
   }
 
+  // Navigation function to the fabric design list screen
   navigateToFabricDesignListScreen(String fabricPurchaseCode, int id) async {
     clearAllControllers();
     fabricPurchaseId = id;
-    print(fabricPurchaseId);
-
     _helperServices.navigate(
       FabricDesignListScreen(
         fabricPurchaseId: id,
@@ -63,6 +68,7 @@ class FabricDesignController extends ChangeNotifier {
     await getAllFabricDesigns(fabricPurchaseId);
   }
 
+  // Function to create a new fabric design through the API
   createFabricDesign() async {
     _helperServices.showLoader();
 
@@ -84,9 +90,9 @@ class FabricDesignController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
+        // Refresh fabric designs list and show success message
         getAllFabricDesigns(fabricPurchaseId!);
         _helperServices.goBack();
         _helperServices.showMessage(
@@ -103,6 +109,7 @@ class FabricDesignController extends ChangeNotifier {
     );
   }
 
+  // Function to edit an existing fabric design through the API
   editFabricDesign(int fabricDesignId) async {
     _helperServices.showLoader();
 
@@ -124,9 +131,9 @@ class FabricDesignController extends ChangeNotifier {
       (l) {
         _helperServices.goBack();
         _helperServices.showErrorMessage(l);
-        print(l);
       },
       (r) {
+        // Refresh fabric designs list and show success message
         getAllFabricDesigns(fabricPurchaseId!);
         _helperServices.goBack();
         _helperServices.showMessage(
@@ -143,6 +150,7 @@ class FabricDesignController extends ChangeNotifier {
     );
   }
 
+  // Function to delete an existing fabric design through the API
   void deleteItemLocally(int id) {
     final index =
         allFabricDesigns!.indexWhere((element) => element.fabricdesignId == id);
@@ -159,6 +167,7 @@ class FabricDesignController extends ChangeNotifier {
     }
   }
 
+  // Function to delete a fabric design through the API
   deleteFabricDesign(id, index) async {
     _helperServices.showLoader();
     var response = await FabricDesignApiServiceProvider()
@@ -197,6 +206,7 @@ class FabricDesignController extends ChangeNotifier {
     );
   }
 
+  // Function to fetch all fabric designs from the API
   getAllFabricDesigns(int? fabricPurchaseId) async {
     _helperServices.showLoader();
     final response = await FabricDesignApiServiceProvider()
@@ -207,6 +217,7 @@ class FabricDesignController extends ChangeNotifier {
         _helperServices.showErrorMessage(l),
       },
       (r) {
+        // Filter fabric designs based on fabric purchase ID
         allFabricDesigns = r
             .where((fabricDesign) =>
                 fabricDesign.fabricpurchaseId == fabricPurchaseId)
@@ -220,11 +231,13 @@ class FabricDesignController extends ChangeNotifier {
     );
   }
 
+  // Function to perform a search on fabric designs based on the provided name
   searchFabricDesignMethod(String name) {
     searchText = name;
     updateFabricDesignsData();
   }
 
+  // Function to update the fabric designs data based on the search text
   updateFabricDesignsData() {
     searchFabricDesigns?.clear();
     if (searchText.isEmpty) {
@@ -240,6 +253,7 @@ class FabricDesignController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Function to clear all text editing controllers
   void clearAllControllers() {
     nameController.clear();
     amountOfToopController.clear();

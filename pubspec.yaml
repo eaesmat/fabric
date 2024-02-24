@@ -49,6 +49,7 @@ dependencies:
   provider: ^6.1.1
   dropdown_button2: ^2.3.9
   autocomplete_textfield: ^2.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +81,7 @@ flutter:
     - assets/images/f_logo.svg
     - assets/images/g_logo.svg
     - assets/images/fabricIcon.png
+    - assets/images/noData.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/customer_deal_controller.dart';
+import 'package:fabricproject/screens/customer_deal/customer_deal_details_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -58,22 +59,18 @@ class _CustomerDealListScreenState extends State<CustomerDealListScreen> {
                       customerDealController.searchCustomersDeals![index];
 
                   return ListTileWidget(
-                    // onLongPress: () {
-                    //   showModalBottomSheet(
-                    //     context: context,
-                    //     isScrollControlled: true,
-                    //     builder: (BuildContext context) {
-                    //       List<ContainerModel> containers =
-                    //           (data.container ?? []).cast<ContainerModel>();
-
-                    //       return TransportItemDetailsBottomSheet(
-                    //         data: data,
-                    //         transportName: data.transport!.name.toString(),
-                    //         containerList: containers,
-                    //       );
-                    //     },
-                    //   );
-                    // },
+                    onLongPress: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return CustomerDealDetailsBottomSheet(
+                            // pass the these data to the widget
+                            data: data,
+                          );
+                        },
+                      );
+                    },
                     // lead: CircleAvatar(
                     //   backgroundColor: Pallete.blueColor,
                     //   child: Text(
@@ -84,7 +81,7 @@ class _CustomerDealListScreenState extends State<CustomerDealListScreen> {
                     tileTitle: Row(
                       children: [
                         Text(
-                          "${data.customerId}",
+                          "${data.begaknumber}",
                         ),
                         const Spacer(),
                         Text(data.bundlecount.toString()),
@@ -93,11 +90,11 @@ class _CustomerDealListScreenState extends State<CustomerDealListScreen> {
                     tileSubTitle: Row(
                       children: [
                         Text(
-                          data.begaknumber.toString(),
+                          data.date.toString(),
                         ),
                         const Spacer(),
                         Text(
-                          data.date.toString(),
+                          data.begakpayment.toString(),
                         ),
                       ],
                     ),
