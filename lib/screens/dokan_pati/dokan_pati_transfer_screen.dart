@@ -1,11 +1,11 @@
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/transer_bundles_controller.dart';
-import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
-import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
-import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
-import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/transfer_bundles_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/dokan_pati/dokan_fabric_purchase_bottom_sheet.dart';
 import 'package:fabricproject/screens/dokan_pati/dokan_pati_select_bottom_sheet.dart';
@@ -152,7 +152,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                         Icons.add,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Colors.green,
                       onTap: () {
                         // validates the form to create the new item
                         // if (formKey.currentState!.validate()) {
@@ -174,7 +174,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                         Icons.all_out_outlined,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Pallete.greyColor,
                       onTap: () {
                         // validates the form to create the new item
                         if (formKey.currentState!.validate()) {
@@ -186,7 +186,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                     CustomDropDownButton(
                       btnWidth: 0.1,
                       btnIcon: const Icon(
-                        Icons.compress_sharp,
+                        Icons.compare_arrows,
                         color: Pallete.whiteColor,
                       ),
                       bgColor: Pallete.blueColor,
@@ -197,6 +197,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                               .selectedPati.isNotEmpty) {
                             transferDokanPatiController.addAllItemsToData();
                             transferDokanPatiController.transferDokanPati();
+                            dokanPatiSelectController.resetSearchFilter();
                           } else {
                             print("no pati is selected");
                           }
@@ -207,10 +208,10 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                     CustomDropDownButton(
                       btnWidth: 0.1,
                       btnIcon: const Icon(
-                        Icons.remove,
+                        Icons.clear,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Pallete.redColor,
                       onTap: () {
                         dokanPatiSelectController.resetSearchFilter();
                         transferDokanPatiController.selectedPati.clear();
@@ -267,8 +268,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                           : Center(
                               child: Image.asset(
                                 'assets/images/noData.png',
-                                width: screenWidth * 0.4,
-                                height: screenWidth * 0.4,
+                                width: screenWidth * 1,
                               ),
                             ),
                     );

@@ -2,7 +2,7 @@ import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/transer_bundles_controller.dart';
+import 'package:fabricproject/controller/transfer_bundles_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/sarai/sarai_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_bundle_select_bottom_sheet.dart';
@@ -65,7 +65,8 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return  SelectSaraiToTransferButtonSheet(saraiId: widget.saraiId);
+                        return SelectSaraiToTransferButtonSheet(
+                            saraiId: widget.saraiId);
                       },
                     );
                   },
@@ -112,15 +113,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return SaraiFabricPurchaseBottomSheet(
-                          saraiId: widget.saraiId,
-                        );
-                      },
-                    );
+                    
                   },
                   child: CustomTextFieldWithController(
                     customValidator: (value) =>
@@ -145,7 +138,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                         Icons.add,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Colors.green,
                       onTap: () {
                         // validates the form to create the new item
                         // if (formKey.currentState!.validate()) {
@@ -167,7 +160,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                         Icons.all_out_outlined,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Pallete.greyColor,
                       onTap: () {
                         // validates the form to create the new item
                         if (formKey.currentState!.validate()) {
@@ -179,7 +172,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                     CustomDropDownButton(
                       btnWidth: 0.1,
                       btnIcon: const Icon(
-                        Icons.compress_sharp,
+                        Icons.compare_arrows,
                         color: Pallete.whiteColor,
                       ),
                       bgColor: Pallete.blueColor,
@@ -190,6 +183,8 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                               .selectedBundles.isNotEmpty) {
                             transferBundlesController.addAllItemsToData();
                             transferBundlesController.transferBundles();
+                            saraiFabricBundleSelectController
+                                .resetSearchFilter();
                           } else {
                             print("no item to transfer");
                           }
@@ -200,10 +195,10 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                     CustomDropDownButton(
                       btnWidth: 0.1,
                       btnIcon: const Icon(
-                        Icons.remove,
+                        Icons.clear,
                         color: Pallete.whiteColor,
                       ),
-                      bgColor: Pallete.blueColor,
+                      bgColor: Pallete.redColor,
                       onTap: () {
                         saraiFabricBundleSelectController.resetSearchFilter();
                         transferBundlesController.selectedBundles.clear();

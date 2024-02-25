@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';

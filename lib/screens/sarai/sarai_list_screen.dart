@@ -5,7 +5,8 @@ import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_item_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/transfer_bundles_controller.dart';
+import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -42,6 +43,10 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
     final saraiFabricBundleSelectController =
         Provider.of<SaraiFabricBundleSelectController>(context);
     final dokanPatiController = Provider.of<DokanPatiController>(context);
+    final transferBundlesController =
+        Provider.of<TransferBundlesController>(context);
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
     final dokanPatiSelectController =
         Provider.of<DokanPatiSelectController>(context);
 
@@ -49,9 +54,11 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
       saraiFabricBundleSelectController.searchSaraiFabricBundleSelects?.clear();
       saraiMarkaController.searchSaraiMarka?.clear();
       saraiFabricPurchaseController.searchSaraiFabricPurchase?.clear();
-      dokanPatiController.searchAllDokanPati?.clear();
+      // dokanPatiController.searchAllDokanPati?.clear();
       saraiFabricBundleSelectController.resetSearchFilter();
-      dokanPatiSelectController.selectedItems?.clear();
+      dokanPatiSelectController.resetSearchFilter();
+      transferBundlesController.clearAllControllers();
+      transferDokanPatiController.clearAllControllers();
     }
 
     return Scaffold(
