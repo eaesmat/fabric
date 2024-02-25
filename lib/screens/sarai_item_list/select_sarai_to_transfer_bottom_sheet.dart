@@ -8,14 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiButtonSheet extends StatefulWidget {
-  const SaraiButtonSheet({super.key});
+class SelectSaraiToTransferButtonSheet extends StatefulWidget {
+  final int saraiId;
+  const SelectSaraiToTransferButtonSheet({Key? key, required this.saraiId}) : super(key: key);
 
   @override
-  State<SaraiButtonSheet> createState() => _SaraiButtonSheetState();
+  State<SelectSaraiToTransferButtonSheet> createState() => _SelectSaraiToTransferButtonSheetState();
 }
 
-class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
+class _SelectSaraiToTransferButtonSheetState extends State<SelectSaraiToTransferButtonSheet> {
   @override
   void initState() {
     super.initState();
@@ -79,6 +80,13 @@ class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
                   final reversedList =
                       saraiController.searchSarais!.reversed.toList();
                   final data = reversedList[index];
+
+                  // Check if the saraiId matches the widget's saraiId
+                  if (data.saraiId == widget.saraiId) {
+                    // If matched, return an empty container
+                    return Container();
+                  }
+
                   return ListTileWidget(
                     onTap: () {
                       // pass id

@@ -25,13 +25,15 @@ class Data {
   String? bundlename;
   String? patiname;
   int? war;
+  int? saraipatiId;
 
-  Data({this.bundlename, this.patiname, this.war});
+  Data({this.bundlename, this.patiname, this.war, this.saraipatiId});
 
   Data.fromJson(Map<String, dynamic> json) {
     bundlename = json['bundlename'];
     patiname = json['patiname'];
     war = json['war'];
+    saraipatiId = json['saraipati_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +41,7 @@ class Data {
     data['bundlename'] = this.bundlename;
     data['patiname'] = this.patiname;
     data['war'] = this.war;
+    data['saraipati_id'] = this.saraipatiId;
     return data;
   }
 }

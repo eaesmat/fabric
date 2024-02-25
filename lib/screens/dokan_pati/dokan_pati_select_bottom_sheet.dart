@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
@@ -22,8 +23,8 @@ class _DokanPatiSelectBottomSheetState
     // controller provider
     final dokanPatiSelectController =
         Provider.of<DokanPatiSelectController>(context);
-    // final transferBundlesController =
-    //     Provider.of<TransferBundlesController>(context);
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -73,14 +74,14 @@ class _DokanPatiSelectBottomSheetState
                         if (isSelected) {
                           dokanPatiSelectController
                               .removeItemFromSelected(data);
-                          // transferBundlesController.removeItemFromData(
-                          //     'saraidesignbundle_id${data.saraidesignbundleId}');
+                          transferDokanPatiController.removeItemFromData(
+                              'saraipati_id${data.saraipatiId}');
                         } else {
                           dokanPatiSelectController
                               .addItemToSelected(data);
-                          // transferBundlesController.addItemToData(
-                          //     'saraidesignbundle_id${data.saraidesignbundleId}',
-                          //     "${data.saraidesignbundleId}");
+                          transferDokanPatiController.addItemToData(
+                              'saraipati_id${data.saraipatiId}',
+                              "${data.saraipatiId}");
                         }
                       });
                     },

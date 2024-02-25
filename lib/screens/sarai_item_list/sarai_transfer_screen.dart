@@ -2,12 +2,13 @@ import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_bundles_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/sarai/sarai_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_bundle_select_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_purchase_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_marka_bottom_sheet.dart';
+import 'package:fabricproject/screens/sarai_item_list/select_sarai_to_transfer_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -64,7 +65,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return const SaraiButtonSheet();
+                        return  SelectSaraiToTransferButtonSheet(saraiId: widget.saraiId);
                       },
                     );
                   },
@@ -185,8 +186,13 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                       onTap: () {
                         // validates the form to create the new item
                         if (formKey.currentState!.validate()) {
-                          transferBundlesController.addAllItemsToData();
-                          transferBundlesController.transferBundles();
+                          if (transferBundlesController
+                              .selectedBundles.isNotEmpty) {
+                            transferBundlesController.addAllItemsToData();
+                            transferBundlesController.transferBundles();
+                          } else {
+                            print("no item to transfer");
+                          }
                           // transferBundlesController.clearAllControllers();
                         }
                       },

@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transer_bundles_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -8,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiButtonSheet extends StatefulWidget {
-  const SaraiButtonSheet({super.key});
+class SelectDokanToTransferButtonSheet extends StatefulWidget {
+  final int saraiId;
+  const SelectDokanToTransferButtonSheet({Key? key, required this.saraiId})
+      : super(key: key);
 
   @override
-  State<SaraiButtonSheet> createState() => _SaraiButtonSheetState();
+  State<SelectDokanToTransferButtonSheet> createState() =>
+      _SelectDokanToTransferButtonSheetState();
 }
 
-class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
+class _SelectDokanToTransferButtonSheetState
+    extends State<SelectDokanToTransferButtonSheet> {
   @override
   void initState() {
     super.initState();
@@ -30,10 +35,9 @@ class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
     // controller provider
     SaraiController saraiController = Provider.of<SaraiController>(context);
     // fabric purchase controller to pass the selected id to the fabric purchase controller
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
-    final transferBundlesController =
-        Provider.of<TransferBundlesController>(context);
+
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -79,17 +83,20 @@ class _SaraiButtonSheetState extends State<SaraiButtonSheet> {
                   final reversedList =
                       saraiController.searchSarais!.reversed.toList();
                   final data = reversedList[index];
+
+                  // Check if the saraiId matches the widget's saraiId
+                  if (data.saraiId == widget.saraiId || data.type != 'دوکان') {
+                    // If matched, return an empty container
+                    return Container();
+                  }
+
                   return ListTileWidget(
                     onTap: () {
                       // pass id
-                      transportDealController.selectedSaraiIdController.text =
-                          data.saraiId!.toString();
-                      transportDealController.selectedSaraiNameController.text =
-                          data.name!.toString();
 
-                      transferBundlesController.selectedSaraiToIdController
+                      transferDokanPatiController.selectedSaraiToIdController
                           .text = data.saraiId.toString();
-                      transferBundlesController.selectedSaraiToNameController
+                      transferDokanPatiController.selectedSaraiToNameController
                           .text = data.name.toString();
 
                       Navigator.pop(context);

@@ -28,10 +28,11 @@ import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
 import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
 import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transport_payment_controller.dart';
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_bundles_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
@@ -164,6 +165,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<DokanPatiSelectController>(
           create: (_) => DokanPatiSelectController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<TransferDokanPatiController>(
+          create: (_) => TransferDokanPatiController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

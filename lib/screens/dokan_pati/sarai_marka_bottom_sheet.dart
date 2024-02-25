@@ -2,7 +2,8 @@ import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -33,8 +34,8 @@ class _DokanMarkaBottomSheetState extends State<DokanMarkaBottomSheet> {
   Widget build(BuildContext context) {
     // controller provider
     final saraiMarkaController = Provider.of<SaraiMarkaController>(context);
-    final transferBundlesController =
-        Provider.of<TransferBundlesController>(context);
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
     final dokanPatiSelectController =
         Provider.of<DokanPatiSelectController>(context);
     final saraiFabricPurchaseController =
@@ -86,16 +87,18 @@ class _DokanMarkaBottomSheetState extends State<DokanMarkaBottomSheet> {
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      dokanPatiSelectController.resetSearchFilter();
-
                       saraiFabricPurchaseController.getSaraiFabricPurchase(
                           data.companyId!.toInt(), widget.saraiId);
 
-                      transferBundlesController.selectedMarkaIdController.text =
-                          data.companyId.toString();
+                      transferDokanPatiController.selectedMarkaIdController
+                          .text = data.companyId.toString();
 
-                      transferBundlesController.selectedMarkaNameController
+                      transferDokanPatiController.selectedMarkaNameController
                           .text = data.name.toString();
+
+                      print("the marka and id");
+                      print(transferDokanPatiController.selectedMarkaIdController);
+                      print(transferDokanPatiController.selectedMarkaNameController);
 
                       Navigator.pop(context);
                     },

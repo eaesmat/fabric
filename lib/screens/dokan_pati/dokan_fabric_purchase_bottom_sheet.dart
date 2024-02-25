@@ -1,7 +1,8 @@
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -37,8 +38,8 @@ class _DokanFabricPurchaseBottomSheetState
         Provider.of<SaraiFabricPurchaseController>(context);
     final dokanPatiSelectController =
         Provider.of<DokanPatiSelectController>(context);
-    final transferBundlesController =
-        Provider.of<TransferBundlesController>(context);
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -97,9 +98,9 @@ class _DokanFabricPurchaseBottomSheetState
                         widget.saraiId,
                       );
 
-                      transferBundlesController.selectedFabricCodeIdController
+                      transferDokanPatiController.selectedFabricCodeIdController
                           .text = data.fabricpurchaseId.toString();
-                      transferBundlesController.selectedFabricCodeController
+                      transferDokanPatiController.selectedFabricCodeController
                           .text = data.fabricpurchasecode.toString();
                       Navigator.pop(context);
                     },

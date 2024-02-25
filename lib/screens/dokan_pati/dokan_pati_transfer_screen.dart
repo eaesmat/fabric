@@ -1,10 +1,16 @@
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_bundles_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
+import 'package:fabricproject/controller/transer_dokan_pati_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/dokan_pati/dokan_fabric_purchase_bottom_sheet.dart';
 import 'package:fabricproject/screens/dokan_pati/dokan_pati_select_bottom_sheet.dart';
+import 'package:fabricproject/screens/dokan_pati/sarai_marka_bottom_sheet.dart';
+import 'package:fabricproject/screens/dokan_pati/select_dokan_to_transfer_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai/sarai_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_marka_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -17,6 +23,7 @@ import 'package:provider/provider.dart';
 
 class DokanPatiTransferScreen extends StatefulWidget {
   final int saraiId;
+
   const DokanPatiTransferScreen({super.key, required this.saraiId});
 
   @override
@@ -31,15 +38,14 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
   Widget build(BuildContext context) {
     // controller provider instance
     final saraiMarkaController = Provider.of<SaraiMarkaController>(context);
+    final transferDokanPatiController =
+        Provider.of<TransferDokanPatiController>(context);
+
     final dokanPatiSelectController =
         Provider.of<DokanPatiSelectController>(context);
-    final transferBundlesController =
-        Provider.of<TransferBundlesController>(context);
-    final saraiFabricBundleSelectController =
-        Provider.of<SaraiFabricBundleSelectController>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    transferBundlesController.saraiIdController.text =
+    transferDokanPatiController.saraiIdController.text =
         widget.saraiId.toString();
 
     Locale currentLocale = Localizations.localeOf(context);
@@ -56,7 +62,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                 CustomTextFieldWithController(
                   lblText: const LocaleText('carrier'),
                   controller:
-                      transferBundlesController.transporterNameController,
+                      transferDokanPatiController.transporterNameController,
                   // comes from helper validates the field
                 ),
                 GestureDetector(
@@ -65,7 +71,8 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return const SaraiButtonSheet();
+                        return SelectDokanToTransferButtonSheet(
+                            saraiId: widget.saraiId);
                       },
                     );
                   },
@@ -73,8 +80,8 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                     isDisabled: true,
-                    controller:
-                        transferBundlesController.selectedSaraiToNameController,
+                    controller: transferDokanPatiController
+                        .selectedSaraiToNameController,
                     iconBtn: const Icon(
                       size: 30,
                       Icons.add_box_rounded,
@@ -90,7 +97,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return SaraiMarkaBottomSheet(
+                        return DokanMarkaBottomSheet(
                           saraiId: widget.saraiId,
                         );
                       },
@@ -101,7 +108,7 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                         customValidator(value, currentLocale),
                     isDisabled: true,
                     controller:
-                        transferBundlesController.selectedMarkaNameController,
+                        transferDokanPatiController.selectedMarkaNameController,
                     iconBtn: const Icon(
                       size: 30,
                       Icons.add_box_rounded,
@@ -126,8 +133,8 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                     isDisabled: true,
-                    controller:
-                        transferBundlesController.selectedFabricCodeController,
+                    controller: transferDokanPatiController
+                        .selectedFabricCodeController,
                     iconBtn: const Icon(
                       size: 30,
                       Icons.add_box_rounded,
@@ -186,8 +193,13 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                       onTap: () {
                         // validates the form to create the new item
                         if (formKey.currentState!.validate()) {
-                          transferBundlesController.addAllItemsToData();
-                          transferBundlesController.transferBundles();
+                          if (transferDokanPatiController
+                              .selectedPati.isNotEmpty) {
+                            transferDokanPatiController.addAllItemsToData();
+                            transferDokanPatiController.transferDokanPati();
+                          } else {
+                            print("no pati is selected");
+                          }
                           // transferBundlesController.clearAllControllers();
                         }
                       },
@@ -200,9 +212,9 @@ class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
                       ),
                       bgColor: Pallete.blueColor,
                       onTap: () {
-                        saraiFabricBundleSelectController.resetSearchFilter();
-                        transferBundlesController.selectedBundles.clear();
-                        transferBundlesController.transferFormData.clear();
+                        dokanPatiSelectController.resetSearchFilter();
+                        transferDokanPatiController.selectedPati.clear();
+                        transferDokanPatiController.transferFormData.clear();
 
                         // validates the form to create the new item
                         // if (formKey.currentState!.validate()) {
