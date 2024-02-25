@@ -1,31 +1,29 @@
-import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:flutter/material.dart';
-import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
-import 'package:fabricproject/model/sarai_fabric_bundle_select_model.dart';
 
-class SaraiFabricBundleSelectBottomSheet extends StatefulWidget {
-  const SaraiFabricBundleSelectBottomSheet({Key? key}) : super(key: key);
+class DokanPatiSelectBottomSheet extends StatefulWidget {
+  const DokanPatiSelectBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<SaraiFabricBundleSelectBottomSheet> createState() =>
-      _SaraiFabricBundleSelectBottomSheetState();
+  State<DokanPatiSelectBottomSheet> createState() =>
+      _DokanPatiSelectBottomSheetState();
 }
 
-class _SaraiFabricBundleSelectBottomSheetState
-    extends State<SaraiFabricBundleSelectBottomSheet> {
+class _DokanPatiSelectBottomSheetState
+    extends State<DokanPatiSelectBottomSheet> {
   @override
   Widget build(BuildContext context) {
     // controller provider
-    final saraiFabricBundleSelectController =
-        Provider.of<SaraiFabricBundleSelectController>(context);
-    final transferBundlesController =
-        Provider.of<TransferBundlesController>(context);
+    final dokanPatiSelectController =
+        Provider.of<DokanPatiSelectController>(context);
+    // final transferBundlesController =
+    //     Provider.of<TransferBundlesController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -47,8 +45,8 @@ class _SaraiFabricBundleSelectBottomSheetState
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
                   // searches item
-                  saraiFabricBundleSelectController
-                      .searchSaraiFabricBundleSelectMethod(value);
+                  dokanPatiSelectController
+                      .searchDokanPatiMethod(value);
                 },
               ),
             ),
@@ -56,16 +54,16 @@ class _SaraiFabricBundleSelectBottomSheetState
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: saraiFabricBundleSelectController
-                        .searchSaraiFabricBundleSelects?.length ??
+                itemCount: dokanPatiSelectController
+                        .searchAllDokanPatiSelects?.length ??
                     0,
                 itemBuilder: (context, index) {
                   // data gets data from controller
-                  final reversedList = saraiFabricBundleSelectController
-                      .searchSaraiFabricBundleSelects!.reversed
+                  final reversedList = dokanPatiSelectController
+                      .searchAllDokanPatiSelects!.reversed
                       .toList();
                   final data = reversedList[index];
-                  final isSelected = saraiFabricBundleSelectController
+                  final isSelected = dokanPatiSelectController
                       .selectedItems
                       ?.contains(data);
 
@@ -73,24 +71,24 @@ class _SaraiFabricBundleSelectBottomSheetState
                     onTap: () {
                       setState(() {
                         if (isSelected) {
-                          saraiFabricBundleSelectController
+                          dokanPatiSelectController
                               .removeItemFromSelected(data);
-                          transferBundlesController.removeItemFromData(
-                              'saraidesignbundle_id${data.saraidesignbundleId}');
+                          // transferBundlesController.removeItemFromData(
+                          //     'saraidesignbundle_id${data.saraidesignbundleId}');
                         } else {
-                          saraiFabricBundleSelectController
+                          dokanPatiSelectController
                               .addItemToSelected(data);
-                          transferBundlesController.addItemToData(
-                              'saraidesignbundle_id${data.saraidesignbundleId}',
-                              "${data.saraidesignbundleId}");
+                          // transferBundlesController.addItemToData(
+                          //     'saraidesignbundle_id${data.saraidesignbundleId}',
+                          //     "${data.saraidesignbundleId}");
                         }
                       });
                     },
                     tileTitle: Row(
                       children: [
-                        Text(data.name ?? ''),
+                        Text(data.patiname ?? ''),
                         const Spacer(),
-                        Text(data.bundleName ?? ''),
+                        Text(data.bundlename ?? ''),
                       ],
                     ),
                     tileSubTitle: Text(data.war.toString()),
@@ -108,7 +106,7 @@ class _SaraiFabricBundleSelectBottomSheetState
               onTap: () {
                 // Do something with the selected items
                 // saraiFabricBundleSelectController.printSelectedItems();
-                saraiFabricBundleSelectController.notify();
+                dokanPatiSelectController.notify();
                 Navigator.pop(context);
               },
               btnText: const Row(
@@ -125,7 +123,7 @@ class _SaraiFabricBundleSelectBottomSheetState
                 ],
               ),
               btnIcon: Text(
-                saraiFabricBundleSelectController.selectedItems!.length
+                dokanPatiSelectController.selectedItems!.length
                     .toString(),
                 style: const TextStyle(color: Pallete.whiteColor),
               ),

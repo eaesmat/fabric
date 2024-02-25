@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
@@ -8,17 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiFabricPurchaseBottomSheet extends StatefulWidget {
+class DokanFabricPurchaseBottomSheet extends StatefulWidget {
   final int? saraiId;
-  const SaraiFabricPurchaseBottomSheet({super.key, required this.saraiId});
+  const DokanFabricPurchaseBottomSheet({super.key, required this.saraiId});
 
   @override
-  State<SaraiFabricPurchaseBottomSheet> createState() =>
-      _SaraiFabricPurchaseBottomSheetState();
+  State<DokanFabricPurchaseBottomSheet> createState() =>
+      _DokanFabricPurchaseBottomSheetState();
 }
 
-class _SaraiFabricPurchaseBottomSheetState
-    extends State<SaraiFabricPurchaseBottomSheet> {
+class _DokanFabricPurchaseBottomSheetState
+    extends State<DokanFabricPurchaseBottomSheet> {
   @override
   // void initState() {
   //   super.initState();
@@ -34,8 +35,8 @@ class _SaraiFabricPurchaseBottomSheetState
     // controller provider
     final saraiFabricPurchaseController =
         Provider.of<SaraiFabricPurchaseController>(context);
-    final saraiFabricBundleSelectController =
-        Provider.of<SaraiFabricBundleSelectController>(context);
+    final dokanPatiSelectController =
+        Provider.of<DokanPatiSelectController>(context);
     final transferBundlesController =
         Provider.of<TransferBundlesController>(context);
 
@@ -89,11 +90,13 @@ class _SaraiFabricPurchaseBottomSheetState
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      saraiFabricBundleSelectController.resetSearchFilter();
+                      dokanPatiSelectController.resetSearchFilter();
 
-                      saraiFabricBundleSelectController
-                          .getSaraiFabricBundleSelect(
-                              data.fabricpurchaseId!.toInt(), widget.saraiId);
+                      dokanPatiSelectController.getDokanPatiSelect(
+                        data.fabricpurchaseId!.toInt(),
+                        widget.saraiId,
+                      );
+
                       transferBundlesController.selectedFabricCodeIdController
                           .text = data.fabricpurchaseId.toString();
                       transferBundlesController.selectedFabricCodeController

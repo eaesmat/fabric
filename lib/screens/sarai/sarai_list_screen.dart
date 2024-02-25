@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_item_controller.dart';
@@ -41,6 +42,17 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
     final saraiFabricBundleSelectController =
         Provider.of<SaraiFabricBundleSelectController>(context);
     final dokanPatiController = Provider.of<DokanPatiController>(context);
+    final dokanPatiSelectController =
+        Provider.of<DokanPatiSelectController>(context);
+
+    void clearTransferForm() {
+      saraiFabricBundleSelectController.searchSaraiFabricBundleSelects?.clear();
+      saraiMarkaController.searchSaraiMarka?.clear();
+      saraiFabricPurchaseController.searchSaraiFabricPurchase?.clear();
+      dokanPatiController.searchAllDokanPati?.clear();
+      saraiFabricBundleSelectController.resetSearchFilter();
+      dokanPatiSelectController.selectedItems?.clear();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -97,6 +109,7 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                       return ListTileWidget(
                         onTap: () {
                           if (data.type == 'دوکان') {
+                            clearTransferForm();
                             saraiController.navigateToSaraiDetailsScreen(
                               data.name.toString(),
                               data.saraiId!.toInt(),
@@ -105,22 +118,15 @@ class _SaraiListScreenState extends State<SaraiListScreen> {
                             dokanPatiController
                                 .getDokanPati(data.saraiId!.toInt());
                           } else {
-                              saraiFabricBundleSelectController
-                              .searchSaraiFabricBundleSelects
-                              ?.clear();
-                          saraiMarkaController.searchSaraiMarka?.clear();
-                          saraiFabricPurchaseController
-                              .searchSaraiFabricPurchase
-                              ?.clear();
-
-                          saraiController.navigateToSaraiDetailsScreen(
-                            data.name.toString(),
-                            data.saraiId!.toInt(),
-                            data.type.toString(),
-                          );
-                          saraiDesignBundleController.getAllSaraiItems(
-                            data.saraiId!.toInt(),
-                          );
+                            clearTransferForm();
+                            saraiController.navigateToSaraiDetailsScreen(
+                              data.name.toString(),
+                              data.saraiId!.toInt(),
+                              data.type.toString(),
+                            );
+                            saraiDesignBundleController.getAllSaraiItems(
+                              data.saraiId!.toInt(),
+                            );
                           }
                         },
                         // list tile title

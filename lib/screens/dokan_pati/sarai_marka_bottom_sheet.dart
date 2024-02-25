@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
@@ -9,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiMarkaBottomSheet extends StatefulWidget {
+class DokanMarkaBottomSheet extends StatefulWidget {
   final int? saraiId;
-  const SaraiMarkaBottomSheet({super.key, required this.saraiId});
+  const DokanMarkaBottomSheet({super.key, required this.saraiId});
 
   @override
-  State<SaraiMarkaBottomSheet> createState() => _SaraiMarkaBottomSheetState();
+  State<DokanMarkaBottomSheet> createState() => _DokanMarkaBottomSheetState();
 }
 
-class _SaraiMarkaBottomSheetState extends State<SaraiMarkaBottomSheet> {
+class _DokanMarkaBottomSheetState extends State<DokanMarkaBottomSheet> {
   @override
   void initState() {
     super.initState();
@@ -34,8 +35,8 @@ class _SaraiMarkaBottomSheetState extends State<SaraiMarkaBottomSheet> {
     final saraiMarkaController = Provider.of<SaraiMarkaController>(context);
     final transferBundlesController =
         Provider.of<TransferBundlesController>(context);
-    final saraiFabricBundleSelectController =
-        Provider.of<SaraiFabricBundleSelectController>(context);
+    final dokanPatiSelectController =
+        Provider.of<DokanPatiSelectController>(context);
     final saraiFabricPurchaseController =
         Provider.of<SaraiFabricPurchaseController>(context);
 
@@ -85,7 +86,7 @@ class _SaraiMarkaBottomSheetState extends State<SaraiMarkaBottomSheet> {
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      saraiFabricBundleSelectController.resetSearchFilter();
+                      dokanPatiSelectController.resetSearchFilter();
 
                       saraiFabricPurchaseController.getSaraiFabricPurchase(
                           data.companyId!.toInt(), widget.saraiId);

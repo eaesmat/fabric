@@ -1,5 +1,6 @@
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/screens/dokan_pati/dokan_pati_list_screen.dart';
+import 'package:fabricproject/screens/dokan_pati/dokan_pati_transfer_screen.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_item_list_screen.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_transfer_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -74,7 +75,7 @@ class _SaraiDetailsScreenState extends State<SaraiDetailsScreen> {
       case 'دوکان':
         return [
           DokanPatiListScreen(dokanId: widget.saraiId),
-          SaraiTransferScreen(saraiId: widget.saraiId.toInt()),
+          DokanPatiTransferScreen(saraiId: widget.saraiId.toInt()),
           Container(color: Colors.green),
         ];
       case 'گدام':

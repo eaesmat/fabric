@@ -1,37 +1,38 @@
-import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
-import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
 import 'package:fabricproject/controller/ttranser_bundles_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
+import 'package:fabricproject/screens/dokan_pati/dokan_fabric_purchase_bottom_sheet.dart';
+import 'package:fabricproject/screens/dokan_pati/dokan_pati_select_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai/sarai_bottom_sheet.dart';
-import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_bundle_select_bottom_sheet.dart';
-import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_purchase_bottom_sheet.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_marka_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
-import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:fabricproject/widgets/selected_bundles_card_wdiget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SaraiTransferScreen extends StatefulWidget {
+class DokanPatiTransferScreen extends StatefulWidget {
   final int saraiId;
-  const SaraiTransferScreen({super.key, required this.saraiId});
+  const DokanPatiTransferScreen({super.key, required this.saraiId});
 
   @override
-  State<SaraiTransferScreen> createState() => _SaraiTransferScreenState();
+  State<DokanPatiTransferScreen> createState() =>
+      _DokanPatiTransferScreenState();
 }
 
-class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
+class _DokanPatiTransferScreenState extends State<DokanPatiTransferScreen> {
   final formKey = GlobalKey<FormState>();
   @override
   @override
   Widget build(BuildContext context) {
     // controller provider instance
     final saraiMarkaController = Provider.of<SaraiMarkaController>(context);
+    final dokanPatiSelectController =
+        Provider.of<DokanPatiSelectController>(context);
     final transferBundlesController =
         Provider.of<TransferBundlesController>(context);
     final saraiFabricBundleSelectController =
@@ -115,7 +116,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
-                        return SaraiFabricPurchaseBottomSheet(
+                        return DokanFabricPurchaseBottomSheet(
                           saraiId: widget.saraiId,
                         );
                       },
@@ -153,7 +154,7 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
-                            return const SaraiFabricBundleSelectBottomSheet();
+                            return const DokanPatiSelectBottomSheet();
                           },
                         );
                         // Navigator.pop(context);
@@ -219,32 +220,32 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                 SizedBox(
                   height: screenHeight * 0.02,
                 ),
-                Consumer<SaraiFabricBundleSelectController>(
-                  builder: (context, saraiFabricBundleSelectController, child) {
+                Consumer<DokanPatiSelectController>(
+                  builder: (context, dokanPatiSelectController, child) {
                     return SizedBox(
                       height: screenHeight * 0.2,
-                      child: saraiFabricBundleSelectController
+                      child: dokanPatiSelectController
                                   .selectedItems?.isNotEmpty ==
                               true
                           ? ListView.builder(
-                              itemCount: saraiFabricBundleSelectController
+                              itemCount: dokanPatiSelectController
                                   .selectedItems!.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 // Ensure that the index is within the bounds of the list
                                 if (index >= 0 &&
                                     index <
-                                        saraiFabricBundleSelectController
+                                        dokanPatiSelectController
                                             .selectedItems!.length) {
-                                  final reversedList =
-                                      saraiFabricBundleSelectController
-                                          .selectedItems!.reversed
-                                          .toList();
+                                  final reversedList = dokanPatiSelectController
+                                      .selectedItems!.reversed
+                                      .toList();
                                   final data = reversedList[index];
                                   return SelectedBundleCardWidget(
-                                      name: data.name.toString(),
-                                      bundleName: data.bundleName.toString(),
-                                      war: data.war.toString());
+                                    name: data.patiname.toString(),
+                                    bundleName: data.war.toString(),
+                                    war: data.bundlename.toString(),
+                                  );
                                 } else {
                                   // Handle the case where the index is out of bounds
                                   return Container();
