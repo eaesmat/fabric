@@ -1,28 +1,22 @@
-import 'package:fabricproject/controller/transport_deal_controller.dart';
-import 'package:fabricproject/model/transport_deal_model.dart';
+import 'package:fabricproject/model/transport_deals_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
-import 'package:provider/provider.dart';
 
 class TransportItemDetailsBottomSheet extends StatelessWidget {
   final Data data;
   final String transportName;
-  final List<ContainerModel> containerList;
 
   const TransportItemDetailsBottomSheet({
     Key? key,
     required this.data,
-    required this.containerList,
     required this.transportName,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -47,13 +41,13 @@ class TransportItemDetailsBottomSheet extends StatelessWidget {
                   columns: const [
                     DataColumn(
                       label: Text(
-                        'attribute',
+                        'Attribute',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     DataColumn(
                       label: Text(
-                        'value',
+                        'Value',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -61,59 +55,57 @@ class TransportItemDetailsBottomSheet extends StatelessWidget {
                   rows: [
                     buildDataRow(
                       LocaleText('start_date'),
-                      Text(data.startdate.toString()),
+                      Text(data.startdate ?? ''),
                     ),
                     buildDataRow(
-                      LocaleText('arrivale_date'),
-                      Text(data.arrivaldate.toString()),
+                      LocaleText('arrival_date'),
+                      Text(data.arrivaldate ?? ''),
                     ),
-                    buildDataRow(
-                      LocaleText('code'),
-                      Text(data.fabricpurchase!.fabricpurchasecode.toString()),
-                    ),
+                   
                     buildDataRow(
                       LocaleText('khat_amount'),
-                      Text(data.khatamount.toString()),
+                      Text(data.khatamount?.toString() ?? ''),
                     ),
                     buildDataRow(
                       LocaleText('cost_per_khat'),
-                      Text(data.costperkhat.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('total_cost'),
-                      Text(data.totalcost.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('transport'),
-                      Text(data.transport!.name.toString()),
+                      Text(data.costperkhat?.toString() ?? ''),
                     ),
                     buildDataRow(
                       LocaleText('status'),
-                      Text(data.status.toString()),
+                      Text(data.status ?? ''),
                     ),
                     buildDataRow(
                       LocaleText('duration'),
-                      Text(data.duration.toString()),
+                      Text(data.duration?.toString() ?? ''),
                     ),
                     buildDataRow(
                       LocaleText('bundle'),
-                      Text(data.bundle.toString()),
+                      Text(data.bundle?.toString() ?? ''),
+                    ),
+                    buildDataRow(
+                      LocaleText('photo'),
+                      Text(data.photo ?? ''),
+                    ),
+                    buildDataRow(
+                      LocaleText('total_cost'),
+                      Text(data.totalcost?.toString() ?? ''),
                     ),
                     buildDataRow(
                       LocaleText('war_cost'),
-                      Text(data.warcost.toString()),
+                      Text(data.warcost?.toString() ?? ''),
                     ),
-                    // Add the rows from the designColors list
-                    ...containerList.map((data) {
-                      transportDealController.containerNameController.text =
-                          data.name!;
-                      return buildDataRow(
-                        LocaleText('container'),
-                        Text(
-                          data.name.toString(),
-                        ),
-                      );
-                    }),
+                    buildDataRow(
+                      LocaleText('fabric_purchase_code'),
+                      Text(data.fabricpurchasecode ?? ''),
+                    ),
+                    buildDataRow(
+                      LocaleText('war'),
+                      Text(data.war?.toString() ?? ''),
+                    ),
+                    buildDataRow(
+                      LocaleText('container_name'),
+                      Text(data.containerName ?? ''),
+                    ),
                   ],
                 ),
               ],

@@ -65,15 +65,15 @@ class _FabricPurchaseDrawScreenState extends State<FabricPurchaseDrawScreen> {
 
                   return ListTileWidget(
                     onLongPress: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return FabricDetailsBottomSheet(
-                              data: data,
-                              fabricName: data.fabric!.name.toString());
-                        },
-                      );
+                      // showModalBottomSheet(
+                      //   context: context,
+                      //   isScrollControlled: true,
+                      //   builder: (BuildContext context) {
+                      //     return FabricDetailsBottomSheet(
+                      //         data: data,
+                      //         fabricName: data.fabric!.name.toString());
+                      //   },
+                      // );
                     },
                     tileTitle: Text(
                       data.fabric!.name.toString(),

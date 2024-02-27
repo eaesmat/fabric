@@ -65,7 +65,7 @@ class _CustomTextFieldWithControllerState
                 labelStyle: TextStyle(
                   color: widget.isDisabled != null && widget.isDisabled!
                       ? Pallete
-                          .disabledBorder // Use Pallete.blackColor when disabled
+                          .blueColor // Use Pallete.blackColor when disabled
                       : Pallete
                           .blueColor, // Use Pallete.blueColor when enabled or null
                   fontSize: 14,
@@ -94,7 +94,7 @@ class _CustomTextFieldWithControllerState
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                   borderSide: const BorderSide(
-                    color: Pallete.disabledBorder,
+                    color: Pallete.blueColor,
                     width: 1.0,
                   ),
                 ),

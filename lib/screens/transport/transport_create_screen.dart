@@ -51,7 +51,7 @@ class _TransportCreateScreenState extends State<TransportCreateScreen> {
                     lblText: const LocaleText('phone'),
                   ),
                   CustomTextFieldWithController(
-                    controller: transportController.desorptionController,
+                    controller: transportController.descriptionController,
                     lblText: const LocaleText('description'),
                   ),
                   CustomButton(

@@ -1,8 +1,7 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
-import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -20,14 +19,14 @@ class AllFabricPurchaseListScreen extends StatefulWidget {
 class _AllFabricPurchaseListScreenState
     extends State<AllFabricPurchaseListScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Reset search filter after the build cycle is complete
-      Provider.of<AllFabricPurchaseController>(context, listen: false)
-          .resetSearchFilter();
-    });
-  }
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     // Reset search filter after the build cycle is complete
+  //     Provider.of<AllFabricPurchasesController>(context, listen: false)
+  //         .resetSearchFilter();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +35,8 @@ class _AllFabricPurchaseListScreenState
     return Column(
       children: [
         // Search Text field
-        Consumer<AllFabricPurchaseController>(
-          builder: (context, allFabricPurchaseController, child) {
+        Consumer<AllFabricPurchasesController>(
+          builder: (context, allFabricPurchasesController, child) {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               // Search text filed
@@ -49,14 +48,14 @@ class _AllFabricPurchaseListScreenState
                     ),
                     onPressed: () {
                       // navigate to new create screen
-                      allFabricPurchaseController
-                          .navigateToFabricPurchaseCreate();
+                      // allFabricPurchasesController
+                      //     .navigateToFabricPurchaseCreate();
                     }),
                 lblText: const LocaleText('search'),
                 onChanged: (value) {
                   // pass the data to the search method controller
-                  allFabricPurchaseController
-                      .searchFabricPurchasesMethod(value);
+                  allFabricPurchasesController
+                      .searchAllFabricPurchasesMethod(value);
                 },
               ),
             );
@@ -64,17 +63,17 @@ class _AllFabricPurchaseListScreenState
         ),
         // data list
         Expanded(
-          child: Consumer<AllFabricPurchaseController>(
-            builder: (context, allFabricPurchaseController, child) {
+          child: Consumer<AllFabricPurchasesController>(
+            builder: (context, allFabricPurchasesController, child) {
               return ListView.builder(
-                itemCount:
-                    allFabricPurchaseController.searchFabricPurchases?.length ??
-                        0,
+                itemCount: allFabricPurchasesController
+                        .searchAllFabricPurchases?.length ??
+                    0,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   // data vars takes data from controller
-                  final reversedList = allFabricPurchaseController
-                      .searchFabricPurchases!.reversed
+                  final reversedList = allFabricPurchasesController
+                      .searchAllFabricPurchases!.reversed
                       .toList();
                   final data = reversedList[index];
 
@@ -93,16 +92,17 @@ class _AllFabricPurchaseListScreenState
                         isScrollControlled: true,
                         builder: (BuildContext context) {
                           return FabricDetailsBottomSheet(
-                              // pass the these data to the widget
-                              data: data,
-                              fabricName: data.fabric!.name.toString());
+                            // pass the these data to the widget
+                            data: data,
+                            fabricName: data.fabricName.toString(),
+                          );
                         },
                       );
                     },
                     tileTitle: Row(
                       children: [
                         Text(
-                          data.fabric!.name.toString(),
+                          data.fabricName.toString(),
                         ),
                         const Spacer(),
                         Text(
@@ -152,15 +152,15 @@ class _AllFabricPurchaseListScreenState
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          allFabricPurchaseController
-                              .navigateToFabricPurchaseEdit(
-                            data,
-                            data.fabricpurchaseId!.toInt(),
-                          );
+                          // allFabricPurchaseController
+                          //     .navigateToFabricPurchaseEdit(
+                          //   data,
+                          //   data.fabricpurchaseId!.toInt(),
+                          // );
                         }
                         if (value == "delete") {
-                          allFabricPurchaseController.deleteFabricPurchase(
-                              data.fabricpurchaseId, index);
+                          // allFabricPurchaseController.deleteFabricPurchase(
+                          //     data.fabricpurchaseId, index);
                         }
                       },
                     ),

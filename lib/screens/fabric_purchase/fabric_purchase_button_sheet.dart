@@ -1,6 +1,8 @@
 import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -9,32 +11,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class FabricPurchaseButtonSheet extends StatefulWidget {
-  const FabricPurchaseButtonSheet({super.key});
+class FabricPurchasesButtonSheet extends StatefulWidget {
+  const FabricPurchasesButtonSheet({super.key});
 
   @override
-  State<FabricPurchaseButtonSheet> createState() =>
-      _FabricPurchaseButtonSheetState();
+  State<FabricPurchasesButtonSheet> createState() =>
+      _FabricPurchasesButtonSheetState();
 }
 
-class _FabricPurchaseButtonSheetState extends State<FabricPurchaseButtonSheet> {
+class _FabricPurchasesButtonSheetState extends State<FabricPurchasesButtonSheet> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Reset search filter after the build cycle is complete
-      Provider.of<FabricController>(context, listen: false).resetSearchFilter();
-    });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        // Reset search filter after the build cycle is complete
+        Provider.of<FabricController>(context, listen: false)
+            .resetSearchFilter();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
 // controller class providers
 
-    final fabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
+    final fabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context);
+    final transportDealsController =
+        Provider.of<TransportDealsController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -55,7 +60,7 @@ class _FabricPurchaseButtonSheetState extends State<FabricPurchaseButtonSheet> {
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // passes the search text to the controller
-                    fabricPurchaseController.searchFabricPurchasesMethod(value);
+                    fabricPurchasesController.searchAllFabricPurchasesMethod(value);
                   },
                 ),
               ),
@@ -64,29 +69,30 @@ class _FabricPurchaseButtonSheetState extends State<FabricPurchaseButtonSheet> {
               ListView.builder(
                 shrinkWrap: true,
                 itemCount:
-                    fabricPurchaseController.searchFabricPurchases?.length ?? 0,
+                    fabricPurchasesController.searchAllFabricPurchases?.length ?? 0,
                 itemBuilder: (context, index) {
                   // data from controller
-                  final reversedList = fabricPurchaseController
-                      .searchFabricPurchases!.reversed
+                  final reversedList = fabricPurchasesController
+                      .searchAllFabricPurchases!.reversed
                       .toList();
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
                       // pass id
-                      transportDealController.clearKhatCalculatedControllers();
-                      transportDealController.selectedFabricPurchaseIdController
+                      transportDealsController.clearKhatCalculatedControllers();
+                      transportDealsController
+                          .selectedFabricPurchaseIdController
                           .text = data.fabricpurchaseId!.toString();
-                      transportDealController.amountOfBundlesController.text =
+                      transportDealsController.amountOfBundlesController.text =
                           data.bundle.toString();
-                      transportDealController.warPriceFromUIController.text =
+                      transportDealsController.warPriceFromUIController.text =
                           data.war.toString();
-                      transportDealController
+                      transportDealsController
                           .selectedFabricPurchaseCodeController
                           .text = data.fabricpurchasecode!.toString();
-                      transportDealController
+                      transportDealsController
                           .selectedFabricPurchaseNameController
-                          .text = data.fabric!.name!.toString();
+                          .text = data.fabricName.toString();
                       Navigator.pop(context);
                     },
                     onLongPress: () {
@@ -95,15 +101,16 @@ class _FabricPurchaseButtonSheetState extends State<FabricPurchaseButtonSheet> {
                         isScrollControlled: true,
                         builder: (BuildContext context) {
                           return FabricDetailsBottomSheet(
+                              // pass the these data to the widget
                               data: data,
-                              fabricName: data.fabric!.name.toString());
+                              fabricName: data.fabricName.toString());
                         },
                       );
                     },
                     tileTitle: Row(
                       children: [
                         Text(
-                          data.fabric!.name.toString(),
+                          data.fabricName.toString(),
                         ),
                         const Spacer(),
                         Text(
@@ -114,7 +121,7 @@ class _FabricPurchaseButtonSheetState extends State<FabricPurchaseButtonSheet> {
                     tileSubTitle: Row(
                       children: [
                         Text(
-                          data.company!.name.toString(),
+                          data.marka.toString(),
                         ),
                         const Spacer(),
                         Text(

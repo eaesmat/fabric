@@ -26,11 +26,11 @@ class _DatePickerState extends State<DatePicker> {
     } else {
       // If the controller has a value, use its value to set the selected date
       var dateSplit = widget.controller.text.split("-");
-      _selectedDate = DateTime(
-        int.parse(dateSplit[0]),
-        int.parse(dateSplit[1]),
-        int.parse(dateSplit[2]),
-      );
+      int year = int.tryParse(dateSplit[0]) ?? DateTime.now().year;
+      int month = int.tryParse(dateSplit[1]) ?? DateTime.now().month;
+      int day = int.tryParse(dateSplit[2]) ?? DateTime.now().day;
+
+      _selectedDate = DateTime(year, month, day);
     }
   }
 

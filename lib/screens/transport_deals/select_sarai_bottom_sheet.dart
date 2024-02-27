@@ -1,5 +1,5 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
-import 'package:fabricproject/controller/transport_controller.dart';
+import 'package:fabricproject/controller/sarai_controller.dart';
+import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -7,32 +7,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class TransportBottomSheet extends StatefulWidget {
-  const TransportBottomSheet({super.key});
+class SelectSaraiBottomSheet extends StatefulWidget {
+  const SelectSaraiBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<TransportBottomSheet> createState() => _TransportBottomSheetState();
+  State<SelectSaraiBottomSheet> createState() => _SelectSaraiBottomSheetState();
 }
 
-class _TransportBottomSheetState extends State<TransportBottomSheet> {
+class _SelectSaraiBottomSheetState extends State<SelectSaraiBottomSheet> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      Provider.of<TransportController>(context, listen: false)
-          .resetSearchFilter();
+      Provider.of<SaraiController>(context, listen: false).resetSearchFilter();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     // controller provider
+    SaraiController saraiController = Provider.of<SaraiController>(context);
     // fabric purchase controller to pass the selected id to the fabric purchase controller
-    final transportController = Provider.of<TransportController>(context);
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
-
+    final transportDealsController =
+        Provider.of<TransportDealsController>(context);
+   
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(20.0),
@@ -58,46 +57,47 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
                     ),
                     onPressed: () {
                       // to create new
-                      transportController.navigateToTransportCreate();
+                      saraiController.navigateToSaraiCreate();
                     },
                   ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // searches item
-                    transportController.searchTransportsMethod(value);
+                    saraiController.searchSarisMethod(value);
                   },
                 ),
               ),
               const SizedBox(height: 20.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: transportController.searchTransports?.length ?? 0,
+                itemCount: saraiController.searchSarais?.length ?? 0,
                 itemBuilder: (context, index) {
                   // data gets data from controller
                   final reversedList =
-                      transportController.searchTransports!.reversed.toList();
+                      saraiController.searchSarais!.reversed.toList();
                   final data = reversedList[index];
+
+                  // Check if the saraiId matches the widget's saraiId
+                  if (data.type != 'تخلیه') {
+                    // If did matched, return an empty container
+                    return Container();
+                  }
+
                   return ListTileWidget(
                     onTap: () {
-                      // Pass item id when clicked
-                      allFabricPurchaseController.selectedTransportId.text =
-                          data.transportId!.toString();
-                      // Pass name when clicked
-                      allFabricPurchaseController.selectedTransportName.text =
-                          '${data.name}';
+                      // pass id
+                      transportDealsController.selectedSaraiIdController.text =
+                          data.saraiId!.toString();
+                      transportDealsController.selectedSaraiNameController.text =
+                          data.name!.toString();
+
                       Navigator.pop(context);
                     },
-                    // Tile Title
-
-                    tileTitle: Text(
-                      data.name.toString(),
-                    ),
-                    // subtitle
-
-                    tileSubTitle: Row(
+                    tileTitle: Row(
                       children: [
                         Text(
-                          data.description.toString(),
+                          "${data.name}  [ ${data.type} ]",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
                         Text(
@@ -105,8 +105,17 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
                         ),
                       ],
                     ),
-                    // trailing hold delete and update buttons
-
+                    tileSubTitle: Row(
+                      children: [
+                        Text(
+                          data.description.toString(),
+                        ),
+                        const Spacer(),
+                        Text(
+                          data.location.toString(),
+                        ),
+                      ],
+                    ),
                     trail: PopupMenuButton(
                       color: Pallete.whiteColor,
                       child: const Icon(Icons.more_vert_sharp),
@@ -136,14 +145,11 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          // navigates to the edit screen
-
-                          transportController.navigateToTransportEdit(
-                              data, data.transportId!.toInt());
+                          saraiController.navigateToSaraiEdit(
+                              data, data.saraiId!.toInt());
                         }
                         if (value == "delete") {
-                          transportController.deleteTransport(
-                              data.transportId!.toInt());
+                          saraiController.deleteSarai(data.saraiId, index);
                         }
                       },
                     ),

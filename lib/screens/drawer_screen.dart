@@ -6,7 +6,6 @@ import 'package:fabricproject/screens/company/company_list_screen.dart';
 import 'package:fabricproject/screens/customer/customer_list_screen.dart';
 import 'package:fabricproject/screens/fabric/fabric_list_screen.dart';
 import 'package:fabricproject/screens/forex/forex_list_screen.dart';
-import 'package:fabricproject/screens/goods_on_the_way/goods_on_the_way_list_screen.dart';
 import 'package:fabricproject/screens/sarai/sarai_list_screen.dart';
 import 'package:fabricproject/screens/transport/transport_list_screen.dart';
 import 'package:fabricproject/screens/vendor_company/vendor_company_list_screen.dart';
@@ -211,14 +210,14 @@ class DrawerScreen extends StatelessWidget {
 // Desires section ends
 // Goods on the way
             ExpansionTileItemWidget(
-              callBack: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GoodsOnTheWayListScreen(),
-                  ),
-                );
-              },
+              // callBack: () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => const GoodsOnTheWayListScreen(),
+              //     ),
+              //   );
+              // },
               lead: Icon(Icons.local_shipping),
               tileTitle: LocaleText("goods_on_the_way"),
             ),

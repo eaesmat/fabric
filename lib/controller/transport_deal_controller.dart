@@ -7,8 +7,6 @@ import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/transport_deal_model.dart';
 import 'package:fabricproject/screens/sarai/sarai_details_screen.dart';
 import 'package:fabricproject/screens/transport/transport_details_screen.dart';
-import 'package:fabricproject/screens/transport_deal/transport_deal_create_screen.dart';
-import 'package:fabricproject/screens/transport_deal/transport_deal_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -72,7 +70,7 @@ class TransportDealController extends ChangeNotifier {
     containerNameController.clear();
     clearAllControllers();
 
-    _helperServices.navigate(const TransportDealCreateScreen());
+    // _helperServices.navigate(const TransportDealCreateScreen());
   }
 
   navigateToTransportDealEdit(Data data, int? transportDealId, containerId,
@@ -138,10 +136,10 @@ class TransportDealController extends ChangeNotifier {
     saraiInDealDate.text = saraiInDate;
     selectedFabricPurchaseIdController.text = data.fabricpurchaseId.toString();
 
-    _helperServices.navigate(
-      TransportDealEditScreen(
-          transportDealData: data, transportDealId: transportDealId ?? 0),
-    );
+    // _helperServices.navigate(
+    //   TransportDealEditScreen(
+    //       transportDealData: data, transportDealId: transportDealId ?? 0),
+    // );
   }
 
   getContainer(int transportDealId) async {

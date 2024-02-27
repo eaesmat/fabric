@@ -27,7 +27,9 @@ class ForexController extends ChangeNotifier {
 
   navigateToForexCreate() {
     clearAllControllers();
-    _helperServices.navigate(const ForexCreateScreen());
+    _helperServices.navigate(
+      const ForexCreateScreen(),
+    );
   }
 
   navigateToForexEdit(Data data, int id) {
@@ -190,6 +192,7 @@ class ForexController extends ChangeNotifier {
         (r) {
           _helperServices.goBack();
           if (r == 200) {
+            deleteItemLocally(id);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -198,7 +201,6 @@ class ForexController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             );
-            deleteItemLocally(id);
           } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),

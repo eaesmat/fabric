@@ -1,4 +1,4 @@
-import 'package:fabricproject/model/fabric_purchase_model.dart';
+import 'package:fabricproject/model/all_fabric_purchases_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +54,11 @@ class FabricDetailsBottomSheet extends StatelessWidget {
                   ],
                   rows: [
                     buildDataRow(
-                        'vendor_company', data.vendorcompany!.name.toString()),
+                        'vendor_company', data.vendorcompany.toString()),
                     buildDataRow(
                         'fabric_code', data.fabricpurchasecode.toString()),
-                    buildDataRow('item', data.fabric!.name.toString()),
-                    buildDataRow('marka', data.company!.marka.toString()),
+                    buildDataRow('item', data.fabricName.toString()),
+                    buildDataRow('marka', data.marka.toString()),
                     buildDataRow('bundle', data.bundle.toString()),
                     buildDataRow('meter', data.meter.toString()),
                     buildDataRow('war', data.war.toString()),

@@ -58,7 +58,7 @@ class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
             ),
           ),
         ),
-        body: const TabBarView(
+        body:  TabBarView(
           children: [
             // gets three screens in here
 
@@ -67,8 +67,10 @@ class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
             //   vendorCompanyId: widget.vendorCompanyId,
             //   vendorCompanyName: widget.vendorCompanyName,
             // ),
-            AllDrawListScreen(),
-            KhalidDrawListScreen(),
+            // AllDrawListScreen(),
+            // KhalidDrawListScreen(),
+            Container(color: Colors.amber),
+            Container(color: Colors.amber),
           ],
         ),
       ),

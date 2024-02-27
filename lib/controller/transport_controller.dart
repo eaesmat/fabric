@@ -8,150 +8,178 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class TransportController extends ChangeNotifier {
-  // helper class instance
   final HelperServices _helperServices;
-  // TextEditing Controller to send and receive data from ui
+
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController desorptionController = TextEditingController();
-  // lists to hold data comes from api
+  TextEditingController descriptionController = TextEditingController();
 
-  List<Data>? allTransports = [];
-  List<Data>? searchTransports = [];
-  // this will hold search text field text
+  List<Data> allTransports = [];
+  List<Data> searchTransports = [];
+  List<Data> cachedTransports = [];
   String searchText = "";
 
   TransportController(this._helperServices) {
-    // Gets data at first visit to the ui
     getAllTransports();
   }
+
   navigateToTransportCreate() {
     clearAllControllers();
-    // navigate comes to from helper class works as router
-    // navigate to the the create page
     _helperServices.navigate(const TransportCreateScreen());
   }
 
   navigateToTransportEdit(Data data, int id) {
     clearAllControllers();
-    // passed all the data to the edit screen
-    nameController.text = data.name.toString();
-    phoneController.text = data.phone.toString();
-    desorptionController.text = data.description.toString();
+    nameController.text = data.name ?? '';
+    phoneController.text = data.phone ?? '';
+    descriptionController.text = data.description ?? '';
     _helperServices.navigate(
       TransportEditScreen(transportData: data, transportId: id),
     );
   }
-// gets all the data
 
-  getAllTransports() async {
+  Future<void> getAllTransports() async {
     _helperServices.showLoader();
-    final response =
-        await TransportApiServiceProvider().getTransport('getTransport');
-    // endpoint passed to the api class
-
-    response.fold(
-        (l) => {
-              // l returns failure with status code to the ui
-
-              _helperServices.goBack(),
-              _helperServices.showErrorMessage(l),
-            }, (r) {
-      // r holds data comes from api with success
-
-      allTransports = r;
+    try {
+      final response =
+          await TransportApiServiceProvider().getTransport('getTransport');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allTransports = r;
+          searchTransports = List.from(allTransports);
+          cachedTransports = List.from(allTransports); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      updateTransportsData();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createTransport() async {
+  Future<void> createTransport() async {
     _helperServices.showLoader();
+    try {
+      var response = await TransportApiServiceProvider().createTransport(
+        'add-transport',
+        {
+          "transport_id": 0,
+          "name": nameController.text,
+          "phone": phoneController.text,
+          "description": descriptionController.text,
+        },
+      );
 
-    var response = await TransportApiServiceProvider().createTransport(
-      'add-transport',
-      {
-        "transport_id": 0,
-        "name": nameController.text,
-        "phone": phoneController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllTransports(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllTransports();
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editTransport(int id) async {
+  Future<void> editTransport(int id) async {
     _helperServices.showLoader();
+    try {
+      var response = await TransportApiServiceProvider().editTransport(
+        'update-transport?transport_id=$id',
+        {
+          "transport_id": id,
+          "name": nameController.text,
+          "phone": phoneController.text,
+          "description": descriptionController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
 
-    var response = await TransportApiServiceProvider().editTransport(
-      'update-transport?transport_id=$id',
-      {
-        "transport_id": id,
-        "name": nameController.text,
-        "phone": phoneController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllTransports(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+
+          updateTransportLocally(
+            id,
+            Data(
+              transportId: id,
+              name: nameController.text,
+              description: descriptionController.text,
+              phone: phoneController.text,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  // This method removes  or delete the item without reloading server
-  void deleteItemLocally(int id) {
-    final index =
-        allTransports!.indexWhere((element) => element.transportId == id);
+  void updateTransportLocally(int id, Data updatedData) {
+    int index =
+        allTransports.indexWhere((element) => element.transportId == id);
     if (index != -1) {
-      allTransports!.removeAt(index);
-
-      final searchIndex =
-          searchTransports!.indexWhere((element) => element.transportId == id);
-      if (searchIndex != -1) {
-        searchTransports!.removeAt(searchIndex);
+      allTransports[index] = updatedData;
+      int cacheIndex =
+          cachedTransports.indexWhere((element) => element.transportId == id);
+      if (cacheIndex != -1) {
+        cachedTransports[cacheIndex] = updatedData; // Update cache
       }
-
+      int searchIndex =
+          searchTransports.indexWhere((element) => element.transportId == id);
+      if (searchIndex != -1) {
+        searchTransports[searchIndex] = updatedData; // Update search list
+      }
       notifyListeners();
     }
   }
 
-  deleteTransport(id, index) async {
+  Future<void> deleteTransport(int id) async {
     _helperServices.showLoader();
-    var response = await TransportApiServiceProvider()
-        .deleteTransport('delete-transport?transport_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await TransportApiServiceProvider()
+          .deleteTransport('delete-transport?transport_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteTransportLocally(id);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -159,11 +187,8 @@ class TransportController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -171,46 +196,61 @@ class TransportController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  searchTransportsMethod(String name) {
+  void searchTransportsMethod(String name) {
     searchText = name;
     updateTransportsData();
   }
-// updates data ui according entered search text
 
-  updateTransportsData() {
-    searchTransports?.clear();
+  void updateTransportsData() {
+    searchTransports.clear();
     if (searchText.isEmpty) {
-      searchTransports?.addAll(allTransports!);
+      searchTransports.addAll(allTransports);
     } else {
-      searchTransports?.addAll(
-        // search filter is applied on these columns
-
-        allTransports!
-            .where((element) =>
-                element.name!.toLowerCase().contains(searchText) ||
-                element.phone!.toLowerCase().contains(searchText) ||
-                element.description!.toLowerCase().contains(searchText))
-            .toList(),
+      searchTransports.addAll(
+        allTransports.where(
+          (element) =>
+              (element.name
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (element.phone
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (element.description
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false),
+        ),
       );
     }
     notifyListeners();
   }
 
-  // Reset the search text
   void resetSearchFilter() {
     searchText = '';
     updateTransportsData();
   }
 
+  void deleteTransportLocally(int id) {
+    allTransports.removeWhere((element) => element.transportId == id);
+    searchTransports.removeWhere((element) => element.transportId == id);
+    notifyListeners();
+  }
+
   void clearAllControllers() {
     nameController.clear();
     phoneController.clear();
-    desorptionController.clear();
+    descriptionController.clear();
   }
 }

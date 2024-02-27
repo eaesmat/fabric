@@ -93,16 +93,16 @@ class _FabricPurchaseListScreenState extends State<FabricPurchaseListScreen> {
                     },
                     onLongPress: () {
                       // show bottom modal sheet to view more details of the fabric purchase
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return FabricDetailsBottomSheet(
-                              // pass the these data to the widget
-                              data: data,
-                              fabricName: data.fabric!.name.toString());
-                        },
-                      );
+                      // showModalBottomSheet(
+                      //   context: context,
+                      //   isScrollControlled: true,
+                      //   builder: (BuildContext context) {
+                      //     return FabricDetailsBottomSheet(
+                      //         // pass the these data to the widget
+                      //         data: data,
+                      //         fabricName: data.fabric!.name.toString());
+                      //   },
+                      // );
                     },
                     tileTitle: Row(
                       children: [
