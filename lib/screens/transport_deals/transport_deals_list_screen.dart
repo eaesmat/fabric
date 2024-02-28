@@ -130,8 +130,9 @@ class _TransportDealsListScreenState extends State<TransportDealsListScreen> {
                           );
                         }
                         if (value == "delete") {
-                          // transportController
-                          //     .deleteTransport(data.transportId!.toInt());
+                          transportDealsController.deleteTransportDeals(
+                            data.transportdealId!.toInt(),
+                          );
                         }
                       },
                     ),

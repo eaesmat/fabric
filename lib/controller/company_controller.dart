@@ -154,10 +154,10 @@ class CompanyController extends ChangeNotifier {
     _helperServices.showLoader();
     var response = await CompanyApiServiceProvider()
         .deleteCompany('delete-company?company_id=$id');
-    _helperServices.goBack();
     response.fold(
       (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
       (r) => {
+        _helperServices.goBack(),
         if (r == 200)
           {
             _helperServices.showMessage(

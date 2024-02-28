@@ -1,6 +1,7 @@
 import 'package:fabricproject/screens/main_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_button.dart';
+import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/login_screen_appbar.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  CustomButton(
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(Icons.login, color: Pallete.whiteColor),
                     btnText: const LocaleText(
@@ -103,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  CustomButton(
+                  CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(Icons.email),
                     btnText: const LocaleText(
@@ -115,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  const CustomButton(
+                  const CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: Icon(Icons.facebook_sharp),
                     btnText: LocaleText(

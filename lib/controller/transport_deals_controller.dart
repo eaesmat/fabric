@@ -34,6 +34,7 @@ class TransportDealsController extends ChangeNotifier {
   // Lists to hold data comes from API
   List<Data>? allTransportDeals = [];
   List<Data>? searchTransportDeals = [];
+  List<Data> cachedForex = [];
 
   // This will hold search text field text
   String searchText = "";
@@ -106,15 +107,7 @@ class TransportDealsController extends ChangeNotifier {
     );
   }
 
-  void printControllerValues() {
-    void printControllerValues() {
-  
-}
-
-  }
-
   createTransportDeals(int curTransportId) async {
-    printControllerValues();
     _helperServices.showLoader();
 
     var response =
@@ -140,37 +133,49 @@ class TransportDealsController extends ChangeNotifier {
         _helperServices.showErrorMessage(l),
       },
       (r) => {
-        getTransportDeals(curTransportId),
         _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
+        if (r == 200)
+          {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            ),
+            getTransportDeals(curTransportId),
+          }
+        else if (r == 500)
+          {
+            _helperServices.showMessage(
+              const LocaleText('already_dealt'),
+              Colors.deepOrange,
+              const Icon(
+                Icons.warning,
+                color: Pallete.whiteColor,
+              ),
+            ),
+          }
       },
     );
   }
 
   updateTransportDeals(int curTransportId, transportDealId) async {
-print("Date: ${startDateController.text}");
-  print("Transport ID: ${curTransportId.toInt()}");
-  print("Transport Deal ID: $transportDealId");
-  print("Fabric Purchase ID: ${selectedFabricPurchaseIdController.text}");
-  print("Bundle: ${amountOfBundlesController.text}");
-  print("Cost Per Khat: ${singleKhatPriceController.text}");
-  print("Khat Amount: ${amountOfKhatController.text}");
-  print("Total Cost: ${totalCostController.text}");
-  print("War Cost: ${warPriceController.text}");
-  print("Container Name: ${containerNameController.text}");
-  print("Sarai ID: ${selectedSaraiIdController.text}");
+    print("Date: ${startDateController.text}");
+    print("Transport ID: ${curTransportId.toInt()}");
+    print("Transport Deal ID: $transportDealId");
+    print("Fabric Purchase ID: ${selectedFabricPurchaseIdController.text}");
+    print("Bundle: ${amountOfBundlesController.text}");
+    print("Cost Per Khat: ${singleKhatPriceController.text}");
+    print("Khat Amount: ${amountOfKhatController.text}");
+    print("Total Cost: ${totalCostController.text}");
+    print("War Cost: ${warPriceController.text}");
+    print("Container Name: ${containerNameController.text}");
+    print("Sarai ID: ${selectedSaraiIdController.text}");
     _helperServices.showLoader();
 
-    var response =
-        await TransportDealsApiServiceProvider().editTransportDeals(
+    var response = await TransportDealsApiServiceProvider().editTransportDeals(
       'update-transport-deal?$transportDealId',
       {
         "date": startDateController.text,
@@ -196,7 +201,7 @@ print("Date: ${startDateController.text}");
         getTransportDeals(curTransportId),
         _helperServices.goBack(),
         _helperServices.showMessage(
-          const LocaleText('added'),
+          const LocaleText('updated'),
           Colors.green,
           const Icon(
             Icons.check,
@@ -206,6 +211,55 @@ print("Date: ${startDateController.text}");
         clearAllControllers(),
       },
     );
+  }
+
+  Future<void> deleteTransportDeals(int transportDealId) async {
+    _helperServices.showLoader();
+    try {
+      final response = await TransportDealsApiServiceProvider()
+          .deleteTransportDeals(
+              'delete-transport-deal?transportdeal_id=$transportDealId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteItemLocally(transportDealId);
+            _helperServices.showMessage(
+              const LocaleText('deleted'),
+              Colors.red,
+              const Icon(
+                Icons.close,
+                color: Pallete.whiteColor,
+              ),
+            );
+          } else if (r == 500) {
+            _helperServices.showMessage(
+              const LocaleText('parent'),
+              Colors.deepOrange,
+              const Icon(
+                Icons.warning,
+                color: Pallete.whiteColor,
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  void deleteItemLocally(int id) {
+    allTransportDeals?.removeWhere((element) => element.transportdealId == id);
+    cachedForex.removeWhere((element) => element.transportdealId == id);
+    searchTransportDeals
+        ?.removeWhere((element) => element.transportdealId == id);
+    notifyListeners();
   }
 
   searchTransportDealsMethod(String name) {

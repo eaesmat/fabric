@@ -219,6 +219,13 @@ class ForexController extends ChangeNotifier {
     }
   }
 
+  void deleteItemLocally(int id) {
+    allForex.removeWhere((element) => element.sarafiId == id);
+    cachedForex.removeWhere((element) => element.sarafiId == id);
+    searchForex.removeWhere((element) => element.sarafiId == id);
+    notifyListeners();
+  }
+
   void searchForexMethod(String text) {
     searchText = text;
     updateForexData();
@@ -263,13 +270,6 @@ class ForexController extends ChangeNotifier {
   void resetSearchFilter() {
     searchText = '';
     updateForexData();
-  }
-
-  void deleteItemLocally(int id) {
-    allForex.removeWhere((element) => element.sarafiId == id);
-    cachedForex.removeWhere((element) => element.sarafiId == id);
-    searchForex.removeWhere((element) => element.sarafiId == id);
-    notifyListeners();
   }
 
   void clearAllControllers() {
