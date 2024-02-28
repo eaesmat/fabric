@@ -43,11 +43,13 @@ class TransportDealsController extends ChangeNotifier {
 
   navigateToTransportDealCreate(int curTransportId) {
     clearAllControllers();
-    _helperServices
-        .navigate(TransportDealsCreateScreen(curTransportId: curTransportId));
+    _helperServices.navigate(
+      TransportDealsCreateScreen(curTransportId: curTransportId),
+    );
   }
 
-  navigateToTransportDealsEdit(Data data, int id, int curTransportId) {
+  navigateToTransportDealsEdit(
+      Data data, int transportDealId, int curTransportId) {
     clearAllControllers();
     startDateController.text = data.startdate.toString();
     selectedFabricPurchaseIdController.text = data.fabricpurchaseId.toString();
@@ -62,10 +64,12 @@ class TransportDealsController extends ChangeNotifier {
     selectedSaraiIdController.text = data.saraiId.toString();
     selectedSaraiNameController.text = data.name.toString();
 
-    _helperServices.navigate(TransportDealsEditScreen(
-      curTransportId: curTransportId,
-      transportDealId: id,
-    ));
+    _helperServices.navigate(
+      TransportDealsEditScreen(
+        curTransportId: curTransportId,
+        transportDealId: transportDealId,
+      ),
+    );
   }
 
   navigateToTransportDealDetailsScreen(String transportName, int id) async {
@@ -102,7 +106,15 @@ class TransportDealsController extends ChangeNotifier {
     );
   }
 
+  void printControllerValues() {
+    void printControllerValues() {
+  
+}
+
+  }
+
   createTransportDeals(int curTransportId) async {
+    printControllerValues();
     _helperServices.showLoader();
 
     var response =
@@ -144,10 +156,21 @@ class TransportDealsController extends ChangeNotifier {
   }
 
   updateTransportDeals(int curTransportId, transportDealId) async {
+print("Date: ${startDateController.text}");
+  print("Transport ID: ${curTransportId.toInt()}");
+  print("Transport Deal ID: $transportDealId");
+  print("Fabric Purchase ID: ${selectedFabricPurchaseIdController.text}");
+  print("Bundle: ${amountOfBundlesController.text}");
+  print("Cost Per Khat: ${singleKhatPriceController.text}");
+  print("Khat Amount: ${amountOfKhatController.text}");
+  print("Total Cost: ${totalCostController.text}");
+  print("War Cost: ${warPriceController.text}");
+  print("Container Name: ${containerNameController.text}");
+  print("Sarai ID: ${selectedSaraiIdController.text}");
     _helperServices.showLoader();
 
     var response =
-        await TransportDealsApiServiceProvider().createTransportDeals(
+        await TransportDealsApiServiceProvider().editTransportDeals(
       'update-transport-deal?$transportDealId',
       {
         "date": startDateController.text,
@@ -230,6 +253,7 @@ class TransportDealsController extends ChangeNotifier {
     selectedFabricPurchaseIdController.clear();
     selectedSaraiIdController.clear();
     selectedSaraiNameController.clear();
+    selectedFabricPurchaseNameController.clear();
     containerNameController.clear();
     amountOfKhatController.clear();
     photoController.clear();

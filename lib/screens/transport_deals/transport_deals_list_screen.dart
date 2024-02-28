@@ -125,7 +125,7 @@ class _TransportDealsListScreenState extends State<TransportDealsListScreen> {
                         if (value == "edit") {
                           transportDealsController.navigateToTransportDealsEdit(
                             data,
-                            data.transportId!.toInt(),
+                            data.transportdealId!.toInt(),
                             widget.transportId,
                           );
                         }

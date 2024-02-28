@@ -16,11 +16,11 @@ import 'package:provider/provider.dart';
 class TransportDealsEditScreen extends StatefulWidget {
   final int curTransportId;
   final int transportDealId;
-  const TransportDealsEditScreen(
-      {super.key,
-      required this.curTransportId,
-      required this.transportDealId,
-    });
+  const TransportDealsEditScreen({
+    super.key,
+    required this.curTransportId,
+    required this.transportDealId,
+  });
 
   @override
   State<TransportDealsEditScreen> createState() =>
@@ -47,7 +47,7 @@ class _TransportDealsEditScreenState extends State<TransportDealsEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_transport_deal'),
+        title: const LocaleTexts(localeText: 'update_transport_deal'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -224,14 +224,14 @@ class _TransportDealsEditScreenState extends State<TransportDealsEditScreen> {
                       color: Pallete.whiteColor,
                     ),
                     btnText: const LocaleText(
-                      'create',
+                      'update',
                       style: TextStyle(color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () async {
                       if (formKey.currentState!.validate()) {
-                        transportDealsController
-                            .createTransportDeals(widget.curTransportId);
+                        transportDealsController.updateTransportDeals(
+                            widget.curTransportId, widget.transportDealId);
                         Navigator.pop(context);
                       }
                     },
@@ -341,21 +341,25 @@ class _TransportDealsEditScreenState extends State<TransportDealsEditScreen> {
       war = parsedWar;
       totalCost = amountOfKhat * costPerKhat;
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          transportDealsController.warPriceController.text =
-              (totalCost / war).toStringAsFixed(2);
-          transportDealsController.amountOfKhatController.text =
-              amountOfKhat.toStringAsFixed(2);
-          transportDealsController.singleKhatPriceController.text =
-              costPerKhat.toStringAsFixed(2);
-          transportDealsController.totalCostController.text =
-              totalCost.toStringAsFixed(2);
-        });
-      });
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          setState(
+            () {
+              transportDealsController.warPriceController.text =
+                  (totalCost / war).toStringAsFixed(2);
+              transportDealsController.amountOfKhatController.text =
+                  amountOfKhat.toStringAsFixed(2);
+              transportDealsController.singleKhatPriceController.text =
+                  costPerKhat.toStringAsFixed(2);
+              transportDealsController.totalCostController.text =
+                  totalCost.toStringAsFixed(2);
+            },
+          );
+        },
+      );
     } else {
       helper.showMessage(
-        const LocaleText('no_bundle_is_selected'),
+        const LocaleText('war_is_empty'),
         Colors.deepOrange,
         const Icon(
           Icons.warning,

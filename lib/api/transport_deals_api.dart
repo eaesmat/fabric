@@ -55,4 +55,28 @@ class TransportDealsApiServiceProvider {
       );
     }
   }
+
+  Future<Either<String, int>> editTransportDeals(
+      String apiEndpoint, Map<String, dynamic> data) async {
+    String jsonData = json.encode(data);
+    try {
+      final response = await http
+          .put(Uri.parse(_baseURL + apiEndpoint), body: jsonData, headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      });
+      if (response.statusCode == 200) {
+        return right(response.statusCode);
+      } else {
+        return left(
+          response.statusCode.toString(),
+        );
+      }
+    } catch (e) {
+      return left(
+        e.toString(),
+      );
+    }
+  }
+
 }

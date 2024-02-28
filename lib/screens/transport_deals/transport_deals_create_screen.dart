@@ -334,6 +334,7 @@ class _TransportDealsCreateScreenState
 
     if (parsedWar != null && parsedWar != 0) {
       war = parsedWar;
+      print(war);
       totalCost = amountOfKhat * costPerKhat;
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -350,7 +351,7 @@ class _TransportDealsCreateScreenState
       });
     } else {
       helper.showMessage(
-        const LocaleText('no_bundle_is_selected'),
+        const LocaleText('war_is_empty'),
         Colors.deepOrange,
         const Icon(
           Icons.warning,
