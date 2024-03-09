@@ -1,5 +1,4 @@
 import 'package:fabricproject/controller/sarai_controller.dart';
-import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transfer_bundles_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -10,13 +9,16 @@ import 'package:provider/provider.dart';
 
 class SelectSaraiToTransferButtonSheet extends StatefulWidget {
   final int saraiId;
-  const SelectSaraiToTransferButtonSheet({Key? key, required this.saraiId}) : super(key: key);
+  const SelectSaraiToTransferButtonSheet({Key? key, required this.saraiId})
+      : super(key: key);
 
   @override
-  State<SelectSaraiToTransferButtonSheet> createState() => _SelectSaraiToTransferButtonSheetState();
+  State<SelectSaraiToTransferButtonSheet> createState() =>
+      _SelectSaraiToTransferButtonSheetState();
 }
 
-class _SelectSaraiToTransferButtonSheetState extends State<SelectSaraiToTransferButtonSheet> {
+class _SelectSaraiToTransferButtonSheetState
+    extends State<SelectSaraiToTransferButtonSheet> {
   @override
   void initState() {
     super.initState();
@@ -31,8 +33,7 @@ class _SelectSaraiToTransferButtonSheetState extends State<SelectSaraiToTransfer
     // controller provider
     SaraiController saraiController = Provider.of<SaraiController>(context);
     // fabric purchase controller to pass the selected id to the fabric purchase controller
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
+
     final transferBundlesController =
         Provider.of<TransferBundlesController>(context);
 
@@ -89,12 +90,6 @@ class _SelectSaraiToTransferButtonSheetState extends State<SelectSaraiToTransfer
 
                   return ListTileWidget(
                     onTap: () {
-                      // pass id
-                      transportDealController.selectedSaraiIdController.text =
-                          data.saraiId!.toString();
-                      transportDealController.selectedSaraiNameController.text =
-                          data.name!.toString();
-
                       transferBundlesController.selectedSaraiToIdController
                           .text = data.saraiId.toString();
                       transferBundlesController.selectedSaraiToNameController

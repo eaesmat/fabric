@@ -1,11 +1,6 @@
-import 'package:fabricproject/screens/all_draw/draw_list_screen.dart';
-import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_list_screen.dart';
-import 'package:fabricproject/screens/draw/draw_calculation_screen.dart';
-import 'package:fabricproject/screens/draw/draw_list_screen.dart';
-import 'package:fabricproject/screens/khalid_draw/khalid_list_screen.dart';
+import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -62,14 +57,14 @@ class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
           children: [
             // gets three screens in here
 
-            AllFabricPurchaseListScreen(),
+            const AllFabricPurchaseListScreen(),
             // DrawListScreen(
             //   vendorCompanyId: widget.vendorCompanyId,
             //   vendorCompanyName: widget.vendorCompanyName,
             // ),
-            // AllDrawListScreen(),
             // KhalidDrawListScreen(),
-            Container(color: Colors.amber),
+            const KhalidRasidListScreen(),
+            // Container(color: Colors.amber),
             Container(color: Colors.amber),
           ],
         ),

@@ -10,7 +10,7 @@ class AllFabricPurchasesApiServiceProvider {
   final String _baseURL = baseURL;
   // Data type comes from its model
   // api EndPoint comes from controller
-  Future<Either<String, List<Data>>> getTransportDeals(String apiEndpoint) async {
+  Future<Either<String, List<Data>>> getAllFabricPurchase(String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),
@@ -25,6 +25,46 @@ class AllFabricPurchasesApiServiceProvider {
         );
       } else {
         return left(" ${response.statusCode}");
+      }
+    } catch (e) {
+      return left(
+        e.toString(),
+      );
+    }
+  }
+  Future<Either<String, int>> createFabricPurchase(
+      String apiEndpoint, Map<String, dynamic> data) async {
+    String jsonData = json.encode(data);
+    try {
+      final response = await http
+          .post(Uri.parse(_baseURL + apiEndpoint), body: jsonData, headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      });
+
+      if (response.statusCode == 200) {
+        return right(response.statusCode);
+      } else {
+        return left(response.statusCode.toString());
+      }
+    } catch (e) {
+      return left(
+        e.toString(),
+      );
+    }
+  }
+
+  Future<Either<String, int>> deleteFabricPurchase(String apiEndpoint) async {
+    try {
+      final response = await http.delete(Uri.parse(_baseURL + apiEndpoint));
+      if (response.statusCode == 200) {
+        return right(response.statusCode);
+      } else if (response.statusCode == 500) {
+        return right(response.statusCode);
+      } else {
+        return left(
+          response.statusCode.toString(),
+        );
       }
     } catch (e) {
       return left(

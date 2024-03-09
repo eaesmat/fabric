@@ -1,11 +1,11 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
-import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/constants/screen_type_constants.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_meter_convertor.dart';
-import 'package:fabricproject/screens/company/company_bottom_sheet.dart';
-import 'package:fabricproject/screens/fabric/fabric_bottom_sheet.dart';
-import 'package:fabricproject/screens/transport/transport_bottom_sheet.dart';
-import 'package:fabricproject/screens/vendor_company/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_company_bottom_sheet.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_fabric_bottom_sheet.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_transport_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -25,15 +25,20 @@ class AllFabricPurchaseCreateScreen extends StatefulWidget {
 
 class _AllFabricPurchaseCreateScreenState
     extends State<AllFabricPurchaseCreateScreen> {
+  // @override
+  // void dispose() {
+  //   final allFabricPurchasesController =
+  //       Provider.of<AllFabricPurchasesController>(context, listen: false);
+  //   allFabricPurchasesController.dispose(); // Dispose controllers here
+  //   super.dispose();
+  // }
+
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    // controller provider
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
+    final allFabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
@@ -56,7 +61,10 @@ class _AllFabricPurchaseCreateScreenState
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet();
+                          return const VendorCompanyBottomSheet(
+                            screenType:
+                                ScreenTypeConstants.allFabricPurchasesScreen,
+                          );
                         },
                       );
                     },
@@ -64,8 +72,8 @@ class _AllFabricPurchaseCreateScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller:
-                          allFabricPurchaseController.selectedVendorCompanyName,
+                      controller: allFabricPurchasesController
+                          .selectedVendorCompanyName,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -74,8 +82,6 @@ class _AllFabricPurchaseCreateScreenState
                       lblText: const LocaleText('vendor_companies'),
                     ),
                   ),
-
-                  // company bottom sheet to select the company
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
@@ -90,7 +96,7 @@ class _AllFabricPurchaseCreateScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: allFabricPurchaseController
+                      controller: allFabricPurchasesController
                           .selectedCompanyNameController,
                       iconBtn: const Icon(
                         size: 30,
@@ -100,7 +106,6 @@ class _AllFabricPurchaseCreateScreenState
                       lblText: const LocaleText('companies'),
                     ),
                   ),
-                  // fabric bottom sheet to select the fabrics
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
@@ -115,7 +120,7 @@ class _AllFabricPurchaseCreateScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: allFabricPurchaseController
+                      controller: allFabricPurchasesController
                           .selectedFabricNameController,
                       iconBtn: const Icon(
                         size: 30,
@@ -130,7 +135,7 @@ class _AllFabricPurchaseCreateScreenState
                         customValidator(value, currentLocale),
                     lblText: const LocaleText('bundle'),
                     controller:
-                        allFabricPurchaseController.amountOfBundlesController,
+                        allFabricPurchasesController.amountOfBundlesController,
                   ),
                   const AllFabricPurchaseMeterConverter(),
                   Row(
@@ -138,7 +143,7 @@ class _AllFabricPurchaseCreateScreenState
                       Expanded(
                         child: DatePicker(
                           controller:
-                              allFabricPurchaseController.dateController,
+                              allFabricPurchasesController.dateController,
                         ),
                       ),
                       Expanded(
@@ -147,7 +152,7 @@ class _AllFabricPurchaseCreateScreenState
                               customValidator(value, currentLocale),
                           lblText: const LocaleText('fabric_code'),
                           controller:
-                              allFabricPurchaseController.fabricCodeController,
+                              allFabricPurchasesController.fabricCodeController,
                         ),
                       ),
                     ],
@@ -167,7 +172,7 @@ class _AllFabricPurchaseCreateScreenState
                           customValidator(value, currentLocale),
                       isDisabled: true,
                       controller:
-                          allFabricPurchaseController.selectedTransportName,
+                          allFabricPurchasesController.selectedTransportName,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -178,13 +183,13 @@ class _AllFabricPurchaseCreateScreenState
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('bank_receipt_photo'),
-                    controller:
-                        allFabricPurchaseController.bankReceivedPhotoController,
+                    controller: allFabricPurchasesController
+                        .bankReceivedPhotoController,
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('package_photo'),
                     controller:
-                        allFabricPurchaseController.packagePhotoController,
+                        allFabricPurchasesController.packagePhotoController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -198,41 +203,10 @@ class _AllFabricPurchaseCreateScreenState
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () async {
-                      // Check if the selected company is not empty
                       if (formKey.currentState!.validate()) {
-                        // Inside the method where the transport deal is created
-                        // Inside the method where the transport deal is created
-                        await allFabricPurchaseController
-                            .createFabricPurchase();
+                        allFabricPurchasesController.createFabricPurchase();
+
                         Navigator.pop(context);
-// Fetch updated transport deals immediately after creation
-                        await allFabricPurchaseController
-                            .getAllFabricPurchases();
-
-                        if (allFabricPurchaseController.isAdded) {
-                          // print(allFabricPurchaseController
-                          //     .selectedTransportId.text);
-                          // print(allFabricPurchaseController
-                          //     .selectedTransportName.text);
-                          int? lastFabricPurchaseId =
-                              allFabricPurchaseController
-                                  .getLastFabricPurchaseId();
-                          // print(lastTransportDealId);
-                          String selectedTransportId =
-                              allFabricPurchaseController
-                                  .selectedTransportId.text;
-                          int? transportId = int.tryParse(selectedTransportId);
-
-                          if (lastFabricPurchaseId != null) {
-                            // assign container name to the container controller
-                            transportDealController
-                                .selectedFabricPurchaseIdController
-                                .text = lastFabricPurchaseId.toString();
-
-                            transportDealController.transportId = transportId;
-                            await transportDealController.createTransportDeal();
-                          }
-                        }
                       }
                     },
                   ),

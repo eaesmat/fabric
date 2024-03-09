@@ -7,20 +7,10 @@ import 'package:flutter/material.dart';
 class SaraiOutFabricController extends ChangeNotifier {
   // helper class instance
   final HelperServices _helperServices;
-  // TextEditing Controller to send and receive data from ui
-  TextEditingController fabricPurchaseController = TextEditingController();
-  TextEditingController bundleNameController = TextEditingController();
-  TextEditingController bundleToopController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController statusController = TextEditingController();
-  TextEditingController indateController = TextEditingController();
-  TextEditingController outdateController = TextEditingController();
-  TextEditingController saraiToNameController = TextEditingController();
-  TextEditingController customerNameController = TextEditingController();
-  TextEditingController branchNameController = TextEditingController();
   // lists to hold data comes from api
-  List<Data>? allSaraiOutFabric = [];
-  List<Data>? searchSaraiOutFabrics = [];
+  List<Data> allSaraiOutFabric = [];
+  List<Data> searchSaraiOutFabrics = [];
+  List<Data> cachedForex = [];
   // this will hold search text field text
   String searchText = "";
 
@@ -28,9 +18,9 @@ class SaraiOutFabricController extends ChangeNotifier {
     // Gets data at first visit to the ui
   }
 
-  navigateToAllSaraiOutFabric() async {
+  navigateToAllSaraiOutFabric() {
     _helperServices.navigate(
-      AllSaraiOutFabric(),
+      const AllSaraiOutFabric(),
     );
 
     // await getAllSaraiOutFabrics(
@@ -38,27 +28,30 @@ class SaraiOutFabricController extends ChangeNotifier {
   }
 
 // gets all the data
-  getAllSaraiOutFabrics(int fabricId, saraiId) async {
+
+  Future<void> getAllSaraiOutFabrics(int fabricId, saraiId) async {
     _helperServices.showLoader();
-    // endpoint passed to the api class
-    final response = await SaraiOutFabricApiServiceProvider().getSaraiOutFabric(
-        'getSaraiOutFabric?fabric_id=$fabricId&sarai_id=$saraiId');
-    response.fold(
+    try {
+      final response = await SaraiOutFabricApiServiceProvider().getSaraiOutFabric(
+          'showInOutFabric?fabric_id=$fabricId&sarai_id=$saraiId&action=outFabric');
+      response.fold(
         (l) => {
 // l returns failure with status code to the ui
-              _helperServices.goBack(),
-              _helperServices.showErrorMessage(l),
-            }, (r) {
-// r holds data comes from api with success
-      allSaraiOutFabric = r;
-      // goBack pops the current stack
+          _helperServices.goBack(),
+          _helperServices.showErrorMessage(l),
+        },
+        (r) {
+          allSaraiOutFabric = r;
+          searchSaraiOutFabrics = List.from(allSaraiOutFabric);
+          cachedForex = List.from(allSaraiOutFabric); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      searchSaraiOutFabrics?.clear();
-      searchSaraiOutFabrics?.addAll(allSaraiOutFabric!);
-      // this methods assign the recent data to the search List
-      // updateForexData();
-      notifyListeners();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
   searchSaraiFabricsMethod(String name) {
@@ -68,24 +61,46 @@ class SaraiOutFabricController extends ChangeNotifier {
 
 // updates data ui according entered search text
   updateSaraiFabricsData() {
-    searchSaraiOutFabrics?.clear();
+    searchSaraiOutFabrics.clear();
     if (searchText.isEmpty) {
-      searchSaraiOutFabrics?.addAll(allSaraiOutFabric!);
+      searchSaraiOutFabrics.addAll(allSaraiOutFabric);
     } else {
-      searchSaraiOutFabrics?.addAll(
-        allSaraiOutFabric!
+      searchSaraiOutFabrics.addAll(
+        allSaraiOutFabric
             .where((element) =>
                 // search filter is applied on these columns
-                element.fabricpurchasecode!
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.bundlename!.toLowerCase().contains(searchText) ||
-                element.status!.toLowerCase().contains(searchText) ||
-                element.outdate!.contains(searchText) ||
-                element.customername!.contains(searchText) ||
-                element.branchname!.contains(searchText) ||
-                element.saraitoname!.contains(searchText) ||
-                element.indate!.toLowerCase().contains(searchText))
+                (element.fabricpurchasecode
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.bundlename
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.status
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.outdate
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.customername
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.branchname
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.saraitoname
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.indate
+                        ?.toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false))
             .toList(),
       );
     }
@@ -94,8 +109,8 @@ class SaraiOutFabricController extends ChangeNotifier {
 
   // Reset the search text
   void resetSearchFilter() {
-    allSaraiOutFabric?.clear();
-    searchSaraiOutFabrics?.clear();
+    allSaraiOutFabric.clear();
+    searchSaraiOutFabrics.clear();
     notifyListeners();
   }
 }

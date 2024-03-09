@@ -13,6 +13,8 @@
   "internal_companies": "شرکت های داخلی",
   "fabric": "تکه",
   "ٰvendor_companies": "شرکت های خارجی",
+  "vendor_company": "شرکت خارجی",
+
   "ٰtransport": "حمل و نقل",
   "ٰwarehouses": "گدامها",
   "customers": "مشتریان",
@@ -90,8 +92,7 @@
   "date": "تاریخ ",
   "bank_receipt_photo": "عکس رسید بانک ",
   "package_photo": "عکس بسته بندی ",
-  "item" : "جنس",
-  "attribute" : "کلیدها",
-  "value" : "ارزش ها"
+  "item": "جنس",
+  "attribute": "کلیدها",
+  "value": "ارزش ها"
 }
- 

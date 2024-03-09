@@ -1,10 +1,11 @@
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
+import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
-import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class _ForexListScreenState extends State<ForexListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleText('forex'),
+        title: const LocaleTexts(localeText: 'forex'),
         centerTitle: true,
       ),
       body: CustomRefreshIndicator(
@@ -145,13 +146,7 @@ class _ForexListScreenState extends State<ForexListScreen> {
                     );
                   } else {
                     // If no data, display the "noData.png" image
-                    return Center(
-                      child: Image.asset(
-                        'assets/images/noData.png',
-                        width: 800, // Set the width as needed
-                        height: 500, // Set the height as needed
-                      ),
-                    );
+                    return const NoDataFoundWidget();
                   }
                 },
               ),

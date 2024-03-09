@@ -28,7 +28,9 @@ class CompanyController extends ChangeNotifier {
   // navigate to the the create page
   navigateToCompanyCreate() {
     clearAllController();
-    _helperServices.navigate(const CompanyCreateScreen());
+    _helperServices.navigate(
+      const CompanyCreateScreen(),
+    );
   }
 
 //Pass data and id to the edit screen

@@ -2,8 +2,6 @@ import 'package:fabricproject/api/pati_api.dart';
 import 'package:fabricproject/helper/generate_pati_name.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/pati_model.dart';
-import 'package:fabricproject/screens/pati/pati_create_screen.dart';
-import 'package:fabricproject/screens/pati/pati_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -97,13 +95,13 @@ class PatiController extends ChangeNotifier {
     print("THE ID IS");
     print(designBundleId);
 
-    _helperServices.navigate(
-      PatiListScreen(
-        fabricDesignBundleId: fabricDesignBundleId,
-        fabricDesignName: fabricDesignName,
-        fabricDesignId: fabricDesignId,
-      ),
-    );
+    // _helperServices.navigate(
+    //   PatiListScreen(
+    //     fabricDesignBundleId: fabricDesignBundleId,
+    //     fabricDesignName: fabricDesignName,
+    //     fabricDesignId: fabricDesignId,
+    //   ),
+    // );
     await getAllPati(designBundleId);
   }
 

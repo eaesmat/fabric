@@ -1,5 +1,7 @@
-import 'package:fabricproject/controller/sarai_controller.dart';
-import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
+import 'package:fabricproject/constants/screen_type_constants.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
+import 'package:fabricproject/controller/khalid_rasid_controller.dart';
+import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -7,35 +9,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class SelectDokanToTransferButtonSheet extends StatefulWidget {
-  final int saraiId;
-  const SelectDokanToTransferButtonSheet({Key? key, required this.saraiId})
-      : super(key: key);
+class VendorCompanyBottomSheet extends StatefulWidget {
+  final String screenType;
+  const VendorCompanyBottomSheet({super.key, required this.screenType});
 
   @override
-  State<SelectDokanToTransferButtonSheet> createState() =>
-      _SelectDokanToTransferButtonSheetState();
+  State<VendorCompanyBottomSheet> createState() =>
+      _VendorCompanyBottomSheetState();
 }
 
-class _SelectDokanToTransferButtonSheetState
-    extends State<SelectDokanToTransferButtonSheet> {
+class _VendorCompanyBottomSheetState extends State<VendorCompanyBottomSheet> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
-      Provider.of<SaraiController>(context, listen: false).resetSearchFilter();
+      Provider.of<VendorCompanyController>(context, listen: false)
+          .resetSearchFilter();
     });
+  }
+
+  void passDataToController(
+      String screenType, vendorCompanyName, vendorCompanyId) {
+    if (screenType == ScreenTypeConstants.allFabricPurchasesScreen) {
+      final allFabricPurchasesController =
+          Provider.of<AllFabricPurchasesController>(context, listen: false);
+
+      allFabricPurchasesController.selectedVendorCompanyName.text =
+          vendorCompanyName;
+      allFabricPurchasesController.selectedVendorCompanyId.text =
+          vendorCompanyId.toString();
+    }
+    if (screenType == ScreenTypeConstants.khalidRasidScreen) {
+      final khalidRasidController =
+          Provider.of<KhalidRasidController>(context, listen: false);
+
+      khalidRasidController.selectedVendorCompanyName.text =
+          vendorCompanyName;
+      khalidRasidController.selectedVendorCompanyId.text =
+          vendorCompanyId.toString();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // controller provider
-    SaraiController saraiController = Provider.of<SaraiController>(context);
     // fabric purchase controller to pass the selected id to the fabric purchase controller
-
-    final transferDokanPatiController =
-        Provider.of<TransferDokanPatiController>(context);
+    final vendorCompanyController =
+        Provider.of<VendorCompanyController>(context);
+    // final allDrawController = Provider.of<AllDrawController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -62,55 +84,40 @@ class _SelectDokanToTransferButtonSheetState
                     ),
                     onPressed: () {
                       // to create new
-                      saraiController.navigateToSaraiCreate();
+                      vendorCompanyController.navigateToVendorCompanyCreate();
                     },
                   ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // searches item
-                    saraiController.searchSarisMethod(value);
+                    vendorCompanyController.searchVendorCompaniesMethod(value);
                   },
                 ),
               ),
               const SizedBox(height: 20.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: saraiController.searchSarais?.length ?? 0,
+                itemCount:
+                    vendorCompanyController.searchVendorCompanies?.length ?? 0,
                 itemBuilder: (context, index) {
                   // data gets data from controller
-                  final reversedList =
-                      saraiController.searchSarais!.reversed.toList();
+                  final reversedList = vendorCompanyController
+                      .searchVendorCompanies!.reversed
+                      .toList();
                   final data = reversedList[index];
-
-                  // Check if the saraiId matches the widget's saraiId
-                  if (data.saraiId == widget.saraiId || data.type != 'دوکان') {
-                    // If matched, return an empty container
-                    return Container();
-                  }
-
                   return ListTileWidget(
                     onTap: () {
-                      // pass id
-
-                      transferDokanPatiController.selectedSaraiToIdController
-                          .text = data.saraiId.toString();
-                      transferDokanPatiController.selectedSaraiToNameController
-                          .text = data.name.toString();
-
+                      passDataToController(
+                          widget.screenType, data.name, data.vendorcompanyId);
                       Navigator.pop(context);
                     },
-                    tileTitle: Row(
-                      children: [
-                        Text(
-                          "${data.name}  [ ${data.type} ]",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        Text(
-                          data.phone.toString(),
-                        ),
-                      ],
+                    // Tile Title
+
+                    tileTitle: Text(
+                      data.name.toString(),
                     ),
+                    // subtitle
+
                     tileSubTitle: Row(
                       children: [
                         Text(
@@ -118,10 +125,12 @@ class _SelectDokanToTransferButtonSheetState
                         ),
                         const Spacer(),
                         Text(
-                          data.location.toString(),
+                          data.phone.toString(),
                         ),
                       ],
                     ),
+                    // trailing hold delete and update buttons
+
                     trail: PopupMenuButton(
                       color: Pallete.whiteColor,
                       child: const Icon(Icons.more_vert_sharp),
@@ -151,11 +160,14 @@ class _SelectDokanToTransferButtonSheetState
                       ],
                       onSelected: (String value) {
                         if (value == "edit") {
-                          saraiController.navigateToSaraiEdit(
-                              data, data.saraiId!.toInt());
+                          // navigates to the edit screen
+
+                          vendorCompanyController.navigateToVendorCompanyEdit(
+                              data, data.vendorcompanyId!.toInt());
                         }
                         if (value == "delete") {
-                          saraiController.deleteSarai(data.saraiId, index);
+                          vendorCompanyController.deleteVendorCompany(
+                              data.vendorcompanyId, index);
                         }
                       },
                     ),

@@ -1,6 +1,3 @@
-import 'package:fabricproject/api/sarai_out_fabric_api.dart';
-import 'package:fabricproject/controller/all_draw_controller.dart';
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
@@ -15,14 +12,13 @@ import 'package:fabricproject/controller/container_controller.dart';
 import 'package:fabricproject/controller/customer_deal_controller.dart';
 import 'package:fabricproject/controller/customer_deals_controller.dart';
 import 'package:fabricproject/controller/customer_payment_controller.dart';
-import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
-import 'package:fabricproject/controller/khalid_draw_controller.dart';
+import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/controller/pati_controller.dart';
 import 'package:fabricproject/controller/pati_design_color_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
@@ -31,14 +27,12 @@ import 'package:fabricproject/controller/sarai_marka_controller.dart';
 import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
 import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
-import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/controller/transfer_bundles_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
-import 'package:fabricproject/model/dokan_pati_in_model.dart';
 import 'package:fabricproject/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,8 +80,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FabricPurchaseController>(
           create: (_) => FabricPurchaseController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<DrawController>(
-          create: (_) => DrawController(HelperServices.instance),
+        ChangeNotifierProvider<KhalidRasidController>(
+          create: (_) => KhalidRasidController(HelperServices.instance),
         ),
         ChangeNotifierProvider<FabricDesignController>(
           create: (_) => FabricDesignController(HelperServices.instance),
@@ -98,30 +92,26 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FabricDesignBundleController>(
           create: (_) => FabricDesignBundleController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<TransportDealController>(
-          create: (_) => TransportDealController(HelperServices.instance),
-        ),
+       
         ChangeNotifierProvider<ContainerController>(
           create: (_) => ContainerController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<AllFabricPurchaseController>(
-          create: (_) => AllFabricPurchaseController(HelperServices.instance),
-        ),
-        ChangeNotifierProvider<AllDrawController>(
-          create: (_) => AllDrawController(HelperServices.instance),
-        ),
+       
+        // ChangeNotifierProvider<KhalidRasidController>(
+        //   create: (_) => KhalidRasidController(HelperServices.instance),
+        // ),
         ChangeNotifierProvider<TransportPaymentController>(
           create: (_) => TransportPaymentController(HelperServices.instance),
         ),
         ChangeNotifierProvider<SaraiInDealController>(
           create: (_) => SaraiInDealController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<KhalidDrawController>(
-          create: (_) => KhalidDrawController(HelperServices.instance),
-        ),
-        ChangeNotifierProvider<PatiDesignColorController>(
-          create: (_) => PatiDesignColorController(HelperServices.instance),
-        ),
+        // ChangeNotifierProvider<KhalidRasidController>(
+        //   create: (_) => KhalidRasidController(HelperServices.instance),
+        // ),
+        // ChangeNotifierProvider<PatiDesignColorController>(
+        //   create: (_) => PatiDesignColorController(HelperServices.instance),
+        // ),
         ChangeNotifierProvider<PatiController>(
           create: (_) => PatiController(HelperServices.instance),
         ),

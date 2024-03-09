@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/transport_deal_controller.dart';
+import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/model/transport_deal_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
@@ -21,8 +21,8 @@ class TransportItemDetailsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    final transportDealController =
-        Provider.of<TransportDealController>(context);
+    final transportDealsController =
+        Provider.of<TransportDealsController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -105,7 +105,7 @@ class TransportItemDetailsBottomSheet extends StatelessWidget {
                     ),
                     // Add the rows from the designColors list
                     ...containerList.map((data) {
-                      transportDealController.containerNameController.text =
+                      transportDealsController.containerNameController.text =
                           data.name!;
                       return buildDataRow(
                         LocaleText('container'),

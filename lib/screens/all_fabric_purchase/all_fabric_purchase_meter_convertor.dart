@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
@@ -30,7 +30,7 @@ class _AllFabricPurchaseMeterConverterState
   @override
   Widget build(BuildContext context) {
     final allFabricPurchaseMeterConverter =
-        Provider.of<AllFabricPurchaseController>(context);
+        Provider.of<AllFabricPurchasesController>(context);
     return Column(
       children: [
         Row(
@@ -142,8 +142,8 @@ class _AllFabricPurchaseMeterConverterState
     double modalHeight = screenHeight * 0.9;
     Locale currentLocale = Localizations.localeOf(context);
     final formKey = GlobalKey<FormState>();
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context, listen: false);
+    final allFabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context, listen: false);
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -169,7 +169,7 @@ class _AllFabricPurchaseMeterConverterState
                   CustomTextFieldWithController(
                     lblText: const LocaleText('meter'),
                     controller:
-                        allFabricPurchaseController.amountOfMetersController,
+                        allFabricPurchasesController.amountOfMetersController,
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                     onChanged: (value) {
@@ -182,7 +182,7 @@ class _AllFabricPurchaseMeterConverterState
                   ),
                   CustomTextFieldWithController(
                     controller:
-                        allFabricPurchaseController.dollarPriceController,
+                        allFabricPurchasesController.dollarPriceController,
                     lblText: const LocaleText('dollar_price'),
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
@@ -196,7 +196,7 @@ class _AllFabricPurchaseMeterConverterState
                   ),
                   CustomTextFieldWithController(
                     controller:
-                        allFabricPurchaseController.ttCommissionController,
+                        allFabricPurchasesController.ttCommissionController,
                     lblText: const LocaleText('tt_commission'),
                     onChanged: (value) {
                       setState(() {
@@ -242,7 +242,7 @@ class _AllFabricPurchaseMeterConverterState
     double modalHeight = screenHeight * 0.9;
     Locale currentLocale = Localizations.localeOf(context);
     final allFabricPurchaseMeterConverter =
-        Provider.of<AllFabricPurchaseController>(context, listen: false);
+        Provider.of<AllFabricPurchasesController>(context, listen: false);
     final formKey = GlobalKey<FormState>();
 
     return showModalBottomSheet<void>(
@@ -370,7 +370,7 @@ class _AllFabricPurchaseMeterConverterState
 
   void _postDataToController() {
     final allFabricPurchaseMeterConverter =
-        Provider.of<AllFabricPurchaseController>(context, listen: false);
+        Provider.of<AllFabricPurchasesController>(context, listen: false);
     allFabricPurchaseMeterConverter.amountOfMetersController.text =
         meterValue.toStringAsFixed(2);
     allFabricPurchaseMeterConverter.yenPriceController.text =

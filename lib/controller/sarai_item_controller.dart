@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:fabricproject/api/sarai_item_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/sarai_item_model.dart';
-import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_locales/flutter_locales.dart';
 
 class SaraiItemController extends ChangeNotifier {
   final HelperServices _helperServices;
@@ -25,7 +22,7 @@ class SaraiItemController extends ChangeNotifier {
 
   getAllSaraiItems(int saraiId) async {
     _helperServices.showLoader();
-    final response = await SaraiItemApiServiceProvider().getSaraiItem('getSaraiItem?sarai_id=$saraiId');
+    final response = await SaraiItemApiServiceProvider().getSaraiItem('loadSaraiMainTable?sarai_id=$saraiId');
     response.fold(
       (l) => {
         _helperServices.goBack(),

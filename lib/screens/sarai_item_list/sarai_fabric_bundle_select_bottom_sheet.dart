@@ -7,7 +7,6 @@ import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
-import 'package:fabricproject/model/sarai_fabric_bundle_select_model.dart';
 
 class SaraiFabricBundleSelectBottomSheet extends StatefulWidget {
   const SaraiFabricBundleSelectBottomSheet({Key? key}) : super(key: key);

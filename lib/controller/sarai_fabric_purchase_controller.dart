@@ -26,7 +26,7 @@ class SaraiFabricPurchaseController extends ChangeNotifier {
     // endpoint passed to the api class
     final response = await SaraiFabricPurchaseApiServiceProvider()
         .getSaraiFabricPurchase(
-            'getSaraiFabricPurchase?company_id=$companyId&sarai_id=$saraiId');
+            'loadFabricPurchase?company_id=$companyId&sarai_id=$saraiId');
     response.fold(
         (l) => {
 // l returns failure with status code to the ui

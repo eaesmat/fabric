@@ -4,9 +4,9 @@ class SaraiInFabricModel {
   SaraiInFabricModel({this.data});
 
   SaraiInFabricModel.fromJson(Map<String, dynamic> json) {
-    if (json['Data'] != null) {
+    if (json['data'] != null) {
       data = <Data>[];
-      json['Data'].forEach((v) {
+      json['data'].forEach((v) {
         data!.add(new Data.fromJson(v));
       });
     }
@@ -15,7 +15,7 @@ class SaraiInFabricModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['Data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -28,8 +28,9 @@ class Data {
   int? bundletoop;
   int? description;
   int? fabricdesignId;
-  String? status;
   int? userId;
+  int? bundlewar;
+  String? status;
   String? indate;
 
   Data(
@@ -39,8 +40,9 @@ class Data {
       this.bundletoop,
       this.description,
       this.fabricdesignId,
-      this.status,
       this.userId,
+      this.bundlewar,
+      this.status,
       this.indate});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -50,8 +52,9 @@ class Data {
     bundletoop = json['bundletoop'];
     description = json['description'];
     fabricdesignId = json['fabricdesign_id'];
-    status = json['status'];
     userId = json['user_id'];
+    bundlewar = json['bundlewar'];
+    status = json['status'];
     indate = json['indate'];
   }
 
@@ -63,8 +66,9 @@ class Data {
     data['bundletoop'] = this.bundletoop;
     data['description'] = this.description;
     data['fabricdesign_id'] = this.fabricdesignId;
-    data['status'] = this.status;
     data['user_id'] = this.userId;
+    data['bundlewar'] = this.bundlewar;
+    data['status'] = this.status;
     data['indate'] = this.indate;
     return data;
   }

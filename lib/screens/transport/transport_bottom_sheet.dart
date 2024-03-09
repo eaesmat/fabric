@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/transport_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -30,8 +30,8 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
     // controller provider
     // fabric purchase controller to pass the selected id to the fabric purchase controller
     final transportController = Provider.of<TransportController>(context);
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
+    final allFabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -80,11 +80,11 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
                   return ListTileWidget(
                     onTap: () {
                       // Pass item id when clicked
-                      allFabricPurchaseController.selectedTransportId.text =
-                          data.transportId!.toString();
-                      // Pass name when clicked
-                      allFabricPurchaseController.selectedTransportName.text =
-                          '${data.name}';
+                      // allFabricPurchaseController.selectedTransportId.text =
+                      //     data.transportId!.toString();
+                      // // Pass name when clicked
+                      // allFabricPurchaseController.selectedTransportName.text =
+                      //     '${data.name}';
                       Navigator.pop(context);
                     },
                     // Tile Title

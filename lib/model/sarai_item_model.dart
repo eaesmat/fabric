@@ -26,7 +26,7 @@ class Data {
   String? indate;
   int? total;
   int? fabricId;
-  int? saraiId;
+  String? saraiId;
   int? outbundle;
   int? inbundle;
 

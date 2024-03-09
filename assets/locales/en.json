@@ -64,6 +64,7 @@
   "create_fabric": "Create Fabric",
   "update_fabric": "Update Fabric",
   "vendor_companies": "Vendor Companies",
+  "vendor_company": "Vendor Company",
   "create_vendor_company": "Create Vendor Company",
   "update_vendor_company": "َUpdate Vendor Company",
   "transports": "Transports",

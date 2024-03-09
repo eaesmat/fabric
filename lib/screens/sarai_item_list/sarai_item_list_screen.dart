@@ -23,9 +23,9 @@ class SaraiItemListScreen extends StatefulWidget {
 
 class _SaraiItemListScreenState extends State<SaraiItemListScreen> {
   int? outFabricId;
-  int? outSaraiId;
+  String? outSaraiId;
   int? inFabricId;
-  int? inSaraiId;
+  String? inSaraiId;
   final HelperServices helper = HelperServices.instance;
 
   @override
@@ -100,10 +100,9 @@ class _SaraiItemListScreenState extends State<SaraiItemListScreen> {
                                 outItems: data.outbundle.toString(),
                                 inDate: data.indate.toString(),
                                 onGreenButtonPressed: () {
-                                  if (data.fabricId != null &&
-                                      data.inbundle != 0) {
+                                  if (data.inbundle != 0) {
                                     inFabricId = data.fabricId!.toInt();
-                                    inSaraiId = data.saraiId!.toInt();
+                                    inSaraiId = data.saraiId;
                                     saraiInFabricController.getAllSaraiFabrics(
                                       data.fabricId!.toInt(),
                                       data.saraiId,
@@ -111,14 +110,13 @@ class _SaraiItemListScreenState extends State<SaraiItemListScreen> {
                                   }
                                 },
                                 onRedButtonPressed: () {
-                                  if (data.fabricId != null &&
-                                      data.outbundle != 0) {
+                                  if (data.outbundle != 0) {
                                     outFabricId = data.fabricId!.toInt();
-                                    outSaraiId = data.saraiId!.toInt();
+                                    outSaraiId = data.saraiId;
                                     saraiOutFabricController
                                         .getAllSaraiOutFabrics(
                                       data.fabricId!.toInt(),
-                                      data.saraiId,
+                                      data.saraiId!,
                                     );
                                   }
                                 },
@@ -273,15 +271,15 @@ class _SaraiItemListScreenState extends State<SaraiItemListScreen> {
                   height: screenWidth *
                       0.6, // Adjust the height based on screen width
                   child: saraiOutFabricController
-                              .searchSaraiOutFabrics?.isNotEmpty ==
+                              .searchSaraiOutFabrics.isNotEmpty ==
                           true
                       ? ListView.builder(
                           itemCount: saraiOutFabricController
-                              .searchSaraiOutFabrics!.length,
+                              .searchSaraiOutFabrics.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             final reversedList = saraiOutFabricController
-                                .searchSaraiOutFabrics!.reversed
+                                .searchSaraiOutFabrics.reversed
                                 .toList();
                             final data = reversedList[index];
                             return Padding(

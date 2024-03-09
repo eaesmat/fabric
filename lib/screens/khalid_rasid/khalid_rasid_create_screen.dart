@@ -1,8 +1,8 @@
-import 'package:fabricproject/controller/all_draw_controller.dart';
-import 'package:fabricproject/controller/draw_controller.dart';
+import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/constants/screen_type_constants.dart';
+import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/screens/forex/forex_bottom_sheet.dart';
-import 'package:fabricproject/screens/vendor_company/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/bottom_sheets/forex_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -12,25 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class AllDrawCreateScreen extends StatefulWidget {
-  const AllDrawCreateScreen({super.key});
+class KhalidRasidCreateScreen extends StatefulWidget {
+  const KhalidRasidCreateScreen({super.key});
 
   @override
-  State<AllDrawCreateScreen> createState() => _AllDrawCreateScreenState();
+  State<KhalidRasidCreateScreen> createState() => _KhalidRasidCreateScreenState();
 }
 
-class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
+class _KhalidRasidCreateScreenState extends State<KhalidRasidCreateScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final allDrawController = Provider.of<AllDrawController>(context);
+    final khalidRasidController = Provider.of<KhalidRasidController>(context);
 
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_draw'),
+        title: const LocaleTexts(localeText: 'create_khalid_rasid'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -43,34 +43,28 @@ class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
               child: Column(
                 children: [
                   CustomTextFieldWithController(
-                    lblText: const LocaleText('dollar_price'),
-                    controller: allDrawController.dollarPriceController,
+                    lblText: const LocaleText('yen_price'),
+                    controller: khalidRasidController.yenPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
-                    controller: allDrawController.yenPriceController,
-                    lblText: const LocaleText('yen_price'),
-                    //  customValidator: customFormValidator
-                  ),
-                  CustomTextFieldWithController(
-                    controller: allDrawController.exchangeRateController,
                     lblText: const LocaleText('exchange_rate'),
+                    controller: khalidRasidController.exchangeRateController,
                     // customValidator: customFormValidator,
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
-                    controller: allDrawController.descriptionController,
-                    lblText: const LocaleText('description'),
+                    lblText: const LocaleText('dollar_price'),
+                    controller: khalidRasidController.dollarPriceController,
                     // customValidator: customFormValidator,
-                  ),
-                  CustomTextFieldWithController(
-                    controller: allDrawController.bankPhotoController,
-                    lblText: const LocaleText('photo'),
-                    // customValidator: customFormValidator,
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
                   ),
                   DatePicker(
-                    controller: allDrawController.dateController,
+                    controller: khalidRasidController.dateController,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -78,16 +72,16 @@ class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet();
+                          return const VendorCompanyBottomSheet(
+                            screenType: ScreenTypeConstants.khalidRasidScreen,
+                          );
                         },
                       );
                     },
                     child: CustomTextFieldWithController(
-                      customValidator: (value) =>
-                          customValidator(value, currentLocale),
                       isDisabled: true,
                       controller:
-                          allDrawController.selectedVendorCompanyNameController,
+                          khalidRasidController.selectedVendorCompanyName,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -102,15 +96,16 @@ class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const ForexBottomSheet();
+                          return const ForexBottomSheet(
+                            screenName: ScreenTypeConstants.khalidRasidScreen,
+                          );
                         },
                       );
                     },
                     child: CustomTextFieldWithController(
-                      customValidator: (value) =>
-                          customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: allDrawController.selectedForexController,
+                      controller:
+                          khalidRasidController.selectedForexNameController,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -118,6 +113,10 @@ class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
                       ),
                       lblText: const LocaleText('forex'),
                     ),
+                  ),
+                  CustomTextFieldWithController(
+                    lblText: const LocaleText('photo'),
+                    controller: khalidRasidController.bankPhotoController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -132,7 +131,7 @@ class _AllDrawCreateScreenState extends State<AllDrawCreateScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        allDrawController.createDraw();
+                        khalidRasidController.createKhalidRasd();
                         Navigator.pop(context);
                       }
                     },

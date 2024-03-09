@@ -41,7 +41,7 @@ class SaraiInFabricController extends ChangeNotifier {
     _helperServices.showLoader();
     // endpoint passed to the api class
     final response = await SaraiInFabricApiServiceProvider().getSaraiInFabric(
-        'getSaraiInFabric?fabric_id=$fabricId&sarai_id=$saraiId');
+        'showInOutFabric?fabric_id=$fabricId&sarai_id=$saraiId&action=inFabric');
     response.fold(
         (l) => {
 // l returns failure with status code to the ui

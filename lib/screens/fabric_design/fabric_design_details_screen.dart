@@ -1,5 +1,4 @@
 import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_color_list_screen.dart';
-import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +61,15 @@ class _FabricDesignDetailsScreenState extends State<FabricDesignDetailsScreen> {
             //   vendorCompanyName: widget.vendorCompanyName,
             // ),
             // const DrawCalculation(),
-            FabricDesignBundleListScreen(
+            // FabricDesignBundleListScreen(
+            //   fabricDesignId: widget.fabricDesignId,
+            //   fabricDesignName: widget.fabricDesignName,
+            // ),
+
+            FabricDesignColorListScreen(
               fabricDesignId: widget.fabricDesignId,
               fabricDesignName: widget.fabricDesignName,
             ),
-
             FabricDesignColorListScreen(
               fabricDesignId: widget.fabricDesignId,
               fabricDesignName: widget.fabricDesignName,

@@ -1,7 +1,5 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
-import 'package:fabricproject/controller/transport_deal_controller.dart';
 import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/theme/pallete.dart';

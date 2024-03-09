@@ -1,6 +1,7 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_meter_convertor.dart';
-import 'package:fabricproject/screens/vendor_company/vendor_company_bottom_sheet.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_fabric_bottom_sheet.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/date_picker.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,7 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/model/fabric_purchase_model.dart';
-import 'package:fabricproject/screens/company/company_bottom_sheet.dart';
-import 'package:fabricproject/screens/fabric/fabric_bottom_sheet.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_company_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
@@ -37,8 +37,8 @@ class _AllFabricPurchaseEditScreenState
   @override
   Widget build(BuildContext context) {
     // controller provider
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
+    final allFabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
@@ -61,7 +61,7 @@ class _AllFabricPurchaseEditScreenState
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet();
+                          return const VendorCompanyBottomSheet(screenType: 'allFabricPurchasesScreen',);
                         },
                       );
                     },
@@ -70,7 +70,7 @@ class _AllFabricPurchaseEditScreenState
                           customValidator(value, currentLocale),
                       isDisabled: true,
                       controller:
-                          allFabricPurchaseController.selectedVendorCompanyName,
+                          allFabricPurchasesController.selectedVendorCompanyName,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -95,7 +95,7 @@ class _AllFabricPurchaseEditScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: allFabricPurchaseController
+                      controller: allFabricPurchasesController
                           .selectedCompanyNameController,
                       iconBtn: const Icon(
                         size: 30,
@@ -120,7 +120,7 @@ class _AllFabricPurchaseEditScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller: allFabricPurchaseController
+                      controller: allFabricPurchasesController
                           .selectedFabricNameController,
                       iconBtn: const Icon(
                         size: 30,
@@ -135,7 +135,7 @@ class _AllFabricPurchaseEditScreenState
                         customValidator(value, currentLocale),
                     lblText: const LocaleText('bundle'),
                     controller:
-                        allFabricPurchaseController.amountOfBundlesController,
+                        allFabricPurchasesController.amountOfBundlesController,
                   ),
                   const AllFabricPurchaseMeterConverter(),
                   Row(
@@ -143,7 +143,7 @@ class _AllFabricPurchaseEditScreenState
                       Expanded(
                         child: DatePicker(
                           controller:
-                              allFabricPurchaseController.dateController,
+                              allFabricPurchasesController.dateController,
                         ),
                       ),
                       Expanded(
@@ -152,7 +152,7 @@ class _AllFabricPurchaseEditScreenState
                               customValidator(value, currentLocale),
                           lblText: const LocaleText('fabric_code'),
                           controller:
-                              allFabricPurchaseController.fabricCodeController,
+                              allFabricPurchasesController.fabricCodeController,
                         ),
                       ),
                     ],
@@ -172,7 +172,7 @@ class _AllFabricPurchaseEditScreenState
                   //         customValidator(value, currentLocale),
                   //     isDisabled: true,
                   //     controller:
-                  //         allFabricPurchaseController.selectedTransportName,
+                  //         allFabricPurchasesController.selectedTransportName,
                   //     iconBtn: const Icon(
                   //       size: 30,
                   //       Icons.add_box_rounded,
@@ -184,12 +184,12 @@ class _AllFabricPurchaseEditScreenState
                   CustomTextFieldWithController(
                     lblText: const LocaleText('bank_receipt_photo'),
                     controller:
-                        allFabricPurchaseController.bankReceivedPhotoController,
+                        allFabricPurchasesController.bankReceivedPhotoController,
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('package_photo'),
                     controller:
-                        allFabricPurchaseController.packagePhotoController,
+                        allFabricPurchasesController.packagePhotoController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -205,8 +205,8 @@ class _AllFabricPurchaseEditScreenState
                     onTap: () {
                       // Check if the selected company is not empty
                       if (formKey.currentState!.validate()) {
-                        allFabricPurchaseController
-                            .editFabricPurchase(widget.fabricPurchaseId);
+                        // allFabricPurchasesController
+                        //     .editFabricPurchase(widget.fabricPurchaseId);
                         Navigator.pop(context);
                       }
                     },

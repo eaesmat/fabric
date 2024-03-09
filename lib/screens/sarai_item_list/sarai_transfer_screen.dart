@@ -113,7 +113,15 @@ class _SaraiTransferScreenState extends State<SaraiTransferScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return SaraiFabricPurchaseBottomSheet(
+                          saraiId: widget.saraiId,
+                        );
+                      },
+                    );
                   },
                   child: CustomTextFieldWithController(
                     customValidator: (value) =>

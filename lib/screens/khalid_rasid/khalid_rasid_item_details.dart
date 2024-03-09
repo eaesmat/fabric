@@ -1,17 +1,16 @@
-import 'package:fabricproject/constants/api_url.dart';
-import 'package:fabricproject/model/all_fabric_purchases_model.dart';
+import 'package:fabricproject/model/khalid_rasid_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class FabricDetailsBottomSheet extends StatelessWidget {
+class KhalidRasidItemDetailsBottomSheet extends StatelessWidget {
   // gets this dat from the fabric purchase list screen directly
   final Data data;
-  final String fabricName;
+  final String vendorCompanyName;
 
-  const FabricDetailsBottomSheet(
-      {Key? key, required this.data, required this.fabricName})
+  const KhalidRasidItemDetailsBottomSheet(
+      {Key? key, required this.data, required this.vendorCompanyName})
       : super(key: key);
 
   @override
@@ -34,7 +33,7 @@ class FabricDetailsBottomSheet extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomTextTitle(
-                    text: fabricName,
+                    text: vendorCompanyName,
                   ),
                 ),
                 // data table to show the details
@@ -54,44 +53,33 @@ class FabricDetailsBottomSheet extends StatelessWidget {
                     ),
                   ],
                   rows: [
+                    buildDataRow('date', data.drawDate.toString()),
+                    buildDataRow('yen', data.yen.toString()),
+                    buildDataRow('dollar', data.doller.toString()),
+                    buildDataRow('exchange_rate', data.exchangerate.toString()),
+                    buildDataRow('photo', data.photo.toString()),
                     buildDataRow(
-                        'vendor_company', data.vendorcompany.toString()),
-                    buildDataRow(
-                        'fabric_code', data.fabricpurchasecode.toString()),
-                    buildDataRow('item', data.fabricName.toString()),
-                    buildDataRow('marka', data.marka.toString()),
-                    buildDataRow('bundle', data.bundle.toString()),
-                    buildDataRow('meter', data.meter.toString()),
-                    buildDataRow('war', data.war.toString()),
-                    buildDataRow('yen_price', data.yenprice.toString()),
-                    buildDataRow(
-                        'total_yen_price', data.totalyenprice.toString()),
-                    buildDataRow('dollar_price', data.dollerprice.toString()),
-                    buildDataRow(
-                        'total_dollar_price', data.totaldollerprice.toString()),
-                    buildDataRow('tt_commission', data.ttcommission.toString()),
-                    buildDataRow('tamam_shoda', data.dollerprice.toString()),
-                    buildDataRow('exchange_rate', data.yenexchange.toString()),
-                    buildDataRow('date', data.date.toString()),
+                        'vendor_company', data.vendorcompanyName.toString()),
+                    buildDataRow('forex', data.sarafiName.toString()),
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    if (data.bankreceiptphoto != null &&
-                        data.bankreceiptphoto!.isNotEmpty)
-                      buildImageIcon(
-                        imageUrl: "$fabricPurchaseURL${data.bankreceiptphoto}",
-                        context: context,
-                      ),
-                    if (data.packagephoto != null &&
-                        data.packagephoto!.isNotEmpty)
-                      buildImageIcon(
-                        imageUrl: "$fabricPurchaseURL${data.packagephoto}",
-                        context: context,
-                      ),
-                  ],
-                )
+                // Row(
+                //   children: [
+                //     if (data.bankreceiptphoto != null &&
+                //         data.bankreceiptphoto!.isNotEmpty)
+                //       buildImageIcon(
+                //         imageUrl: "$fabricPurchaseURL${data.bankreceiptphoto}",
+                //         context: context,
+                //       ),
+                //     if (data.packagephoto != null &&
+                //         data.packagephoto!.isNotEmpty)
+                //       buildImageIcon(
+                //         imageUrl: "$fabricPurchaseURL${data.packagephoto}",
+                //         context: context,
+                //       ),
+                //   ],
+                // )
               ],
             ),
           ),

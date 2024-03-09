@@ -43,7 +43,6 @@ class HelperServices {
       },
     );
   }
-
   showMessage(LocaleText message, Color color, Icon icon) {
     ScaffoldMessenger.of(navigationKey.currentContext!).showSnackBar(
       SnackBar(

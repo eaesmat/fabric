@@ -1,5 +1,3 @@
-import 'package:fabricproject/screens/draw/draw_calculation_screen.dart';
-import 'package:fabricproject/screens/draw/draw_list_screen.dart';
 import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
@@ -65,11 +63,13 @@ class _VendorCompanyDetailsListScreenState
               vendorCompanyId: widget.vendorCompanyId,
               vendorCompanyName: widget.vendorCompanyName,
             ),
-            DrawListScreen(
-              vendorCompanyId: widget.vendorCompanyId,
-              vendorCompanyName: widget.vendorCompanyName,
-            ),
-            const DrawCalculation(),
+            // DrawListScreen(
+            //   vendorCompanyId: widget.vendorCompanyId,
+            //   vendorCompanyName: widget.vendorCompanyName,
+            // ),
+            // const DrawCalculation(),
+             Container(),
+             Container(),
           ],
         ),
       ),

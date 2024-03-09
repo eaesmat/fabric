@@ -1,4 +1,3 @@
-import 'package:fabricproject/controller/draw_controller.dart';
 import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
   Widget build(BuildContext context) {
     final fabricPurchaseController =
         Provider.of<FabricPurchaseController>(context);
-    final drawController = Provider.of<DrawController>(context);
+    // final drawController = Provider.of<DrawController>(context);
 
     return Scaffold(
       backgroundColor: Pallete.whiteColor,
@@ -159,10 +158,10 @@ class _VendorCompanyListScreenState extends State<VendorCompanyListScreen> {
                             data.vendorcompanyId!.toInt();
 
                         // pass the the id and data to the draw controller on click
-                        drawController.navigateToVendorCompanyDetails(
-                            data.name.toString(), data.vendorcompanyId!);
-                        drawController.vendorCompanyId =
-                            data.vendorcompanyId!.toInt();
+                        // drawController.navigateToVendorCompanyDetails(
+                        //     data.name.toString(), data.vendorcompanyId!);
+                        // drawController.vendorCompanyId =
+                        //     data.vendorcompanyId!.toInt();
                       },
                     );
                   },

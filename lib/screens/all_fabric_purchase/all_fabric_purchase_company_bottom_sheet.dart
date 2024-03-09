@@ -1,6 +1,5 @@
-import 'package:fabricproject/controller/all_fabric_purchase_controller.dart';
+import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
-import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
@@ -32,10 +31,9 @@ class _CompanyBottomSheetState extends State<CompanyBottomSheet> {
     CompanyController companyController =
         Provider.of<CompanyController>(context);
     // fabric purchase controller to pass the selected id to the fabric purchase controller
-    final fabricPurchaseController =
-        Provider.of<FabricPurchaseController>(context);
-    final allFabricPurchaseController =
-        Provider.of<AllFabricPurchaseController>(context);
+
+    final allFabricPurchasesController =
+        Provider.of<AllFabricPurchasesController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
@@ -83,16 +81,11 @@ class _CompanyBottomSheetState extends State<CompanyBottomSheet> {
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
-                      fabricPurchaseController.selectedCompanyIdController.text =
-                          data.companyId!.toString();
+                      allFabricPurchasesController.selectedCompanyIdController
+                          .text = data.companyId!.toString();
 
-                      allFabricPurchaseController.selectedCompanyIdController.text =
-                          data.companyId!.toString();
-
-                      fabricPurchaseController.selectedCompanyNameController.text =
-                          '${data.name},  ${data.description} (${data.marka} )';
-
-                      allFabricPurchaseController.selectedCompanyNameController.text =
+                      allFabricPurchasesController
+                              .selectedCompanyNameController.text =
                           '${data.name},  ${data.description} (${data.marka} )';
                       Navigator.pop(context);
                     },

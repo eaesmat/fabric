@@ -1,8 +1,6 @@
 import 'package:fabricproject/api/fabric_design_bundle_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_bundle_model.dart';
-import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_create_screen.dart';
-import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 
 import 'package:flutter/material.dart';
@@ -29,7 +27,7 @@ class FabricDesignBundleController extends ChangeNotifier {
   navigateToFabricDesignBundleCreate() {
     clearAllControllers();
 
-    _helperServices.navigate(const FabricDesignBundleCreateScreen());
+    // _helperServices.navigate(const FabricDesignBundleCreateScreen());
   }
 
   navigateToFabricDesignBundleEdit(Data data, int id) {
@@ -37,10 +35,10 @@ class FabricDesignBundleController extends ChangeNotifier {
     bundleNameController.text = data.bundlename.toString();
     amountOfBundleToopController.text = data.bundletoop.toString();
 
-    _helperServices.navigate(FabricDesignBundleEditScreen(
-      fabricDesignBundleData: data,
-      fabricDesignBundleId: id,
-    ));
+    // _helperServices.navigate(FabricDesignBundleEditScreen(
+    //   fabricDesignBundleData: data,
+    //   fabricDesignBundleId: id,
+    // ));
   }
 
   navigateToFabricDesignDetails(String fabricDesignName, int id) async {
