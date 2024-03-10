@@ -3,5 +3,6 @@
 // to the specified controller
 class ScreenTypeConstants {
   static const khalidRasidScreen = 'khalidRasidScreen';
+  static const khalidGereftScreen = 'khalidGereftScreen';
   static const allFabricPurchasesScreen = 'allFabricPurchasesScreen';
 }

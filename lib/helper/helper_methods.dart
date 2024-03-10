@@ -64,6 +64,8 @@ String showSaraiType(String? value, Locale currentLocale) {
 }
 
 
+
+
 Color getColorFromName(String colorName) {
   switch (colorName.toLowerCase()) {
     case "جگری":

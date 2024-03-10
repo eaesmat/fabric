@@ -1,18 +1,14 @@
-// Import necessary dependencies and files
 import 'dart:convert';
 import 'package:fabricproject/constants/api_url.dart';
-import 'package:fabricproject/model/fabric_design_model.dart';
-import 'package:fabricproject/model/remaining_bundle_war_model.dart';
+import 'package:fabricproject/model/khalid_gereft_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
-
-// Class responsible for handling API calls related to fabric designs
-class FabricDesignApiServiceProvider {
+class KhalidGereftApiServiceProvider {
   final String _baseURL = baseURL;
-
-  // Function to fetch fabric designs from the API
-  Future<Either<String, FabricDesignModel>> getFabricDesign(
-      String apiEndpoint) async {
+// return either data or status
+// accept end point from controller class
+// base url comes from constant class
+  Future<Either<String, List<Data>>> getKhalidGereft(String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),
@@ -20,12 +16,13 @@ class FabricDesignApiServiceProvider {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
-        final fabricDesign = FabricDesignModel.fromJson(jsonResponse);
-
+        final draw = KhalidGereftModel.fromJson(jsonResponse);
+// returns data if success
         return right(
-          fabricDesign,
+          draw.data!,
         );
       } else {
+// return status code if no success
         return left(" ${response.statusCode}");
       }
     } catch (e) {
@@ -35,32 +32,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
-  Future<Either<String, RemainBundleAndWar>> getFabricDesignRemainBundleAndWar(
-      String apiEndpoint) async {
-    try {
-      var response = await http.get(
-        Uri.parse(_baseURL + apiEndpoint),
-      );
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse =
-            json.decode(response.body.toString());
-        final remainBundleAndWarModel = RemainBundleAndWarModel.fromJson(jsonResponse);
-
-        return right(
-          remainBundleAndWarModel.remainBundleAndWar!,
-        );
-      } else {
-        return left(" ${response.statusCode}");
-      }
-    } catch (e) {
-      return left(
-        e.toString(),
-      );
-    }
-  }
-
-  // Function to create a new fabric design through the API
-  Future<Either<String, int>> createFabricDesign(
+  Future<Either<String, int>> createKhalidGereft(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
     try {
@@ -82,8 +54,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
-  // Function to edit an existing fabric design through the API
-  Future<Either<String, int>> editFabricDesign(
+  Future<Either<String, int>> editKhalidGereft(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
     try {
@@ -106,8 +77,7 @@ class FabricDesignApiServiceProvider {
     }
   }
 
-  // Function to delete a fabric design through the API
-  Future<Either<String, int>> deleteFabricDesign(String apiEndpoint) async {
+  Future<Either<String, int>> deleteKhalidGereft(String apiEndpoint) async {
     try {
       final response = await http.delete(Uri.parse(_baseURL + apiEndpoint));
       if (response.statusCode == 200) {

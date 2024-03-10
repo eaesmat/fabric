@@ -23,14 +23,16 @@ class FabricDesignController extends ChangeNotifier {
 
   // Variables to store fabric purchase information and fabric designs
   int? fabricPurchaseId;
-  List<Data>? allFabricDesigns = [];
-  List<Data>? searchFabricDesigns = [];
+  List<Data> allFabricDesigns = [];
+  List<Data> searchFabricDesigns = [];
+  List<Data> cachedFabricDesigns = [];
+  List<FabricAndBundleButtonColors> fabricDesignColors = [];
+  String remainingWar = "";
+  String remainingBundle = "";
   String searchText = "";
 
   // Constructor to initialize the controller with helper services and fetch initial data
-  FabricDesignController(this._helperServices) {
-    getAllFabricDesigns(fabricPurchaseId);
-  }
+  FabricDesignController(this._helperServices) {}
 
   // Navigation function to the fabric design create screen
   navigateToFabricDesignCreate() {
@@ -46,7 +48,6 @@ class FabricDesignController extends ChangeNotifier {
     amountOfBundlesController.text = data.bundle.toString();
     amountOfWarsController.text = data.war.toString();
     amountOfToopController.text = data.toop.toString();
-    designNameController.text = data.designname.toString();
     designImageController.text = data.designimage.toString();
 
     _helperServices.navigate(FabricDesignEditScreen(
@@ -65,7 +66,7 @@ class FabricDesignController extends ChangeNotifier {
         fabricPurchaseCode: fabricPurchaseCode,
       ),
     );
-    await getAllFabricDesigns(fabricPurchaseId);
+    await getAllFabricDesigns(fabricPurchaseId!);
   }
 
   // Function to create a new fabric design through the API
@@ -93,7 +94,7 @@ class FabricDesignController extends ChangeNotifier {
       },
       (r) {
         // Refresh fabric designs list and show success message
-        getAllFabricDesigns(fabricPurchaseId!);
+        // getAllFabricDesigns(fabricPurchaseId!);
         _helperServices.goBack();
         _helperServices.showMessage(
           const LocaleText('added'),
@@ -134,7 +135,7 @@ class FabricDesignController extends ChangeNotifier {
       },
       (r) {
         // Refresh fabric designs list and show success message
-        getAllFabricDesigns(fabricPurchaseId!);
+        // getAllFabricDesigns(fabricPurchaseId!);
         _helperServices.goBack();
         _helperServices.showMessage(
           const LocaleText('updated'),
@@ -207,28 +208,62 @@ class FabricDesignController extends ChangeNotifier {
   }
 
   // Function to fetch all fabric designs from the API
-  getAllFabricDesigns(int? fabricPurchaseId) async {
+  Future<void> getAllFabricDesigns(int fabricPurchaseId) async {
     _helperServices.showLoader();
-    final response = await FabricDesignApiServiceProvider()
-        .getFabricDesign('getFabricDesign');
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) {
-        // Filter fabric designs based on fabric purchase ID
-        allFabricDesigns = r
-            .where((fabricDesign) =>
-                fabricDesign.fabricpurchaseId == fabricPurchaseId)
-            .toList();
-        searchFabricDesigns?.clear();
-        searchFabricDesigns?.addAll(allFabricDesigns!);
+    try {
+      final response = await FabricDesignApiServiceProvider()
+          .getFabricDesign('getFabricDesign/$fabricPurchaseId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allFabricDesigns = r.data ?? [];
+          fabricDesignColors = r.fabricAndBundleButtonColors ?? [];
+          searchFabricDesigns = List.from(allFabricDesigns);
+          cachedFabricDesigns =
+              List.from(allFabricDesigns); // Cache initial data
+          _helperServices.goBack();
 
-        _helperServices.goBack();
-        notifyListeners();
-      },
-    );
+          notifyListeners();
+          getFabricDesignRemainBundleAndWar(fabricPurchaseId);
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  // Function to fetch all fabric designs from the API
+  Future<void> getFabricDesignRemainBundleAndWar(int fabricPurchaseId) async {
+    // _helperServices.showLoader();
+    try {
+      final response = await FabricDesignApiServiceProvider()
+          .getFabricDesignRemainBundleAndWar(
+              'getRemainBundleAndWar?fabricpurchase_id=$fabricPurchaseId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          remainingBundle = r.bundle.toString();
+          remainingWar = r.war.toString();
+          // fabricDesignColors = r.fabricAndBundleButtonColors ?? [];
+          // searchFabricDesigns = List.from(allFabricDesigns);
+          // cachedFabricDesigns =
+          //     List.from(allFabricDesigns); // Cache initial data
+          // _helperServices.goBack();
+
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
   // Function to perform a search on fabric designs based on the provided name
@@ -238,15 +273,35 @@ class FabricDesignController extends ChangeNotifier {
   }
 
   // Function to update the fabric designs data based on the search text
-  updateFabricDesignsData() {
-    searchFabricDesigns?.clear();
+  void updateFabricDesignsData() {
+    searchFabricDesigns.clear();
     if (searchText.isEmpty) {
-      searchFabricDesigns?.addAll(allFabricDesigns!);
+      searchFabricDesigns.addAll(cachedFabricDesigns);
     } else {
-      searchFabricDesigns?.addAll(
-        allFabricDesigns!
+      searchFabricDesigns.addAll(
+        cachedFabricDesigns
             .where(
-                (element) => element.name!.toLowerCase().contains(searchText))
+              (element) =>
+                  (element.name
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.bundle
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.toop
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.toop
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false),
+            )
             .toList(),
       );
     }

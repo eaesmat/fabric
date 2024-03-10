@@ -1,5 +1,6 @@
 import 'package:fabricproject/constants/screen_type_constants.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
+import 'package:fabricproject/controller/khalid_gereft_controller.dart';
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -34,15 +35,20 @@ class _ForexBottomSheetState extends State<ForexBottomSheet> {
       khalidRasidController.selectedForexNameController.text = forexName;
       khalidRasidController.selectedForexIdController.text = forexId.toString();
     }
+    if (screenType == ScreenTypeConstants.khalidGereftScreen) {
+      final khalidGereftController =
+          Provider.of<KhalidGereftController>(context, listen: false);
+
+      khalidGereftController.selectedForexNameController.text = forexName;
+      khalidGereftController.selectedForexIdController.text =
+          forexId.toString();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // controllers
     final forexController = Provider.of<ForexController>(context);
-    // final drawController = Provider.of<DrawController>(context);
-    // final allDrawController = Provider.of<AllDrawController>(context);
-    // final khalidDrawController = Provider.of<KhalidDrawController>(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(

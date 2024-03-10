@@ -88,7 +88,6 @@ class _AllFabricPurchaseListScreenState
                     final data = reversedList[index];
 
                     return ListTileWidget(
-                      isComplete: data.status,
                       onTap: () {
                         fabricDesignController.navigateToFabricDesignListScreen(
                           data.fabricpurchasecode.toString(),
@@ -107,6 +106,10 @@ class _AllFabricPurchaseListScreenState
                           },
                         );
                       },
+                      lead: data.status == 'complete'
+                          ? // Check if status is complete
+                          const Icon(Icons.check, color: Colors.green)
+                          : const Icon(Icons.close, color: Colors.red),
                       tileTitle: Row(
                         children: [
                           Text(

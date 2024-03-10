@@ -1,9 +1,8 @@
-import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
 import 'package:fabricproject/constants/screen_type_constants.dart';
-import 'package:fabricproject/controller/khalid_rasid_controller.dart';
+import 'package:fabricproject/controller/khalid_gereft_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/bottom_sheets/forex_bottom_sheet.dart';
-import 'package:fabricproject/model/khalid_rasid_model.dart';
+import 'package:fabricproject/model/khalid_gereft_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -13,31 +12,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class KhalidRasidEditScreen extends StatefulWidget {
+class KhalidGereftEditScreen extends StatefulWidget {
   final Data data;
-  final int khalidRasidId;
-  const KhalidRasidEditScreen({
-    super.key,
-    required this.data,
-    required this.khalidRasidId,
-  });
+  final int gereftId;
+  const KhalidGereftEditScreen(
+      {super.key, required this.data, required this.gereftId});
 
   @override
-  State<KhalidRasidEditScreen> createState() => _KhalidRasidEditScreenState();
+  State<KhalidGereftEditScreen> createState() => _KhalidGereftEditScreenState();
 }
 
-class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
+class _KhalidGereftEditScreenState extends State<KhalidGereftEditScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final khalidRasidController = Provider.of<KhalidRasidController>(context);
+    final khalidGereftController = Provider.of<KhalidGereftController>(context);
 
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'update_khalid_rasid'),
+        title: const LocaleTexts(localeText: 'update_khalid_gereft'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -50,52 +46,18 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
               child: Column(
                 children: [
                   CustomTextFieldWithController(
-                    lblText: const LocaleText('yen_price'),
-                    controller: khalidRasidController.yenPriceController,
-                    // customValidator: customFormValidator,
-                    customValidator: (value) =>
-                        customValidator(value, currentLocale),
-                  ),
-                  CustomTextFieldWithController(
-                    lblText: const LocaleText('exchange_rate'),
-                    controller: khalidRasidController.exchangeRateController,
-                    // customValidator: customFormValidator,
-                    customValidator: (value) =>
-                        customValidator(value, currentLocale),
-                  ),
-                  CustomTextFieldWithController(
                     lblText: const LocaleText('dollar_price'),
-                    controller: khalidRasidController.dollarPriceController,
+                    controller: khalidGereftController.dollarPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
                         customValidator(value, currentLocale),
+                  ),
+                  CustomTextFieldWithController(
+                    lblText: const LocaleText('description'),
+                    controller: khalidGereftController.descriptionController,
                   ),
                   DatePicker(
-                    controller: khalidRasidController.dateController,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet(
-                            screenType: ScreenTypeConstants.khalidRasidScreen,
-                          );
-                        },
-                      );
-                    },
-                    child: CustomTextFieldWithController(
-                      isDisabled: true,
-                      controller:
-                          khalidRasidController.selectedVendorCompanyName,
-                      iconBtn: const Icon(
-                        size: 30,
-                        Icons.add_box_rounded,
-                        color: Pallete.blueColor,
-                      ),
-                      lblText: const LocaleText('vendor_companies'),
-                    ),
+                    controller: khalidGereftController.dateController,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -104,7 +66,7 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
                         isScrollControlled: true,
                         builder: (BuildContext context) {
                           return const ForexBottomSheet(
-                            screenName: ScreenTypeConstants.khalidRasidScreen,
+                            screenName: ScreenTypeConstants.khalidGereftScreen,
                           );
                         },
                       );
@@ -112,7 +74,7 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
                     child: CustomTextFieldWithController(
                       isDisabled: true,
                       controller:
-                          khalidRasidController.selectedForexNameController,
+                          khalidGereftController.selectedForexNameController,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -120,10 +82,6 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
                       ),
                       lblText: const LocaleText('forex'),
                     ),
-                  ),
-                  CustomTextFieldWithController(
-                    lblText: const LocaleText('photo'),
-                    controller: khalidRasidController.bankPhotoController,
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,
@@ -138,8 +96,7 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        khalidRasidController
-                            .editKhalidRasid(widget.khalidRasidId);
+                        khalidGereftController.editKhalidGereft(widget.gereftId.toInt());
                         Navigator.pop(context);
                       }
                     },

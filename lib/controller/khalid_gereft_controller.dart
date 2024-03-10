@@ -1,76 +1,68 @@
-import 'package:fabricproject/api/khalid_rasid_api.dart';
+import 'package:fabricproject/api/khalid_gereft_api.dart';
 import 'package:fabricproject/helper/helper.dart';
-import 'package:fabricproject/model/khalid_rasid_model.dart';
-import 'package:fabricproject/screens/khalid_rasid/khalid_gereft_edit_screen.dart';
-import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_create_screen.dart';
+import 'package:fabricproject/model/khalid_gereft_model.dart';
+import 'package:fabricproject/screens/khalid_gereft/khalid_gereft_create_screen.dart';
+import 'package:fabricproject/screens/khalid_gereft/khalid_gereft_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class KhalidRasidController extends ChangeNotifier {
+class KhalidGereftController extends ChangeNotifier {
   final HelperServices _helperServices;
   TextEditingController dateController = TextEditingController();
-  TextEditingController yenPriceController = TextEditingController();
   TextEditingController selectedForexIdController = TextEditingController();
   TextEditingController selectedForexNameController = TextEditingController();
-  TextEditingController selectedVendorCompanyName = TextEditingController();
-  TextEditingController selectedVendorCompanyId = TextEditingController();
-  TextEditingController exchangeRateController = TextEditingController();
   TextEditingController dollarPriceController = TextEditingController();
-  TextEditingController forexController = TextEditingController();
-  TextEditingController bankPhotoController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   double sumOfDrawTotalDollar = 0; // Variable to hold the sum of the  column
   double sumOfDrawTotalYen = 0; // Variable to hold the sum of the column
 
-  List<Data> allKhalidRasids = [];
-  List<Data> searchKhalidRasids = [];
-  List<Data> cachedKhalidRasids = [];
+  List<Data> allKhalidGerefts = [];
+  List<Data> searchKhalidGerefts = [];
+  List<Data> cachedKhalidGerefts = [];
   String searchText = "";
 
-  KhalidRasidController(
+  KhalidGereftController(
     this._helperServices,
   ) {
-    getAllKhalidRasids();
+    getAllKhalidGerefts();
   }
 
-  navigateToKhalidRasidCreate() {
+  navigateToKhalidGereftCreate() {
     clearAllControllers();
 
     _helperServices.navigate(
-      const KhalidRasidCreateScreen(),
+      const KhalidGereftCreateScreen(),
     );
   }
 
-  navigateToKhalidRasidEdit(Data data, int id) {
+  navigateToKhalidGereftEdit(Data data, int id) {
     clearAllControllers();
+    if (data.sarafName != null && data.sarafiId != null) {
+      selectedForexIdController.text = data.sarafiId.toString();
+      selectedForexNameController.text = data.sarafName.toString();
+    }
+    descriptionController.text = data.description.toString();
     dateController.text = data.drawDate.toString();
-    yenPriceController.text = data.yen.toString();
-    exchangeRateController.text = data.exchangerate.toString();
     dollarPriceController.text = data.doller.toString();
-    selectedVendorCompanyName.text = data.vendorcompanyName.toString();
-    selectedVendorCompanyId.text = data.vendorcompanyId.toString();
-    selectedForexIdController.text = data.sarafiId.toString();
-    selectedForexNameController.text = data.sarafiName.toString();
 
-    _helperServices.navigate(KhalidRasidEditScreen(
+    _helperServices.navigate(KhalidGereftEditScreen(
       data: data,
-      khalidRasidId: id,
+      gereftId: id,
     ));
   }
 
-  Future<void> createKhalidRasd() async {
+  Future<void> createKhalidGereft() async {
     _helperServices.showLoader();
     try {
-      var response = await KhalidRasidApiServiceProvider().createKhalidRasid(
-        'addKhalidRasidat',
+      var response = await KhalidGereftApiServiceProvider().createKhalidGereft(
+        'addKhalidGreft',
         {
           "date": dateController.text,
           "sarafi_id": selectedForexIdController.text,
-          "exchangerate": exchangeRateController.text,
-          "vc_id": selectedVendorCompanyId.text,
-          "priceindoller": dollarPriceController.text,
-          "yen": yenPriceController.text,
+          "doller": dollarPriceController.text,
+          "description": descriptionController.text,
         },
       );
 
@@ -90,7 +82,7 @@ class KhalidRasidController extends ChangeNotifier {
                 color: Pallete.whiteColor,
               ),
             );
-            getAllKhalidRasids();
+            getAllKhalidGerefts();
           }
         },
       );
@@ -100,21 +92,18 @@ class KhalidRasidController extends ChangeNotifier {
     }
   }
 
-  Future<void> editKhalidRasid(int id) async {
+  Future<void> editKhalidGereft(int id) async {
     _helperServices.showLoader();
 
     try {
-      final response = await KhalidRasidApiServiceProvider().editKhalidRasid(
-        'updateKhalidRasidat',
+      final response = await KhalidGereftApiServiceProvider().editKhalidGereft(
+        'updateKhalidGreft',
         {
           "draw_id": id,
-          "sarafi_id": selectedForexIdController.text,
-          "exchangerate": exchangeRateController.text,
-          "priceindoller": dollarPriceController.text,
-          // the vc-name is the  id only var name  issues
-          "yen": yenPriceController.text,
-          "vc_name": selectedVendorCompanyId.text,
           "date": dateController.text,
+          "sarafi_id": selectedForexIdController.text,
+          "doller": dollarPriceController.text,
+          "description": descriptionController.text,
         },
       );
       response.fold(
@@ -134,17 +123,21 @@ class KhalidRasidController extends ChangeNotifier {
             ),
           );
 
-          updateKhalidRasidLocally(
+          updateKhalidGerefLocally(
             id,
             Data(
               drawId: id,
-              drawDate: dateController.text,
-              yen: double.tryParse(yenPriceController.text),
-              doller: double.tryParse(dollarPriceController.text),
-              exchangerate: double.tryParse(exchangeRateController.text),
-              photo: bankPhotoController.text,
-              vendorcompanyName: selectedVendorCompanyName.text,
-              sarafiName: selectedForexNameController.text,
+              drawDate:
+                  dateController.text.isNotEmpty ? dateController.text : null,
+              doller: dollarPriceController.text.isNotEmpty
+                  ? double.tryParse(dollarPriceController.text)
+                  : null,
+              description: descriptionController.text.isNotEmpty
+                  ? descriptionController.text
+                  : null,
+              sarafName: selectedForexNameController.text.isNotEmpty
+                  ? selectedForexNameController.text
+                  : null,
             ),
           );
         },
@@ -155,29 +148,29 @@ class KhalidRasidController extends ChangeNotifier {
     }
   }
 
-  void updateKhalidRasidLocally(int id, Data updatedData) {
-    int index = allKhalidRasids.indexWhere((element) => element.drawId == id);
+  void updateKhalidGerefLocally(int id, Data updatedData) {
+    int index = allKhalidGerefts.indexWhere((element) => element.drawId == id);
     if (index != -1) {
-      allKhalidRasids[index] = updatedData;
+      allKhalidGerefts[index] = updatedData;
       int cacheIndex =
-          cachedKhalidRasids.indexWhere((element) => element.drawId == id);
+          cachedKhalidGerefts.indexWhere((element) => element.drawId == id);
       if (cacheIndex != -1) {
-        cachedKhalidRasids[cacheIndex] = updatedData; // Update cache
+        cachedKhalidGerefts[cacheIndex] = updatedData; // Update cache
       }
       int searchIndex =
-          searchKhalidRasids.indexWhere((element) => element.drawId == id);
+          searchKhalidGerefts.indexWhere((element) => element.drawId == id);
       if (searchIndex != -1) {
-        searchKhalidRasids[searchIndex] = updatedData; // Update search list
+        searchKhalidGerefts[searchIndex] = updatedData; // Update search list
       }
       notifyListeners();
     }
   }
 
-  Future<void> deleteKhalidRasid(int id) async {
+ Future<void> deleteKhalidGereft(int id) async {
     _helperServices.showLoader();
     try {
-      final response = await KhalidRasidApiServiceProvider()
-          .deleteKhalid('deleteKhalidRasidat?draw_id=$id');
+      final response = await KhalidGereftApiServiceProvider()
+          .deleteKhalidGereft('deleteKhalidGreft?draw_id=$id');
       response.fold(
         (l) {
           _helperServices.goBack();
@@ -214,29 +207,27 @@ class KhalidRasidController extends ChangeNotifier {
   }
 
   void deleteItemLocally(int id) {
-    allKhalidRasids.removeWhere((element) => element.drawId == id);
-    cachedKhalidRasids.removeWhere((element) => element.drawId == id);
-    searchKhalidRasids.removeWhere((element) => element.drawId == id);
+    allKhalidGerefts.removeWhere((element) => element.drawId == id);
+    cachedKhalidGerefts.removeWhere((element) => element.drawId == id);
+    searchKhalidGerefts.removeWhere((element) => element.drawId == id);
     notifyListeners();
   }
 
-  Future<void> getAllKhalidRasids() async {
+  Future<void> getAllKhalidGerefts() async {
     _helperServices.showLoader();
     try {
-      final response = await KhalidRasidApiServiceProvider()
-          .getKhalidRasid('loadKhalidRasidat');
+      final response = await KhalidGereftApiServiceProvider()
+          .getKhalidGereft('loadKhalidGreft');
       response.fold(
         (l) {
           _helperServices.goBack();
           _helperServices.showErrorMessage(l);
-          print("rasiderrero run ");
         },
         (r) {
-          allKhalidRasids = r;
-          searchKhalidRasids = List.from(allKhalidRasids);
-          cachedKhalidRasids = List.from(allKhalidRasids);
+          allKhalidGerefts = r;
+          searchKhalidGerefts = List.from(allKhalidGerefts);
+          cachedKhalidGerefts = List.from(allKhalidGerefts);
           _helperServices.goBack();
-          print("data is here khalid ");
           notifyListeners();
         },
       );
@@ -270,26 +261,21 @@ class KhalidRasidController extends ChangeNotifier {
   //   return sum;
   // }
 
-  searchKhalidRasidsMethod(String name) {
+  searchKhalidGereftsMethod(String name) {
     searchText = name;
-    updateDrawsData();
+    updateKhalidGereftData();
   }
 
-  void updateDrawsData() {
-    searchKhalidRasids.clear();
+  void updateKhalidGereftData() {
+    searchKhalidGerefts.clear();
     if (searchText.isEmpty) {
-      searchKhalidRasids.addAll(cachedKhalidRasids);
+      searchKhalidGerefts.addAll(cachedKhalidGerefts);
     } else {
-      searchKhalidRasids.addAll(
-        cachedKhalidRasids
+      searchKhalidGerefts.addAll(
+        cachedKhalidGerefts
             .where((element) =>
                 (element.drawDate
                         ?.toLowerCase()
-                        .contains(searchText.toLowerCase()) ??
-                    false) ||
-                (element.yen
-                        ?.toString()
-                        .toLowerCase()
                         .contains(searchText.toLowerCase()) ??
                     false) ||
                 (element.doller
@@ -297,16 +283,12 @@ class KhalidRasidController extends ChangeNotifier {
                         .toLowerCase()
                         .contains(searchText.toLowerCase()) ??
                     false) ||
-                (element.exchangerate
+                (element.description
                         ?.toString()
                         .toLowerCase()
                         .contains(searchText.toLowerCase()) ??
                     false) ||
-                (element.vendorcompanyName
-                        ?.toLowerCase()
-                        .contains(searchText.toLowerCase()) ??
-                    false) ||
-                (element.sarafiName?.toLowerCase().contains(searchText) ??
+                (element.sarafName?.toLowerCase().contains(searchText) ??
                     false))
             .toList(),
       );
@@ -317,16 +299,13 @@ class KhalidRasidController extends ChangeNotifier {
   void clearAllControllers() {
     dateController.clear();
     dollarPriceController.clear();
-    forexController.clear();
     selectedForexIdController.clear();
     selectedForexNameController.clear();
-    selectedVendorCompanyId.clear();
-    selectedVendorCompanyName.clear();
-    exchangeRateController.clear();
+    descriptionController.clear();
   }
 
   void resetSearchFilter() {
     searchText = '';
-    updateDrawsData();
+    updateKhalidGereftData();
   }
 }

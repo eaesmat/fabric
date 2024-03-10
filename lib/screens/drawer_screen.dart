@@ -1,6 +1,5 @@
 // drawer_widget.dart
 
-import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_list_screen.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.dart';
 import 'package:fabricproject/screens/company/company_list_screen.dart';
 import 'package:fabricproject/screens/customer/customer_list_screen.dart';

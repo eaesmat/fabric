@@ -3,6 +3,7 @@ import 'package:fabricproject/constants/screen_type_constants.dart';
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/bottom_sheets/forex_bottom_sheet.dart';
+import 'package:fabricproject/model/khalid_rasid_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -12,14 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class KhalidRasidCreateScreen extends StatefulWidget {
-  const KhalidRasidCreateScreen({super.key});
+class KhalidRasidEditScreen extends StatefulWidget {
+  final Data data;
+  final int khalidRasidId;
+  const KhalidRasidEditScreen({
+    super.key,
+    required this.data,
+    required this.khalidRasidId,
+  });
 
   @override
-  State<KhalidRasidCreateScreen> createState() => _KhalidRasidCreateScreenState();
+  State<KhalidRasidEditScreen> createState() => _KhalidRasidEditScreenState();
 }
 
-class _KhalidRasidCreateScreenState extends State<KhalidRasidCreateScreen> {
+class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -30,7 +37,7 @@ class _KhalidRasidCreateScreenState extends State<KhalidRasidCreateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_khalid_rasid'),
+        title: const LocaleTexts(localeText: 'update_khalid_rasid'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -129,13 +136,14 @@ class _KhalidRasidCreateScreenState extends State<KhalidRasidCreateScreen> {
                       color: Pallete.whiteColor,
                     ),
                     btnText: const LocaleText(
-                      'create',
+                      'update',
                       style: TextStyle(color: Pallete.whiteColor),
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        khalidRasidController.createKhalidRasd();
+                        khalidRasidController
+                            .editKhalidRasid(widget.khalidRasidId);
                         Navigator.pop(context);
                       }
                     },

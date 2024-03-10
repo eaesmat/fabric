@@ -3,6 +3,7 @@ import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
+import 'package:fabricproject/controller/khalid_gereft_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
@@ -166,6 +167,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<AllFabricPurchasesController>(
           create: (_) => AllFabricPurchasesController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<KhalidGereftController>(
+          create: (_) => KhalidGereftController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

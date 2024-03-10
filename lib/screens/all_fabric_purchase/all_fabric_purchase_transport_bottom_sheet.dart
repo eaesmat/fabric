@@ -71,11 +71,11 @@ class _TransportBottomSheetState extends State<TransportBottomSheet> {
               const SizedBox(height: 20.0),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: transportController.searchTransports?.length ?? 0,
+                itemCount: transportController.searchTransports.length,
                 itemBuilder: (context, index) {
                   // data gets data from controller
                   final reversedList =
-                      transportController.searchTransports!.reversed.toList();
+                      transportController.searchTransports.reversed.toList();
                   final data = reversedList[index];
                   return ListTileWidget(
                     onTap: () {
