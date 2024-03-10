@@ -4,12 +4,14 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
+import 'package:fabricproject/widgets/remaining_war_bundle_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class FabricDesignCreateScreen extends StatefulWidget {
-  const FabricDesignCreateScreen({super.key});
+  final int fabricPurchaseId;
+  const FabricDesignCreateScreen({super.key, required this.fabricPurchaseId});
 
   @override
   State<FabricDesignCreateScreen> createState() =>
@@ -71,10 +73,6 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                       currentLocale,
                     ),
                   ),
-                  CustomTextFieldWithController(
-                    controller: fabricDesignController.designImageController,
-                    lblText: const LocaleText('photo'),
-                  ),
                   CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
@@ -88,7 +86,8 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        fabricDesignController.createFabricDesign();
+                        fabricDesignController
+                            .createFabricDesign(widget.fabricPurchaseId);
                         Navigator.pop(context);
                       }
                     },
@@ -97,6 +96,13 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
               ),
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: IgnorePointer(
+        ignoring: true,
+        child: RemainingWarAndBundleBottomNavigationBar(
+          remainingBundle: fabricDesignController.remainingBundle,
+          remainingWar: fabricDesignController.remainingWar,
         ),
       ),
     );

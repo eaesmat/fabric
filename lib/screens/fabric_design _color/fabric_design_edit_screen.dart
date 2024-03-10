@@ -12,11 +12,12 @@ import 'package:provider/provider.dart';
 class FabricDesignEditScreen extends StatefulWidget {
   final Data fabricDesignData;
   final int fabricDesignId;
-  const FabricDesignEditScreen({
-    super.key,
-    required this.fabricDesignData,
-    required this.fabricDesignId,
-  });
+  final int fabricPurchaseId;
+  const FabricDesignEditScreen(
+      {super.key,
+      required this.fabricDesignData,
+      required this.fabricDesignId,
+      required this.fabricPurchaseId});
 
   @override
   State<FabricDesignEditScreen> createState() => _FabricDesignEditScreenState();
@@ -78,7 +79,7 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                     ),
                   ),
                   CustomTextFieldWithController(
-                    controller: fabricDesignController.designImageController,
+                    // controller: fabricDesignController.designImageController,
                     lblText: const LocaleText('photo'),
                   ),
                   CustomDropDownButton(
@@ -93,10 +94,12 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        fabricDesignController.editFabricDesign(widget.fabricDesignId);
-                        Navigator.pop(context);
-                      }
+                      // if (formKey.currentState!.validate()) {
+                      //   fabricDesignController.editFabricDesign(
+                      //     widget.fabricDesignId,
+                      //   );
+                      //   Navigator.pop(context);
+                      // }
                     },
                   ),
                 ],

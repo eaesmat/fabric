@@ -71,10 +71,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                       currentLocale,
                     ),
                   ),
-                  CustomTextFieldWithController(
-                    controller: fabricDesignController.designImageController,
-                    lblText: const LocaleText('photo'),
-                  ),
+                 
                   CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
@@ -88,7 +85,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        fabricDesignController.createFabricDesign();
+                        // fabricDesignController.createFabricDesign();
                         Navigator.pop(context);
                       }
                     },

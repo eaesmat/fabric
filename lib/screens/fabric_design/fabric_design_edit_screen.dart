@@ -5,6 +5,7 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
+import 'package:fabricproject/widgets/remaining_war_bundle_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +13,12 @@ import 'package:provider/provider.dart';
 class FabricDesignEditScreen extends StatefulWidget {
   final Data fabricDesignData;
   final int fabricDesignId;
+  final int fabricPurchaseId;
   const FabricDesignEditScreen({
     super.key,
     required this.fabricDesignData,
     required this.fabricDesignId,
+    required this.fabricPurchaseId,
   });
 
   @override
@@ -77,10 +80,6 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                       currentLocale,
                     ),
                   ),
-                  CustomTextFieldWithController(
-                    controller: fabricDesignController.designImageController,
-                    lblText: const LocaleText('photo'),
-                  ),
                   CustomDropDownButton(
                     btnWidth: 1,
                     btnIcon: const Icon(
@@ -94,7 +93,8 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        fabricDesignController.editFabricDesign(widget.fabricDesignId);
+                        fabricDesignController.editFabricDesign(
+                            widget.fabricDesignId, widget.fabricPurchaseId);
                         Navigator.pop(context);
                       }
                     },
@@ -103,6 +103,13 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
               ),
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: IgnorePointer(
+        ignoring: true,
+        child: RemainingWarAndBundleBottomNavigationBar(
+          remainingBundle: fabricDesignController.remainingBundle,
+          remainingWar: fabricDesignController.remainingWar,
         ),
       ),
     );

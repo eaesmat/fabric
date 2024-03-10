@@ -18,11 +18,8 @@ class FabricDesignController extends ChangeNotifier {
   TextEditingController amountOfBundlesController = TextEditingController();
   TextEditingController amountOfWarsController = TextEditingController();
   TextEditingController amountOfToopController = TextEditingController();
-  TextEditingController designImageController = TextEditingController();
-  TextEditingController designNameController = TextEditingController();
 
   // Variables to store fabric purchase information and fabric designs
-  int? fabricPurchaseId;
   List<Data> allFabricDesigns = [];
   List<Data> searchFabricDesigns = [];
   List<Data> cachedFabricDesigns = [];
@@ -32,156 +29,155 @@ class FabricDesignController extends ChangeNotifier {
   String searchText = "";
 
   // Constructor to initialize the controller with helper services and fetch initial data
-  FabricDesignController(this._helperServices) {}
+  FabricDesignController(this._helperServices);
 
   // Navigation function to the fabric design create screen
-  navigateToFabricDesignCreate() {
+  navigateToFabricDesignCreate(int fabricPurchaseId) {
     clearAllControllers();
-    _helperServices.navigate(const FabricDesignCreateScreen());
+    _helperServices.navigate(
+      FabricDesignCreateScreen(
+        fabricPurchaseId: fabricPurchaseId,
+      ),
+    );
   }
 
   // Navigation function to the fabric design edit screen
-  navigateToFabricDesignEdit(Data data, int id) {
+  navigateToFabricDesignEdit(Data data, int fabricDesignId, fabricPurchaseId) {
     clearAllControllers();
     // Populate controllers with existing data for editing
     nameController.text = data.name.toString();
     amountOfBundlesController.text = data.bundle.toString();
     amountOfWarsController.text = data.war.toString();
     amountOfToopController.text = data.toop.toString();
-    designImageController.text = data.designimage.toString();
 
-    _helperServices.navigate(FabricDesignEditScreen(
-      fabricDesignData: data,
-      fabricDesignId: id,
-    ));
+    _helperServices.navigate(
+      FabricDesignEditScreen(
+        fabricDesignData: data,
+        fabricDesignId: fabricDesignId,
+        fabricPurchaseId: fabricPurchaseId,
+      ),
+    );
   }
 
   // Navigation function to the fabric design list screen
   navigateToFabricDesignListScreen(String fabricPurchaseCode, int id) async {
     clearAllControllers();
-    fabricPurchaseId = id;
     _helperServices.navigate(
       FabricDesignListScreen(
         fabricPurchaseId: id,
         fabricPurchaseCode: fabricPurchaseCode,
       ),
     );
-    await getAllFabricDesigns(fabricPurchaseId!);
+    await getAllFabricDesigns(id);
   }
 
   // Function to create a new fabric design through the API
-  createFabricDesign() async {
+  Future<void> createFabricDesign(int fabricPurchaseId) async {
     _helperServices.showLoader();
+    try {
+      var response = await FabricDesignApiServiceProvider().createFabricDesign(
+        'add-fabric-design',
+        {
+          "name": nameController.text,
+          "bundle": amountOfBundlesController.text,
+          "war": amountOfWarsController.text,
+          "toop": amountOfToopController.text,
+          "fp_id": fabricPurchaseId,
+        },
+      );
 
-    var response = await FabricDesignApiServiceProvider().createFabricDesign(
-      'add-fabric-design',
-      {
-        "fabricdesign_id": 0,
-        "name": nameController.text,
-        "bundle": amountOfBundlesController.text,
-        "war": amountOfWarsController.text,
-        "toop": amountOfToopController.text,
-        "fabricpurchase_id": fabricPurchaseId.toString(),
-        "designimage": designImageController.text,
-        "designname": designNameController.text,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-      },
-      (r) {
-        // Refresh fabric designs list and show success message
-        // getAllFabricDesigns(fabricPurchaseId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-
-        clearAllControllers();
-      },
-    );
-  }
-
-  // Function to edit an existing fabric design through the API
-  editFabricDesign(int fabricDesignId) async {
-    _helperServices.showLoader();
-
-    var response = await FabricDesignApiServiceProvider().editFabricDesign(
-      'update-fabric-design?fabricdesign_id$fabricDesignId',
-      {
-        "fabricdesign_id": fabricDesignId,
-        "name": nameController.text,
-        "bundle": amountOfBundlesController.text,
-        "war": amountOfWarsController.text,
-        "toop": amountOfToopController.text,
-        "fabricpurchase_id": fabricPurchaseId.toString(),
-        "designimage": designImageController.text,
-        "designname": designNameController.text,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-      },
-      (r) {
-        // Refresh fabric designs list and show success message
-        // getAllFabricDesigns(fabricPurchaseId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-
-        clearAllControllers();
-      },
-    );
-  }
-
-  // Function to delete an existing fabric design through the API
-  void deleteItemLocally(int id) {
-    final index =
-        allFabricDesigns!.indexWhere((element) => element.fabricdesignId == id);
-    if (index != -1) {
-      allFabricDesigns!.removeAt(index);
-
-      final searchIndex = searchFabricDesigns!
-          .indexWhere((element) => element.fabricdesignId == id);
-      if (searchIndex != -1) {
-        searchFabricDesigns!.removeAt(searchIndex);
-      }
-
-      notifyListeners();
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllFabricDesigns(fabricPurchaseId);
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
     }
   }
 
-  // Function to delete a fabric design through the API
-  deleteFabricDesign(id, index) async {
+  Future<void> editFabricDesign(int fabricDesignId, fabricPurchaseId) async {
     _helperServices.showLoader();
-    var response = await FabricDesignApiServiceProvider()
-        .deleteFabricDesign('delete-fabric-design?fabricdesign_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await FabricDesignApiServiceProvider().editFabricDesign(
+        'update-fabric-design',
+        {
+          "fd_id": fabricDesignId,
+          "name": nameController.text,
+          "bundle": amountOfBundlesController.text,
+          "war": amountOfWarsController.text,
+          "toop": amountOfToopController.text,
+          "fp_id": fabricPurchaseId,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+
+          getFabricDesignRemainBundleAndWar(fabricPurchaseId);
+
+          updateFabricDesignLocally(
+            fabricDesignId,
+            Data(
+              fabricdesignId: fabricDesignId,
+              name: nameController.text,
+              bundle: int.tryParse(amountOfBundlesController.text),
+              war: int.tryParse(amountOfBundlesController.text),
+              toop: int.tryParse(amountOfToopController.text),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  Future<void> deleteFabricDesign(int fabricDesignId, fabricPurchaseId) async {
+    _helperServices.showLoader();
+    try {
+      final response = await FabricDesignApiServiceProvider()
+          .deleteFabricDesign('delete-fabric-design?fd_id=$fabricDesignId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            getFabricDesignRemainBundleAndWar(fabricPurchaseId);
+            deleteItemLocally(fabricDesignId);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -189,11 +185,8 @@ class FabricDesignController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -201,10 +194,40 @@ class FabricDesignController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  void deleteItemLocally(int id) {
+    allFabricDesigns.removeWhere((element) => element.fabricdesignId == id);
+    cachedFabricDesigns.removeWhere((element) => element.fabricdesignId == id);
+    searchFabricDesigns.removeWhere((element) => element.fabricdesignId == id);
+    notifyListeners();
+  }
+
+  void updateFabricDesignLocally(int id, Data updatedData) {
+    int index =
+        allFabricDesigns.indexWhere((element) => element.fabricdesignId == id);
+    if (index != -1) {
+      allFabricDesigns[index] = updatedData;
+      int cacheIndex = cachedFabricDesigns
+          .indexWhere((element) => element.fabricdesignId == id);
+      if (cacheIndex != -1) {
+        cachedFabricDesigns[cacheIndex] = updatedData; // Update cache
+      }
+      int searchIndex = searchFabricDesigns
+          .indexWhere((element) => element.fabricdesignId == id);
+      if (searchIndex != -1) {
+        searchFabricDesigns[searchIndex] = updatedData; // Update search list
+      }
+      notifyListeners();
+    }
   }
 
   // Function to fetch all fabric designs from the API
@@ -314,7 +337,5 @@ class FabricDesignController extends ChangeNotifier {
     amountOfToopController.clear();
     amountOfBundlesController.clear();
     amountOfWarsController.clear();
-    designImageController.clear();
-    designNameController.clear();
   }
 }

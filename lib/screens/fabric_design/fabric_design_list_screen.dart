@@ -1,4 +1,5 @@
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
+import 'package:fabricproject/widgets/remaining_war_bundle_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
@@ -57,7 +58,8 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                         color: Pallete.blueColor,
                       ),
                       onPressed: () {
-                        fabricDesignController.navigateToFabricDesignCreate();
+                        fabricDesignController.navigateToFabricDesignCreate(
+                            widget.fabricPurchaseId);
                       },
                     ),
                     lblText: const LocaleText('search'),
@@ -155,11 +157,16 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                           onSelected: (String value) {
                             if (value == "edit") {
                               fabricDesignController.navigateToFabricDesignEdit(
-                                  data, data.fabricdesignId!.toInt());
+                                data,
+                                data.fabricdesignId!.toInt(),
+                                widget.fabricPurchaseId,
+                              );
                             }
                             if (value == "delete") {
                               fabricDesignController.deleteFabricDesign(
-                                  data.fabricdesignId, index);
+                                data.fabricdesignId!.toInt(),
+                                widget.fabricPurchaseId,
+                              );
                             }
                           },
                         ),
@@ -174,54 +181,9 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
       ),
       bottomNavigationBar: IgnorePointer(
         ignoring: true,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Pallete.whiteColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 0,
-                offset: const Offset(0, -0.3),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.timelapse, color: Pallete.blueColor),
-                  const SizedBox(
-                      width: 5), // Adjust spacing between icon and text
-                  const LocaleText('bundle',
-                      style: TextStyle(color: Pallete.blueColor)),
-                  const SizedBox(
-                      width:
-                          5), // Adjust spacing between text and remainingBundle
-                  Text(
-                    fabricDesignController.remainingBundle,
-                    style: const TextStyle(color: Pallete.blueColor),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.timelapse, color: Pallete.blueColor),
-                  const SizedBox(
-                      width: 5), // Adjust spacing between icon and text
-                  const LocaleText('war',
-                      style: TextStyle(color: Pallete.blueColor)),
-                  const SizedBox(
-                      width: 5), // Adjust spacing between text and remainingWar
-                  Text(
-                    fabricDesignController.remainingWar,
-                    style: const TextStyle(color: Pallete.blueColor),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        child: RemainingWarAndBundleBottomNavigationBar(
+          remainingBundle: fabricDesignController.remainingBundle,
+          remainingWar: fabricDesignController.remainingWar,
         ),
       ),
     );
