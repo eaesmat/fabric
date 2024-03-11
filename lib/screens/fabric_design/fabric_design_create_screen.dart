@@ -4,7 +4,7 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
-import 'package:fabricproject/widgets/remaining_war_bundle_navigation.dart';
+import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
@@ -98,12 +98,21 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: IgnorePointer(
-        ignoring: true,
-        child: RemainingWarAndBundleBottomNavigationBar(
-          remainingBundle: fabricDesignController.remainingBundle,
-          remainingWar: fabricDesignController.remainingWar,
-        ),
+      bottomNavigationBar: CalculationBottomNavigationBar(
+        rowsData: [
+          RowData(
+            icon: Icons.timelapse,
+            textKey: 'bundle',
+            remainingValue: fabricDesignController.remainingBundle,
+            iconColor: Pallete.blueColor,
+            textColor: Pallete.blueColor,
+          ),
+          RowData(
+            icon: Icons.timelapse,
+            textKey: 'war',
+            remainingValue: fabricDesignController.remainingWar,
+          ),
+        ],
       ),
     );
   }

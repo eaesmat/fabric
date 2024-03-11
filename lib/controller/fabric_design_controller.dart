@@ -261,24 +261,17 @@ class FabricDesignController extends ChangeNotifier {
 
   // Function to fetch all fabric designs from the API
   Future<void> getFabricDesignRemainBundleAndWar(int fabricPurchaseId) async {
-    // _helperServices.showLoader();
     try {
       final response = await FabricDesignApiServiceProvider()
           .getFabricDesignRemainBundleAndWar(
               'getRemainBundleAndWar?fabricpurchase_id=$fabricPurchaseId');
       response.fold(
         (l) {
-          _helperServices.goBack();
           _helperServices.showErrorMessage(l);
         },
         (r) {
           remainingBundle = r.bundle.toString();
           remainingWar = r.war.toString();
-          // fabricDesignColors = r.fabricAndBundleButtonColors ?? [];
-          // searchFabricDesigns = List.from(allFabricDesigns);
-          // cachedFabricDesigns =
-          //     List.from(allFabricDesigns); // Cache initial data
-          // _helperServices.goBack();
 
           notifyListeners();
         },

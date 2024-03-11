@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:fabricproject/constants/api_url.dart';
+import 'package:fabricproject/model/khalid_calculation_mdoel.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:fabricproject/model/all_fabric_purchases_model.dart';
@@ -10,7 +11,8 @@ class AllFabricPurchasesApiServiceProvider {
   final String _baseURL = baseURL;
   // Data type comes from its model
   // api EndPoint comes from controller
-  Future<Either<String, List<Data>>> getAllFabricPurchase(String apiEndpoint) async {
+  Future<Either<String, List<Data>>> getAllFabricPurchase(
+      String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),
@@ -32,6 +34,30 @@ class AllFabricPurchasesApiServiceProvider {
       );
     }
   }
+
+  Future<Either<String, KhalidCalculationModel>> getKhalidCalculation(
+      String apiEndpoint) async {
+    try {
+      var response = await http.get(
+        Uri.parse(_baseURL + apiEndpoint),
+      );
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse =
+            json.decode(response.body.toString());
+        final khalidCalculationModel =
+            KhalidCalculationModel.fromJson(jsonResponse);
+// return data to the controller
+        return right(khalidCalculationModel);
+      } else {
+        return left(" ${response.statusCode}");
+      }
+    } catch (e) {
+      return left(
+        e.toString(),
+      );
+    }
+  }
+
   Future<Either<String, int>> createFabricPurchase(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);

@@ -1,10 +1,10 @@
 class FabricDesignModel {
   List<Data>? data;
-  List<FabricAndBundleButtonColors>? fabricAndBundleButtonColors;
   int? countColorButton;
+  List<FabricAndBundleButtonColors>? fabricAndBundleButtonColors;
 
   FabricDesignModel(
-      {this.data, this.fabricAndBundleButtonColors, this.countColorButton});
+      {this.data, this.countColorButton, this.fabricAndBundleButtonColors});
 
   FabricDesignModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
@@ -13,6 +13,7 @@ class FabricDesignModel {
         data!.add(new Data.fromJson(v));
       });
     }
+    countColorButton = json['countColorButton'];
     if (json['FabricAndBundleButtonColors'] != null) {
       fabricAndBundleButtonColors = <FabricAndBundleButtonColors>[];
       json['FabricAndBundleButtonColors'].forEach((v) {
@@ -20,7 +21,6 @@ class FabricDesignModel {
             .add(new FabricAndBundleButtonColors.fromJson(v));
       });
     }
-    countColorButton = json['countColorButton'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,11 +28,11 @@ class FabricDesignModel {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['countColorButton'] = this.countColorButton;
     if (this.fabricAndBundleButtonColors != null) {
       data['FabricAndBundleButtonColors'] =
           this.fabricAndBundleButtonColors!.map((v) => v.toJson()).toList();
     }
-    data['countColorButton'] = this.countColorButton;
     return data;
   }
 }
@@ -43,8 +43,11 @@ class Data {
   int? bundle;
   int? war;
   int? toop;
-  String? status;
+  int? fabricpurchaseId;
   String? designimage;
+  String? designname;
+  int? userId;
+  String? status;
 
   Data(
       {this.fabricdesignId,
@@ -52,8 +55,11 @@ class Data {
       this.bundle,
       this.war,
       this.toop,
-      this.status,
-      this.designimage});
+      this.fabricpurchaseId,
+      this.designimage,
+      this.designname,
+      this.userId,
+      this.status});
 
   Data.fromJson(Map<String, dynamic> json) {
     fabricdesignId = json['fabricdesign_id'];
@@ -61,8 +67,11 @@ class Data {
     bundle = json['bundle'];
     war = json['war'];
     toop = json['toop'];
-    status = json['status'];
+    fabricpurchaseId = json['fabricpurchase_id'];
     designimage = json['designimage'];
+    designname = json['designname'];
+    userId = json['user_id'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,61 +81,44 @@ class Data {
     data['bundle'] = this.bundle;
     data['war'] = this.war;
     data['toop'] = this.toop;
-    data['status'] = this.status;
+    data['fabricpurchase_id'] = this.fabricpurchaseId;
     data['designimage'] = this.designimage;
+    data['designname'] = this.designname;
+    data['user_id'] = this.userId;
+    data['status'] = this.status;
     return data;
   }
 }
 
 class FabricAndBundleButtonColors {
-  int? fabricdesigncolorId;
-  int? fabricdesignId;
-  String? toop;
-  String? war;
-  String? bundle;
-  String? photo;
-  int? userId;
   int? colorId;
+  int? fabricdesignId;
+  int? fabricdesigncolorId;
+  int? userId;
   String? colorname;
-  String? colordescription;
 
   FabricAndBundleButtonColors(
-      {this.fabricdesigncolorId,
+      {this.colorId,
       this.fabricdesignId,
-      this.toop,
-      this.war,
-      this.bundle,
-      this.photo,
+      this.fabricdesigncolorId,
       this.userId,
-      this.colorId,
-      this.colorname,
-      this.colordescription});
+      this.colorname});
 
   FabricAndBundleButtonColors.fromJson(Map<String, dynamic> json) {
-    fabricdesigncolorId = json['fabricdesigncolor_id'];
-    fabricdesignId = json['fabricdesign_id'];
-    toop = json['toop'];
-    war = json['war'];
-    bundle = json['bundle'];
-    photo = json['photo'];
-    userId = json['user_id'];
     colorId = json['color_id'];
+    fabricdesignId = json['fabricdesign_id'];
+    fabricdesigncolorId = json['fabricdesigncolor_id'];
+    userId = json['user_id'];
     colorname = json['colorname'];
-    colordescription = json['colordescription'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricdesigncolor_id'] = this.fabricdesigncolorId;
-    data['fabricdesign_id'] = this.fabricdesignId;
-    data['toop'] = this.toop;
-    data['war'] = this.war;
-    data['bundle'] = this.bundle;
-    data['photo'] = this.photo;
-    data['user_id'] = this.userId;
     data['color_id'] = this.colorId;
+    data['fabricdesign_id'] = this.fabricdesignId;
+    data['fabricdesigncolor_id'] = this.fabricdesigncolorId;
+    data['user_id'] = this.userId;
     data['colorname'] = this.colorname;
-    data['colordescription'] = this.colordescription;
     return data;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:fabricproject/api/all_fabric_purchases_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/all_fabric_purchases_model.dart';
+import 'package:fabricproject/model/khalid_calculation_mdoel.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,10 @@ class AllFabricPurchasesController extends ChangeNotifier {
   List<Data> searchAllFabricPurchases = [];
   List<Data> cachedForex = [];
 
+  String totalDollerPirce = "";
+  String submitDoller = "";
+  String balance = "";
+  String kldhmd = "";
   String searchText = "";
 
   AllFabricPurchasesController(this._helperServices) {
@@ -63,6 +68,30 @@ class AllFabricPurchasesController extends ChangeNotifier {
           searchAllFabricPurchases = List.from(allFabricPurchases);
           cachedForex = List.from(allFabricPurchases); // Cache initial data
           _helperServices.goBack();
+          getKhalidCalculation();
+
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  Future<void> getKhalidCalculation() async {
+    try {
+      final response = await AllFabricPurchasesApiServiceProvider()
+          .getKhalidCalculation('statusResult');
+      response.fold(
+        (l) {
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          totalDollerPirce = r.totalDollerPirce.toString();
+          submitDoller = r.submitDoller.toString();
+          balance = r.balance.toString();
+          kldhmd = r.kldhmd.toString();
 
           notifyListeners();
         },

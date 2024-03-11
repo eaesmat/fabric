@@ -1,5 +1,5 @@
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
-import 'package:fabricproject/widgets/remaining_war_bundle_navigation.dart';
+import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
@@ -8,8 +8,6 @@ import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_item_details.dart';
-import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
-import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
 
@@ -30,10 +28,10 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
   @override
   Widget build(BuildContext context) {
     final fabricDesignController = Provider.of<FabricDesignController>(context);
-    final fabricDesignColorController =
-        Provider.of<FabricDesignBundleController>(context);
-    final fabricDesignBundleController =
-        Provider.of<FabricDesignColorController>(context);
+    // final fabricDesignColorController =
+    //     Provider.of<FabricDesignBundleController>(context);
+    // final fabricDesignBundleController =
+    //     Provider.of<FabricDesignColorController>(context);
     return Scaffold(
       appBar: AppBar(
         title: CustomTextTitle(text: widget.fabricPurchaseCode),
@@ -86,14 +84,14 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                       final data = searchFabricDesigns[index];
                       return ListTileWidget(
                         onTap: () {
-                          fabricDesignColorController
-                              .navigateToFabricDesignDetails(
-                                  data.name.toString(),
-                                  data.fabricdesignId!.toInt());
-                          fabricDesignBundleController
-                              .navigateToFabricDesignDetails(
-                                  data.name.toString(),
-                                  data.fabricdesignId!.toInt());
+                          // fabricDesignColorController
+                          //     .navigateToFabricDesignDetails(
+                          //         data.name.toString(),
+                          //         data.fabricdesignId!.toInt());
+                          // fabricDesignBundleController
+                          //     .navigateToFabricDesignDetails(
+                          //         data.name.toString(),
+                          //         data.fabricdesignId!.toInt());
                         },
                         onLongPress: () {
                           showModalBottomSheet(
@@ -114,16 +112,16 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                             : const Icon(Icons.close, color: Colors.red),
                         tileTitle: Row(
                           children: [
-                            Text(data.name.toString()),
+                            Text(data.name?.toString() ?? ''),
                             const Spacer(),
-                            Text(data.bundle.toString()),
+                            Text(data.bundle?.toString() ?? ''),
                           ],
                         ),
                         tileSubTitle: Row(
                           children: [
-                            Text(data.war.toString()),
+                            Text(data.war?.toString() ?? ''),
                             const Spacer(),
-                            Text(data.toop.toString()),
+                            Text(data.toop?.toString() ?? ''),
                           ],
                         ),
                         trail: PopupMenuButton(
@@ -179,12 +177,22 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: IgnorePointer(
-        ignoring: true,
-        child: RemainingWarAndBundleBottomNavigationBar(
-          remainingBundle: fabricDesignController.remainingBundle,
-          remainingWar: fabricDesignController.remainingWar,
-        ),
+      bottomNavigationBar: CalculationBottomNavigationBar(
+        rowsData: [
+          RowData(
+            icon: Icons.timelapse,
+            textKey: 'bundle',
+            remainingValue: fabricDesignController.remainingBundle,
+            iconColor: Pallete.blueColor,
+            textColor: Pallete.blueColor,
+          ),
+          RowData(
+            icon: Icons.timelapse,
+            textKey: 'war',
+            remainingValue: fabricDesignController.remainingWar,
+          ),
+          // Add more RowData objects as needed
+        ],
       ),
     );
   }
