@@ -15,7 +15,13 @@ class SaraiFabricBundleSelectController extends ChangeNotifier {
   List<Data>? searchSaraiFabricBundleSelects = [];
   List<Data>? selectedItems = [];
 
-  void addItemToSelected(Data item) {
+  // this will hold search text field text
+  String searchText = "";
+  SaraiFabricBundleSelectController(this._helperServices) {
+    // Gets data at first visit to the ui
+  }
+
+    void addItemToSelected(Data item) {
     selectedItems ??= [];
     selectedItems!.add(item);
     notifyListeners();
@@ -29,13 +35,6 @@ class SaraiFabricBundleSelectController extends ChangeNotifier {
 
   notify() {
     notifyListeners();
-  }
-
-  // this will hold search text field text
-  String searchText = "";
-
-  SaraiFabricBundleSelectController(this._helperServices) {
-    // Gets data at first visit to the ui
   }
 
 // gets all the data
@@ -53,8 +52,7 @@ class SaraiFabricBundleSelectController extends ChangeNotifier {
             }, (r) {
 // r holds data comes from api with success
       allSaraiFabricBundleSelects = r;
-      print("The data is");
-      print(r.length);
+     
       // goBack pops the current stack
       _helperServices.goBack();
       searchSaraiFabricBundleSelects?.clear();

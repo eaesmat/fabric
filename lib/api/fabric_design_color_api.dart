@@ -16,7 +16,7 @@ class FabricDesignColorApiServiceProvider {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
-        final fabricDesignColor = FabricDesignColor.fromJson(jsonResponse);
+        final fabricDesignColor = FabricDesignColorModel.fromJson(jsonResponse);
 
         return right(
           fabricDesignColor.data!,
@@ -32,24 +32,28 @@ class FabricDesignColorApiServiceProvider {
   }
 
   Future<Either<String, int>> createFabricDesignColor(
-      String apiEndpoint, Map<String, dynamic> data) async {
-    String jsonData = json.encode(data);
+      String apiEndpoint, List<Map<String, dynamic>> data) async {
+    String jsonData = json.encode({"data": data}); // Wrap data with "data" key
+    print(jsonData);
     try {
-      final response = await http
-          .post(Uri.parse(_baseURL + apiEndpoint), body: jsonData, headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      });
+      final response = await http.post(
+        Uri.parse(_baseURL + apiEndpoint),
+        body: jsonData,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
+        return right(response.statusCode);
+      } else if (response.statusCode == 500) {
         return right(response.statusCode);
       } else {
         return left(response.statusCode.toString());
       }
     } catch (e) {
-      return left(
-        e.toString(),
-      );
+      return left(e.toString());
     }
   }
 
@@ -76,7 +80,8 @@ class FabricDesignColorApiServiceProvider {
     }
   }
 
-  Future<Either<String, int>> deleteFabricDesignColor(String apiEndpoint) async {
+  Future<Either<String, int>> deleteFabricDesignColor(
+      String apiEndpoint) async {
     try {
       final response = await http.delete(Uri.parse(_baseURL + apiEndpoint));
       if (response.statusCode == 200) {

@@ -1,9 +1,9 @@
-class FabricDesignColorModel {
+class ColorsModel {
   List<Data>? data;
 
-  FabricDesignColorModel({this.data});
+  ColorsModel({this.data});
 
-  FabricDesignColorModel.fromJson(Map<String, dynamic> json) {
+  ColorsModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -22,26 +22,23 @@ class FabricDesignColorModel {
 }
 
 class Data {
-  int? fabricdesigncolorId;
-  String? colorname;
-  String? photo;
   int? colorId;
+  String? colorname;
+  String? colordescription;
 
-  Data({this.fabricdesigncolorId, this.colorname, this.photo, this.colorId});
+  Data({this.colorId, this.colorname, this.colordescription});
 
   Data.fromJson(Map<String, dynamic> json) {
-    fabricdesigncolorId = json['fabricdesigncolor_id'];
-    colorname = json['colorname'];
-    photo = json['photo'];
     colorId = json['color_id'];
+    colorname = json['colorname'];
+    colordescription = json['colordescription'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricdesigncolor_id'] = this.fabricdesigncolorId;
-    data['colorname'] = this.colorname;
-    data['photo'] = this.photo;
     data['color_id'] = this.colorId;
+    data['colorname'] = this.colorname;
+    data['colordescription'] = this.colordescription;
     return data;
   }
 }

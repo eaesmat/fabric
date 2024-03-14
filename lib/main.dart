@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
+import 'package:fabricproject/controller/colors_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
@@ -93,11 +94,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FabricDesignBundleController>(
           create: (_) => FabricDesignBundleController(HelperServices.instance),
         ),
-       
+
         ChangeNotifierProvider<ContainerController>(
           create: (_) => ContainerController(HelperServices.instance),
         ),
-       
+
         // ChangeNotifierProvider<KhalidRasidController>(
         //   create: (_) => KhalidRasidController(HelperServices.instance),
         // ),
@@ -107,9 +108,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SaraiInDealController>(
           create: (_) => SaraiInDealController(HelperServices.instance),
         ),
-        // ChangeNotifierProvider<KhalidRasidController>(
-        //   create: (_) => KhalidRasidController(HelperServices.instance),
-        // ),
+        ChangeNotifierProvider<ColorsController>(
+          create: (_) => ColorsController(HelperServices.instance),
+        ),
         // ChangeNotifierProvider<PatiDesignColorController>(
         //   create: (_) => PatiDesignColorController(HelperServices.instance),
         // ),

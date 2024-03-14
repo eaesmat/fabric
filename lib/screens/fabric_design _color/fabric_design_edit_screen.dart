@@ -1,6 +1,7 @@
-import 'package:fabricproject/controller/fabric_design_controller.dart';
+import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/model/fabric_design_model.dart';
+import 'package:fabricproject/model/fabric_design_color_model.dart';
+import 'package:fabricproject/screens/fabric_design%20_color/color_button_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -9,31 +10,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class FabricDesignEditScreen extends StatefulWidget {
-  final Data fabricDesignData;
-  final int fabricDesignId;
-  final int fabricPurchaseId;
-  const FabricDesignEditScreen(
-      {super.key,
-      required this.fabricDesignData,
-      required this.fabricDesignId,
-      required this.fabricPurchaseId});
+class FabricDesignColorEditScreen extends StatefulWidget {
+  final Data fabricDesignColorData;
+  final int fabricDesignColorId;
+  const FabricDesignColorEditScreen({
+    super.key,
+    required this.fabricDesignColorData,
+    required this.fabricDesignColorId,
+  });
 
   @override
-  State<FabricDesignEditScreen> createState() => _FabricDesignEditScreenState();
+  State<FabricDesignColorEditScreen> createState() =>
+      _FabricDesignColorEditScreenState();
 }
 
-class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
+class _FabricDesignColorEditScreenState
+    extends State<FabricDesignColorEditScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final fabricDesignController = Provider.of<FabricDesignController>(context);
+    final fabricDesignColorController =
+        Provider.of<FabricDesignColorController>(context);
     Locale currentLocale = Localizations.localeOf(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_fabric_design'),
+        title: const LocaleTexts(localeText: 'edit_fabric_design_color'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -45,41 +48,32 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
               key: formKey,
               child: Column(
                 children: [
-                  CustomTextFieldWithController(
-                    lblText: const LocaleText('design_name'),
-                    controller: fabricDesignController.nameController,
-                    customValidator: (value) => customValidator(
-                      value,
-                      currentLocale,
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return const ColorBottomSheet();
+                        },
+                      );
+                    },
+                    child: CustomTextFieldWithController(
+                      customValidator: (value) =>
+                          customValidator(value, currentLocale),
+                      isDisabled: true,
+                      controller: fabricDesignColorController
+                          .selectedColorNameController,
+                      iconBtn: const Icon(
+                        size: 30,
+                        Icons.add_box_rounded,
+                        color: Pallete.blueColor,
+                      ),
+                      lblText: const LocaleText('colors'),
                     ),
                   ),
                   CustomTextFieldWithController(
-                    controller:
-                        fabricDesignController.amountOfBundlesController,
-                    lblText: const LocaleText('bundle'),
-                    customValidator: (value) => customValidator(
-                      value,
-                      currentLocale,
-                    ),
-                  ),
-                  CustomTextFieldWithController(
-                    controller: fabricDesignController.amountOfWarsController,
-                    lblText: const LocaleText('war'),
-                    customValidator: (value) => customValidator(
-                      value,
-                      currentLocale,
-                    ),
-                  ),
-                  CustomTextFieldWithController(
-                    controller: fabricDesignController.amountOfToopController,
-                    lblText: const LocaleText('toop'),
-                    customValidator: (value) => customValidator(
-                      value,
-                      currentLocale,
-                    ),
-                  ),
-                  CustomTextFieldWithController(
-                    // controller: fabricDesignController.designImageController,
+                    controller: fabricDesignColorController.photoController,
                     lblText: const LocaleText('photo'),
                   ),
                   CustomDropDownButton(
@@ -94,12 +88,12 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                     ),
                     bgColor: Pallete.blueColor,
                     onTap: () {
-                      // if (formKey.currentState!.validate()) {
-                      //   fabricDesignController.editFabricDesign(
-                      //     widget.fabricDesignId,
-                      //   );
-                      //   Navigator.pop(context);
-                      // }
+                      if (formKey.currentState!.validate()) {
+                        fabricDesignColorController.editFabricDesignColor(
+                          widget.fabricDesignColorId,
+                        );
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ],

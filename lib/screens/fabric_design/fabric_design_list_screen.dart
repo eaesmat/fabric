@@ -1,3 +1,5 @@
+import 'package:fabricproject/controller/fabric_design_color_controller.dart';
+import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import 'package:fabricproject/widgets/no_data_found.widget.dart';
 
 class FabricDesignListScreen extends StatefulWidget {
   final int fabricPurchaseId;
+
   final String fabricPurchaseCode;
   const FabricDesignListScreen({
     Key? key,
@@ -25,13 +28,14 @@ class FabricDesignListScreen extends StatefulWidget {
 }
 
 class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
+  final HelperServices helper = HelperServices.instance;
+
   @override
   Widget build(BuildContext context) {
     final fabricDesignController = Provider.of<FabricDesignController>(context);
-    // final fabricDesignColorController =
-    //     Provider.of<FabricDesignBundleController>(context);
-    // final fabricDesignBundleController =
-    //     Provider.of<FabricDesignColorController>(context);
+    final fabricDesignColorController =
+        Provider.of<FabricDesignColorController>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: CustomTextTitle(text: widget.fabricPurchaseCode),
@@ -56,8 +60,26 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                         color: Pallete.blueColor,
                       ),
                       onPressed: () {
-                        fabricDesignController.navigateToFabricDesignCreate(
-                            widget.fabricPurchaseId);
+                        final fabricDesignController =
+                            Provider.of<FabricDesignController>(context,
+                                listen: false);
+                        int bundle =
+                            fabricDesignController.remainingBundle ?? 0;
+                        int war = fabricDesignController.remainingWar ?? 0;
+
+                        if (bundle > 0 && war > 0) {
+                          fabricDesignController.navigateToFabricDesignCreate(
+                              widget.fabricPurchaseId);
+                        } else {
+                          helper.showMessage(
+                            const LocaleText('no_wars_bundles'),
+                            Colors.deepOrange,
+                            const Icon(
+                              Icons.warning,
+                              color: Pallete.whiteColor,
+                            ),
+                          );
+                        }
                       },
                     ),
                     lblText: const LocaleText('search'),
@@ -84,14 +106,13 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                       final data = searchFabricDesigns[index];
                       return ListTileWidget(
                         onTap: () {
-                          // fabricDesignColorController
-                          //     .navigateToFabricDesignDetails(
-                          //         data.name.toString(),
-                          //         data.fabricdesignId!.toInt());
-                          // fabricDesignBundleController
-                          //     .navigateToFabricDesignDetails(
-                          //         data.name.toString(),
-                          //         data.fabricdesignId!.toInt());
+                          fabricDesignColorController
+                              .navigateToFabricDesignDetails(
+                            data.name.toString(),
+                            data.fabricdesignId!.toInt(),
+                            data.countColor,
+                            data.colorsLength
+                          );
                         },
                         onLongPress: () {
                           showModalBottomSheet(
@@ -182,14 +203,14 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
           RowData(
             icon: Icons.timelapse,
             textKey: 'bundle',
-            remainingValue: fabricDesignController.remainingBundle,
+            remainingValue: fabricDesignController.remainingBundle.toString(),
             iconColor: Pallete.blueColor,
             textColor: Pallete.blueColor,
           ),
           RowData(
             icon: Icons.timelapse,
             textKey: 'war',
-            remainingValue: fabricDesignController.remainingWar,
+            remainingValue: fabricDesignController.remainingWar.toString(),
           ),
           // Add more RowData objects as needed
         ],

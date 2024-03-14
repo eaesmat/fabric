@@ -110,14 +110,14 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
           RowData(
             icon: Icons.timelapse,
             textKey: 'bundle',
-            remainingValue: fabricDesignController.remainingBundle,
+            remainingValue: fabricDesignController.remainingBundle.toString(),
             iconColor: Pallete.blueColor,
             textColor: Pallete.blueColor,
           ),
           RowData(
             icon: Icons.timelapse,
             textKey: 'war',
-            remainingValue: fabricDesignController.remainingWar,
+            remainingValue: fabricDesignController.remainingWar.toString(),
           ),
           // Add more RowData objects as needed
         ],

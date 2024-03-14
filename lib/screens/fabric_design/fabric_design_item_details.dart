@@ -21,14 +21,7 @@ class FabricDesignDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fabricDesignController = Provider.of<FabricDesignController>(context);
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // Filter fabricDesignColors to include only colors with matching fabricdesign_id
-    List<FabricAndBundleButtonColors> matchingColors = fabricDesignController.fabricDesignColors
-        .where((color) => color.fabricdesignId == data.fabricdesignId)
-        .toList();
-
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(20.0),
@@ -84,14 +77,10 @@ class FabricDesignDetailsBottomSheet extends StatelessWidget {
                       LocaleText('toop'),
                       Text(data.toop.toString()),
                     ),
-                    // Render matching colors
-                    ...matchingColors.map(
-                      (color) => buildDataRow(
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: getColorFromName(color.colorname.toString()),
-                        ),
-                        Text(color.colorname.toString()),
+                    buildDataRow(
+                      LocaleText('colors'),
+                      Text(
+                        data.colors.toString(),
                       ),
                     ),
                   ],

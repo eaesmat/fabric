@@ -83,7 +83,7 @@ flutter:
     - assets/images/g_logo.svg
     - assets/images/fabricIcon.png
     - assets/images/noData.png
-    - assets/images/newlogo.png
+    - assets/images/isComplete.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

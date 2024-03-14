@@ -1,6 +1,7 @@
 import 'package:fabricproject/api/fabric_design_color_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_color_model.dart';
+import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_edit_screen.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_details_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
@@ -8,171 +9,228 @@ import 'package:flutter_locales/flutter_locales.dart';
 
 class FabricDesignColorController extends ChangeNotifier {
   final HelperServices _helperServices;
-  TextEditingController colorNameController = TextEditingController();
-  TextEditingController amountOfBundlesController = TextEditingController();
-  TextEditingController amountOfWarsController = TextEditingController();
-  TextEditingController amountOfToopController = TextEditingController();
+  TextEditingController selectedColorNameController = TextEditingController();
+  TextEditingController selectedColorIdController = TextEditingController();
   TextEditingController photoController = TextEditingController();
 
-  int? fabricDesignId;
-  List<Data>? allFabricDesignColors = [];
-  List<Data>? searchFabricDesignColors = [];
+  List<Data> allFabricDesignColors = [];
+  List<Data> searchFabricDesignColors = [];
   String searchText = "";
 
-  FabricDesignColorController(
-    this._helperServices,
-  ) {
-    getAllFabricDesignColors(fabricDesignId);
+  List<Map<String, dynamic>> selectedColors = [];
+  List<Map<String, dynamic>> transferFormData = [];
+  int fabricDesignId = 0; // Initialize with a default value
+
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedFabricDesignColors = [];
+
+  FabricDesignColorController(this._helperServices);
+
+  void updateJsonData() {
+    // Clear data before adding new data
+    transferFormData.clear();
+
+    // Add selectedColors data
+    transferFormData.addAll([
+      {"name": "fd_id", "value": "$fabricDesignId"},
+    ]);
+    transferFormData.addAll(selectedColors);
+    notifyListeners(); // Notify listeners after adding an item
   }
 
-  // navigateToFabricDesignColorCreate() {
-  //   clearAllControllers();
+  void addItemToData(String name, String value) {
+    selectedColors.add({"name": name, "value": value});
+    notifyListeners(); // Notify listeners after adding an item
+  }
 
-  //   _helperServices.navigate(const FabricDesignColorCreateScreen());
-  // }
+  void removeItemFromData(String name) {
+    selectedColors.removeWhere((item) => item["name"] == name);
+  }
 
-  // navigateToFabricDesignColorEdit(Data data, int id) {
-  //   clearAllControllers();
-
-  //   colorNameController.text = data.colorname.toString();
-  //   amountOfBundlesController.text = data.bundle.toString();
-  //   amountOfWarsController.text = data.war.toString();
-  //   amountOfToopController.text = data.toop.toString();
-  //   photoController.text = data.photo.toString();
-
-  //   _helperServices.navigate(
-  //     FabricDesignColorEditScreen(
-  //       fabricDesignColorData: data,
-  //       fabricDesignColorId: id,
-  //     ),
-  //   );
-  // }
-
-  navigateToFabricDesignDetails(String fabricDesignName, int id) async {
+  void createColors() {
+    updateJsonData();
+    createFabricDesignColor();
     clearAllControllers();
-    fabricDesignId = id;
+  }
+
+  navigateToFabricDesignColorEdit(Data data, int fabricDesignId) {
+    clearAllControllers();
+    // Populate controllers with existing data for editing
+    selectedColorNameController.text = data.colorname.toString();
+    selectedColorIdController.text = data.colorId.toString();
+
+    _helperServices.navigate(
+      FabricDesignColorEditScreen(
+        fabricDesignColorData: data,
+        fabricDesignColorId: fabricDesignId,
+      ),
+    );
+  }
+
+  navigateToFabricDesignDetails(String fabricDesignName, int fabricDesignId,
+      colorCount, colorLength) async {
+    clearAllControllers();
 
     _helperServices.navigate(
       FabricDesignDetailsScreen(
-        fabricDesignId: id,
+        fabricDesignId: fabricDesignId,
         fabricDesignName: fabricDesignName,
+        colorCount: colorCount,
+        colorLength: colorLength,
       ),
     );
     await getAllFabricDesignColors(
       fabricDesignId,
     );
+    this.fabricDesignId = fabricDesignId;
   }
 
-  createFabricDesignColor() async {
+  Future<void> getAllFabricDesignColors(int fabricDesignId) async {
     _helperServices.showLoader();
-
-    var response =
-        await FabricDesignColorApiServiceProvider().createFabricDesignColor(
-      'add-fabric-design-color',
-      {
-        "fabricdesigncolor_id": 0,
-        "colorname": colorNameController.text,
-        "bundle": null,
-        "war": null,
-        "toop": null,
-        "fabricdesign_id": fabricDesignId.toString(),
-        "photo": null,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-      },
-      (r) {
-        getAllFabricDesignColors(fabricDesignId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-
-        clearAllControllers();
-      },
-    );
+    try {
+      final response = await FabricDesignColorApiServiceProvider()
+          .getFabricDesignColor('getFabricDesignColor/$fabricDesignId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allFabricDesignColors = r;
+          searchFabricDesignColors = List.from(allFabricDesignColors);
+          cachedFabricDesignColors =
+              List.from(allFabricDesignColors); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editFabricDesignColor(int fabricDesignColor) async {
+  Future<void> createFabricDesignColor() async {
+    try {
+      var response =
+          await FabricDesignColorApiServiceProvider().createFabricDesignColor(
+        'add-fabric-design-color',
+        transferFormData,
+      );
+
+      response.fold(
+        (l) {
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          if (r == 200) {
+            getAllFabricDesignColors(fabricDesignId);
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+          }
+          if (r == 500) {
+            _helperServices.showMessage(
+              const LocaleText('duplicated_color_is_not_allowed'),
+              Colors.deepOrange,
+              const Icon(
+                Icons.warning,
+                color: Pallete.whiteColor,
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  Future<void> editFabricDesignColor(int fabricDesignColorId) async {
     _helperServices.showLoader();
+    try {
+      final response =
+          await FabricDesignColorApiServiceProvider().editFabricDesignColor(
+        'update-fabric-design-color?fabricdesigncolor_id=$fabricDesignColorId',
+        {
+          "colorname": selectedColorIdController.text,
+          "fd_id": fabricDesignId.toString(),
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
 
-    var response =
-        await FabricDesignColorApiServiceProvider().editFabricDesignColor(
-      'update-fabric-design-color?fabricdesigncolor_id$fabricDesignColor',
-      {
-        "fabricdesigncolor_id": 0,
-        "colorname": colorNameController.text,
-        "bundle": amountOfBundlesController.text,
-        "war": amountOfWarsController.text,
-        "toop": amountOfToopController.text,
-        "fabricdesign_id": fabricDesignId.toString(),
-        "photo": photoController.text,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-        print(l);
-      },
-      (r) {
-        getAllFabricDesignColors(fabricDesignId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
 
-        clearAllControllers();
-      },
-    );
+          updateFabricDesignColorLocally(
+            fabricDesignColorId,
+            Data(
+              fabricdesigncolorId: fabricDesignColorId,
+              colorname: selectedColorNameController.text,
+              colorId: int.tryParse(selectedColorIdController.text),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  void deleteItemLocally(int id) {
-    final index = allFabricDesignColors!
+  void updateFabricDesignColorLocally(int id, Data updatedData) {
+    int index = allFabricDesignColors
         .indexWhere((element) => element.fabricdesigncolorId == id);
     if (index != -1) {
-      allFabricDesignColors!.removeAt(index);
-
-      final searchIndex = searchFabricDesignColors!
+      allFabricDesignColors[index] = updatedData;
+      int cacheIndex = cachedFabricDesignColors
+          .indexWhere((element) => element.fabricdesigncolorId == id);
+      if (cacheIndex != -1) {
+        cachedFabricDesignColors[cacheIndex] = updatedData; // Update cache
+      }
+      int searchIndex = searchFabricDesignColors
           .indexWhere((element) => element.fabricdesigncolorId == id);
       if (searchIndex != -1) {
-        searchFabricDesignColors!.removeAt(searchIndex);
+        searchFabricDesignColors[searchIndex] =
+            updatedData; // Update search list
       }
-
       notifyListeners();
     }
   }
 
-  deleteFabricDesignColor(id, index) async {
-    print(id);
+  Future<void> deleteFabricDesignColor(int fabricDesignColorId) async {
     _helperServices.showLoader();
-    var response = await FabricDesignColorApiServiceProvider()
-        .deleteFabricDesignColor(
-            'delete-fabric-design-color?fabricdesigncolor_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await FabricDesignColorApiServiceProvider()
+          .deleteFabricDesignColor(
+              'delete-fabric-design-color?fabricdesigncolor_id=$fabricDesignColorId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteItemLocally(fabricDesignColorId);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -180,11 +238,8 @@ class FabricDesignColorController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -192,52 +247,43 @@ class FabricDesignColorController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  getAllFabricDesignColors(int? fabricDesignId) async {
-    _helperServices.showLoader();
-    final response = await FabricDesignColorApiServiceProvider()
-        .getFabricDesignColor('getFabricDesignColor');
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-        print(l),
-      },
-      (r) {
-        allFabricDesignColors = r
-            .where((fabricDesignColor) =>
-                fabricDesignColor.fabricdesignId == fabricDesignId)
-            .toList();
-        searchFabricDesignColors?.clear();
-        searchFabricDesignColors?.addAll(allFabricDesignColors!);
-
-        _helperServices.goBack();
-        notifyListeners();
-      },
-    );
+  void deleteItemLocally(int id) {
+    allFabricDesignColors
+        .removeWhere((element) => element.fabricdesigncolorId == id);
+    cachedFabricDesignColors
+        .removeWhere((element) => element.fabricdesigncolorId == id);
+    searchFabricDesignColors
+        .removeWhere((element) => element.fabricdesigncolorId == id);
+    notifyListeners();
   }
 
-  searchFabricDesignColorMethod(String text) {
+  void searchFabricDesignColorsMethod(String text) {
     searchText = text;
-    updateFabricDesignColorData();
+    updateFabricDesignColorsData();
   }
 
-  updateFabricDesignColorData() {
-    searchFabricDesignColors?.clear();
+  void updateFabricDesignColorsData() {
+    searchFabricDesignColors.clear();
     if (searchText.isEmpty) {
-      searchFabricDesignColors?.addAll(allFabricDesignColors!);
+      searchFabricDesignColors.addAll(cachedFabricDesignColors);
     } else {
-      searchFabricDesignColors?.addAll(
-        allFabricDesignColors!
+      searchFabricDesignColors.addAll(
+        cachedFabricDesignColors
             .where(
-              (element) => element.colorname!
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()),
+              (element) => (element.colorname
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false),
             )
             .toList(),
       );
@@ -245,11 +291,16 @@ class FabricDesignColorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetSearchFilter() {
+    searchText = '';
+    updateFabricDesignColorsData();
+  }
+
   void clearAllControllers() {
-    colorNameController.clear();
-    amountOfToopController.clear();
-    amountOfBundlesController.clear();
-    amountOfWarsController.clear();
+    selectedColorIdController.clear();
+    selectedColorNameController.clear();
     photoController.clear();
+    selectedColors.clear();
+    notifyListeners();
   }
 }

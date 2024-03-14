@@ -1,7 +1,6 @@
 import 'package:fabricproject/controller/colors_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +10,17 @@ import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class ColorListScreenBottomSheet extends StatefulWidget {
-  const ColorListScreenBottomSheet({Key? key}) : super(key: key);
+class ColorBottomSheet extends StatefulWidget {
+  const ColorBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<ColorListScreenBottomSheet> createState() =>
-      _ColorListScreenBottomSheetState();
+  State<ColorBottomSheet> createState() => _ColorBottomSheetState();
 }
 
-class _ColorListScreenBottomSheetState
-    extends State<ColorListScreenBottomSheet> {
+class _ColorBottomSheetState extends State<ColorBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    // controller provider
     final colorsController = Provider.of<ColorsController>(context);
     final fabricDesignColorController =
         Provider.of<FabricDesignColorController>(context);
@@ -65,73 +63,34 @@ class _ColorListScreenBottomSheetState
               ),
               Expanded(
                 child: colorsController.searchColors.isEmpty
-                    ? const NoDataFoundWidget() // Show NoDataFoundWidget if the list is empty
+                    ? const NoDataFoundWidget()
                     : ListView.builder(
                         shrinkWrap: true,
                         itemCount: colorsController.searchColors.length,
                         itemBuilder: (context, index) {
+                          // data gets data from controller
                           final reversedList =
                               colorsController.searchColors.reversed.toList();
                           final data = reversedList[index];
-                          final isSelected =
-                              colorsController.selectedColors?.contains(data);
 
                           return ListTileWidget(
                             onTap: () {
-                              setState(() {
-                                if (isSelected) {
-                                  colorsController
-                                      .removeColorFromSelected(data);
-                                  fabricDesignColorController
-                                      .removeItemFromData(
-                                          "checkbox${data.colorId}");
-                                } else {
-                                  colorsController.addColorToSelected(data);
-                                  fabricDesignColorController.addItemToData(
-                                      "checkbox${data.colorId}",
-                                      "${data.colorId}");
-                                }
-                              });
+                              fabricDesignColorController
+                                  .selectedColorIdController
+                                  .text = data.colorId.toString();
+                              fabricDesignColorController
+                                  .selectedColorNameController
+                                  .text = data.colorname.toString();
+                              Navigator.pop(context);
                             },
                             lead: CircleAvatar(
                               backgroundColor:
                                   getColorFromName(data.colorname.toString()),
                             ),
                             tileTitle: Text(data.colorname ?? ''),
-                            trail: isSelected!
-                                ? const Icon(Icons.check_circle,
-                                    color: Pallete.blueColor)
-                                : Icon(Icons.check_circle_outline,
-                                    color: Colors.grey.shade700),
                           );
                         },
                       ),
-              ),
-              CustomDropDownButton(
-                bgColor: Pallete.blueColor,
-                onTap: () {
-                  fabricDesignColorController.createColors();
-                  colorsController.clearAllControllers();
-                  Navigator.pop(context);
-                },
-                btnText: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.check,
-                      color: Pallete.whiteColor,
-                    ),
-                    LocaleText(
-                      'select',
-                      style: TextStyle(color: Pallete.whiteColor),
-                    ),
-                  ],
-                ),
-                btnIcon: Text(
-                  colorsController.selectedColors!.length.toString(),
-                  style: const TextStyle(color: Pallete.whiteColor),
-                ),
-                btnWidth: 1,
               ),
             ],
           ),

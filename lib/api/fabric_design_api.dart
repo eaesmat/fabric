@@ -12,7 +12,7 @@ class FabricDesignApiServiceProvider {
   final String _baseURL = baseURL;
 
   // Function to fetch fabric designs from the API
-  Future<Either<String, FabricDesignModel>> getFabricDesign(
+   Future<Either<String, List<Data>>> getFabricDesign(
       String apiEndpoint) async {
     try {
       var response = await http.get(
@@ -22,8 +22,10 @@ class FabricDesignApiServiceProvider {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
         final fabricDesign = FabricDesignModel.fromJson(jsonResponse);
-
-        return right(fabricDesign);
+// return data to the controller
+        return right(
+          fabricDesign.data!,
+        );
       } else {
         return left(" ${response.statusCode}");
       }
@@ -33,7 +35,6 @@ class FabricDesignApiServiceProvider {
       );
     }
   }
-
   Future<Either<String, remainingWarBundle.Data>>
       getFabricDesignRemainBundleAndWar(String apiEndpoint) async {
     try {

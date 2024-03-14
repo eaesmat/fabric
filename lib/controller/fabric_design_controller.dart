@@ -3,6 +3,7 @@ import 'package:fabricproject/api/fabric_design_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_model.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_create_screen.dart';
+import 'package:fabricproject/screens/fabric_design/fabric_design_details_screen.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_edit_screen.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -23,9 +24,8 @@ class FabricDesignController extends ChangeNotifier {
   List<Data> allFabricDesigns = [];
   List<Data> searchFabricDesigns = [];
   List<Data> cachedFabricDesigns = [];
-  List<FabricAndBundleButtonColors> fabricDesignColors = [];
-  String remainingWar = "";
-  String remainingBundle = "";
+  int? remainingWar = 0;
+  int? remainingBundle = 0;
   String searchText = "";
 
   // Constructor to initialize the controller with helper services and fetch initial data
@@ -70,6 +70,7 @@ class FabricDesignController extends ChangeNotifier {
     );
     await getAllFabricDesigns(id);
   }
+
 
   // Function to create a new fabric design through the API
   Future<void> createFabricDesign(int fabricPurchaseId) async {
@@ -242,8 +243,8 @@ class FabricDesignController extends ChangeNotifier {
           _helperServices.showErrorMessage(l);
         },
         (r) {
-          allFabricDesigns = r.data ?? [];
-          fabricDesignColors = r.fabricAndBundleButtonColors ?? [];
+          allFabricDesigns = r;
+
           searchFabricDesigns = List.from(allFabricDesigns);
           cachedFabricDesigns =
               List.from(allFabricDesigns); // Cache initial data
@@ -270,8 +271,8 @@ class FabricDesignController extends ChangeNotifier {
           _helperServices.showErrorMessage(l);
         },
         (r) {
-          remainingBundle = r.bundle.toString();
-          remainingWar = r.war.toString();
+          remainingBundle = r.bundle;
+          remainingWar = r.war;
 
           notifyListeners();
         },
