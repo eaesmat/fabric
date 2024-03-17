@@ -1,9 +1,10 @@
 import 'package:fabricproject/api/fabric_design_color_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_color_model.dart';
+import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_color_list_screen.dart';
 import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_edit_screen.dart';
-import 'package:fabricproject/screens/fabric_design/fabric_design_details_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/no_bundle_color_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
@@ -67,21 +68,32 @@ class FabricDesignColorController extends ChangeNotifier {
     );
   }
 
-  navigateToFabricDesignDetails(String fabricDesignName, int fabricDesignId,
-      colorCount, colorLength) async {
-    clearAllControllers();
-
-    _helperServices.navigate(
-      FabricDesignDetailsScreen(
-        fabricDesignId: fabricDesignId,
-        fabricDesignName: fabricDesignName,
-        colorCount: colorCount,
-        colorLength: colorLength,
-      ),
-    );
-    await getAllFabricDesignColors(
-      fabricDesignId,
-    );
+  navigateToFabricDesignColorsListScreen(
+    String fabricDesignName,
+    fabricPurchaseCode,
+    int fabricDesignId,
+    colorCount,
+    colorLength,
+  ) async {
+    if (colorCount == 0) {
+      await getAllFabricDesignColors(
+        fabricDesignId,
+      );
+      _helperServices.navigate(
+        FabricDesignColorListScreen(
+          fabricDesignId: fabricDesignId,
+          fabricDesignName: fabricDesignName,
+          colorCount: colorCount,
+          colorLength: colorLength,
+          fabricPurchaseCode: fabricPurchaseCode,
+        ),
+      );
+    } else {
+      _helperServices.navigate(
+        const NoBundleColorScreen(
+            warningText: 'toops_are_added_can_not_add_new_color'),
+      );
+    }
     this.fabricDesignId = fabricDesignId;
   }
 

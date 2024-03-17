@@ -1,15 +1,23 @@
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class NoDataFoundWidget extends StatelessWidget {
-  const NoDataFoundWidget({super.key});
+  const NoDataFoundWidget({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Image.asset(
-        'assets/images/noData.png',
-        width: 800, // Set the width as needed
-        height: 500, // Set the height as needed
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Align contents vertically centered
+          children: [
+            Image.asset(
+              'assets/images/noData.png',
+            ),
+            const LocaleTexts(localeText: 'no_data'),
+          ],
+        ),
       ),
     );
   }

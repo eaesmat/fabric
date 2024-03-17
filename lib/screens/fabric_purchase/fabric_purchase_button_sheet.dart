@@ -67,11 +67,11 @@ class _FabricPurchasesButtonSheetState extends State<FabricPurchasesButtonSheet>
               ListView.builder(
                 shrinkWrap: true,
                 itemCount:
-                    fabricPurchasesController.searchAllFabricPurchases?.length ?? 0,
+                    fabricPurchasesController.searchAllFabricPurchases.length ?? 0,
                 itemBuilder: (context, index) {
                   // data from controller
                   final reversedList = fabricPurchasesController
-                      .searchAllFabricPurchases!.reversed
+                      .searchAllFabricPurchases.reversed
                       .toList();
                   final data = reversedList[index];
                   return ListTileWidget(

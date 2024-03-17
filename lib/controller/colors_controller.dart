@@ -2,8 +2,6 @@ import 'package:fabricproject/api/colors_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/colors_model.dart';
 import 'package:fabricproject/screens/fabric_design%20_color/color_create_screen.dart';
-import 'package:fabricproject/screens/forex/forex_create_screen.dart';
-import 'package:fabricproject/screens/forex/forex_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -136,74 +134,6 @@ class ColorsController extends ChangeNotifier {
     searchColors.add(newColor);
     notifyListeners();
   }
-
-  // Future<void> editForex(int id) async {
-  //   _helperServices.showLoader();
-  //   try {
-  //     final response = await ForexApiServiceProvider().editForex(
-  //       'update-sarafi?sarafi_id=$id',
-  //       {
-  //         "sarafi_id": id,
-  //         "fullname": colorNameController.text,
-  //         "description": descriptionController.text,
-  //         "phone": phoneController.text,
-  //         "shopno": shopNoController.text,
-  //         "location": locationController.text,
-  //       },
-  //     );
-  //     response.fold(
-  //       (l) {
-  //         _helperServices.goBack();
-  //         _helperServices.showErrorMessage(l);
-  //       },
-  //       (r) {
-  //         _helperServices.goBack();
-
-  //         _helperServices.showMessage(
-  //           const LocaleText('updated'),
-  //           Colors.green,
-  //           const Icon(
-  //             Icons.edit_note_outlined,
-  //             color: Pallete.whiteColor,
-  //           ),
-  //         );
-
-  //         updateForexLocally(
-  //           id,
-  //           Data(
-  //             sarafiId: id,
-  //             fullname: colorNameController.text,
-  //             description: descriptionController.text,
-  //             phone: phoneController.text,
-  //             shopno: shopNoController.text,
-  //             location: locationController.text,
-  //           ),
-  //         );
-  //       },
-  //     );
-  //   } catch (e) {
-  //     _helperServices.goBack();
-  //     _helperServices.showErrorMessage(e.toString());
-  //   }
-  // }
-
-  // void updateForexLocally(int id, Data updatedData) {
-  //   int index = allColors.indexWhere((element) => element.sarafiId == id);
-  //   if (index != -1) {
-  //     allColors[index] = updatedData;
-  //     int cacheIndex =
-  //         cachedColors.indexWhere((element) => element.sarafiId == id);
-  //     if (cacheIndex != -1) {
-  //       cachedColors[cacheIndex] = updatedData; // Update cache
-  //     }
-  //     int searchIndex =
-  //         searchColors.indexWhere((element) => element.sarafiId == id);
-  //     if (searchIndex != -1) {
-  //       searchColors[searchIndex] = updatedData; // Update search list
-  //     }
-  //     notifyListeners();
-  //   }
-  // }
 
   void searchColorsMethod(String text) {
     searchText = text;

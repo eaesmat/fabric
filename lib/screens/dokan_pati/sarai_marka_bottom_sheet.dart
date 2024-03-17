@@ -1,8 +1,5 @@
-import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
-import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
-import 'package:fabricproject/controller/transfer_bundles_controller.dart';
 import 'package:fabricproject/controller/tranfser_dokan_pati_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -36,8 +33,7 @@ class _DokanMarkaBottomSheetState extends State<DokanMarkaBottomSheet> {
     final saraiMarkaController = Provider.of<SaraiMarkaController>(context);
     final transferDokanPatiController =
         Provider.of<TransferDokanPatiController>(context);
-    final dokanPatiSelectController =
-        Provider.of<DokanPatiSelectController>(context);
+
     final saraiFabricPurchaseController =
         Provider.of<SaraiFabricPurchaseController>(context);
 
@@ -97,8 +93,10 @@ class _DokanMarkaBottomSheetState extends State<DokanMarkaBottomSheet> {
                           .text = data.name.toString();
 
                       print("the marka and id");
-                      print(transferDokanPatiController.selectedMarkaIdController);
-                      print(transferDokanPatiController.selectedMarkaNameController);
+                      print(transferDokanPatiController
+                          .selectedMarkaIdController);
+                      print(transferDokanPatiController
+                          .selectedMarkaNameController);
 
                       Navigator.pop(context);
                     },

@@ -1,7 +1,6 @@
 import 'package:fabricproject/api/all_fabric_purchases_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/all_fabric_purchases_model.dart';
-import 'package:fabricproject/model/khalid_calculation_mdoel.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';

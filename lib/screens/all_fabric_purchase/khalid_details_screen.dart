@@ -47,6 +47,7 @@ class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
             child: Container(
               color: Theme.of(context).primaryColor,
               child: TabBar(
+                dividerColor: Pallete.whiteColor,
                 indicatorColor: Colors.transparent,
                 onTap: (index) {
                   setState(() {

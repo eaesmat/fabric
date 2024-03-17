@@ -1,5 +1,4 @@
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 

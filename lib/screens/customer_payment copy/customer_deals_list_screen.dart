@@ -18,7 +18,7 @@ class _CustomerDealsListScreenState extends State<CustomerDealsListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
       Provider.of<CustomerDealsController>(context, listen: false)
           .resetSearchFilter();

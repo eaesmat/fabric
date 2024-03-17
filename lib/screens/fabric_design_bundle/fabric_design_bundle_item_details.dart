@@ -1,15 +1,15 @@
-import 'package:fabricproject/model/fabric_design_model.dart';
+import 'package:fabricproject/model/fabric_design_bundle_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
-class FabricDesignDetailsBottomSheet extends StatelessWidget {
+class FabricDesignBundleDetailsBottomSheet extends StatelessWidget {
   final Data data;
   final String fabricDesignName;
   final String fabricPurchaseCode;
 
-  const FabricDesignDetailsBottomSheet({
+  const FabricDesignBundleDetailsBottomSheet({
     Key? key,
     required this.data,
     required this.fabricDesignName,
@@ -63,21 +63,27 @@ class FabricDesignDetailsBottomSheet extends StatelessWidget {
                   ],
                   rows: [
                     buildDataRow(
-                      LocaleText('bundle'),
-                      Text(data.bundle.toString()),
+                      const LocaleText('bundle_name'),
+                      Text(data.bundlename.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('war'),
-                      Text(data.war.toString()),
+                      const LocaleText('bundle_toop'),
+                      Text(data.bundletoop.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('toop'),
-                      Text(data.toop.toString()),
+                      const LocaleText('bundle_war'),
+                      Text(data.bundlewar.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('colors'),
+                      const LocaleText('toop_war'),
                       Text(
-                        data.colors.toString(),
+                        data.toopwar.toString(),
+                      ),
+                    ),
+                    buildDataRow(
+                      const LocaleText('description'),
+                      Text(
+                        data.description.toString(),
                       ),
                     ),
                   ],

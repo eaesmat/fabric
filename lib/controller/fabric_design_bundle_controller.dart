@@ -1,7 +1,11 @@
 import 'package:fabricproject/api/fabric_design_bundle_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_bundle_model.dart';
+import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_create_screen.dart';
+import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_edit_screen.dart';
+import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/no_bundle_color_screen_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -11,157 +15,269 @@ class FabricDesignBundleController extends ChangeNotifier {
   TextEditingController bundleNameController = TextEditingController();
   TextEditingController amountOfBundleToopController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController statusController = TextEditingController();
+  TextEditingController warBundleController = TextEditingController();
 
-  int? fabricDesignId;
-  List<Data>? allFabricDesignBundles = [];
-  List<Data>? searchFabricDesignBundles = [];
+  int fabricDesignId = 0; // Initialize with a default value
+  List<Data> allFabricDesignBundles = [];
+  List<Data> searchFabricDesignBundles = [];
+  List<Data> cachedFabricDesignBundles = [];
+
   String searchText = "";
 
+  int? remainingToop = 0;
+  int? remainingBundle = 0;
+
+  // Cached data to avoid unnecessary API calls
   FabricDesignBundleController(
     this._helperServices,
   ) {
-    getAllFabricDesignBundles(fabricDesignId);
+    // getAllFabricDesignBundles(fabricDesignId);
   }
 
   navigateToFabricDesignBundleCreate() {
     clearAllControllers();
 
-    // _helperServices.navigate(const FabricDesignBundleCreateScreen());
+    _helperServices.navigate(const FabricDesignBundleCreateScreen());
   }
 
   navigateToFabricDesignBundleEdit(Data data, int id) {
     clearAllControllers();
     bundleNameController.text = data.bundlename.toString();
     amountOfBundleToopController.text = data.bundletoop.toString();
+    warBundleController.text = data.bundlewar.toString();
 
-    // _helperServices.navigate(FabricDesignBundleEditScreen(
-    //   fabricDesignBundleData: data,
-    //   fabricDesignBundleId: id,
-    // ));
+    _helperServices.navigate(FabricDesignBundleEditScreen(
+      fabricDesignBundleData: data,
+      fabricDesignBundleId: id,
+    ));
   }
 
-  navigateToFabricDesignDetails(String fabricDesignName, int id) async {
+  navigateToFabricDesignBundleListScreen(
+    String fabricDesignName,
+    fabricPurchaseCode,
+    int fabricDesignId,
+    colorCount,
+    colorLength,
+  ) async {
     clearAllControllers();
-    fabricDesignId = id;
-//  pass data do not navigate as the design color already navigates
-    // _helperServices.navigate(
-    //   FabricDesignDetailsScreen(
-    //     fabricDesignId: id,
-    //     fabricDesignName: fabricDesignName,
-    //   ),
-    // );
-    await getAllFabricDesignBundles(
-      fabricDesignId,
-    );
+
+    if (colorLength != 0) {
+      await getAllFabricDesignBundles(
+        fabricDesignId,
+      );
+      _helperServices.navigate(
+        FabricDesignBundleListScreen(
+          fabricDesignId: fabricDesignId,
+          fabricDesignName: fabricDesignName,
+          colorLength: colorLength,
+          fabricPurchaseCode: fabricPurchaseCode,
+        ),
+      );
+    } else {
+      _helperServices.navigate(
+        const NoBundleColorScreen(warningText: 'no_colors_are_added'),
+      );
+    }
+    this.fabricDesignId = fabricDesignId;
   }
 
-  createFabricDesignBundle() async {
+  Future<void> createFabricDesignBundle() async {
     _helperServices.showLoader();
+    try {
+      var response =
+          await FabricDesignBundleApiServiceProvider().createFabricDesignBundle(
+        'add-design-bundle',
+        {
+          "bundlename": bundleNameController.text,
+          "bundletoop": amountOfBundleToopController.text,
+          "bundlewar": warBundleController.text,
+          "description": 0,
+          "fd_id": fabricDesignId.toString(),
+        },
+      );
 
-    var response =
-        await FabricDesignBundleApiServiceProvider().createFabricDesignBundle(
-      'add-design-bundle',
-      {
-        "designbundle_id": 0,
-        "bundlename": bundleNameController.text,
-        "bundletoop": amountOfBundleToopController.text,
-        "description": 0,
-        "fabricdesign_id": fabricDesignId.toString(),
-        "status": null,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-      },
-      (r) {
-        getAllFabricDesignBundles(fabricDesignId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-
-        clearAllControllers();
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          getAllFabricDesignBundles(fabricDesignId);
+          _helperServices.goBack();
+          _helperServices.showMessage(
+            const LocaleText('added'),
+            Colors.green,
+            const Icon(
+              Icons.check,
+              color: Pallete.whiteColor,
+            ),
+          );
+          getFabricDesignRemainBundleAndWar(fabricDesignId);
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editFabricDesignBundle(int fabricDesignBundleId) async {
+  Future<void> distributeFabricDesignBundle(int fabricDesignBundleId) async {
     _helperServices.showLoader();
+    print(fabricDesignBundleId);
+    try {
+      var response =
+          await FabricDesignBundleApiServiceProvider().distributingDesignBundle(
+        'distributed-design-bundles?designbundle_id=$fabricDesignBundleId',
+      );
 
-    var response =
-        await FabricDesignBundleApiServiceProvider().editFabricDesignBundle(
-      'update-design-bundle?designbundle_id$fabricDesignBundleId',
-      {
-        "designbundle_id": fabricDesignBundleId,
-        "bundlename": bundleNameController.text,
-        "bundletoop": amountOfBundleToopController.text,
-        "description": 0,
-        "fabricdesign_id": fabricDesignId.toString(),
-        "status": null,
-        "user_id": 1,
-      },
-    );
-    response.fold(
-      (l) {
-        _helperServices.goBack();
-        _helperServices.showErrorMessage(l);
-        print(l);
-      },
-      (r) {
-        getAllFabricDesignBundles(fabricDesignId!);
-        _helperServices.goBack();
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        );
-
-        clearAllControllers();
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          getAllFabricDesignBundles(fabricDesignId);
+          _helperServices.goBack();
+          _helperServices.showMessage(
+            const LocaleText('distributed'),
+            Colors.green,
+            const Icon(
+              Icons.check,
+              color: Pallete.whiteColor,
+            ),
+          );
+          getFabricDesignRemainBundleAndWar(fabricDesignId);
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  void deleteItemLocally(int id) {
-    final index = allFabricDesignBundles!
+  Future<void> completeDesignBundleStatus(int fabricDesignBundleId) async {
+    _helperServices.showLoader();
+    print(fabricDesignBundleId);
+    try {
+      var response = await FabricDesignBundleApiServiceProvider()
+          .completeDesignBundleStatus(
+        'complete-design-bundle-status?designbundle_id=$fabricDesignBundleId',
+      );
+
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          getAllFabricDesignBundles(fabricDesignId);
+          _helperServices.goBack();
+          _helperServices.showMessage(
+            const LocaleText('completed'),
+            Colors.green,
+            const Icon(
+              Icons.check,
+              color: Pallete.whiteColor,
+            ),
+          );
+          getFabricDesignRemainBundleAndWar(fabricDesignId);
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  Future<void> editFabricDesignBundle(int fabricDesignBundleId) async {
+    _helperServices.showLoader();
+    try {
+      var response =
+          await FabricDesignBundleApiServiceProvider().editFabricDesignBundle(
+        'update-design-bundle?designbundle_id$fabricDesignBundleId',
+        {
+          "designbundle_id": fabricDesignBundleId,
+          "bundlename": bundleNameController.text,
+          "bundletoop": amountOfBundleToopController.text,
+          "bundlewar": warBundleController.text,
+          "description": 0,
+          "fd_id": fabricDesignId.toString(),
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+          getFabricDesignRemainBundleAndWar(fabricDesignId);
+
+          updateFabricDesignBundleLocally(
+            fabricDesignBundleId,
+            Data(
+              designbundleId: fabricDesignBundleId,
+              bundlename: bundleNameController.text,
+              description: 0,
+              bundletoop: int.tryParse(amountOfBundleToopController.text),
+              bundlewar: int.tryParse(warBundleController.text),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  void updateFabricDesignBundleLocally(int id, Data updatedData) {
+    int index = allFabricDesignBundles
         .indexWhere((element) => element.designbundleId == id);
     if (index != -1) {
-      allFabricDesignBundles!.removeAt(index);
-
-      final searchIndex = searchFabricDesignBundles!
+      allFabricDesignBundles[index] = updatedData;
+      int cacheIndex = cachedFabricDesignBundles
+          .indexWhere((element) => element.designbundleId == id);
+      if (cacheIndex != -1) {
+        cachedFabricDesignBundles[cacheIndex] = updatedData; // Update cache
+      }
+      int searchIndex = searchFabricDesignBundles
           .indexWhere((element) => element.designbundleId == id);
       if (searchIndex != -1) {
-        searchFabricDesignBundles!.removeAt(searchIndex);
+        searchFabricDesignBundles[searchIndex] =
+            updatedData; // Update search list
       }
-
       notifyListeners();
     }
   }
 
-  deleteFabricDesignBundle(id, index) async {
+  Future<void> deleteFabricDesignBundle(int fabricDesignBundleId) async {
     _helperServices.showLoader();
-    var response = await FabricDesignBundleApiServiceProvider()
-        .deleteFabricDesignBundle('delete-design-bundle?designbundle_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await FabricDesignBundleApiServiceProvider()
+          .deleteFabricDesignBundle(
+              'delete-design-bundle?designbundle_id=$fabricDesignBundleId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteItemLocally(fabricDesignBundleId);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -169,11 +285,8 @@ class FabricDesignBundleController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -181,64 +294,132 @@ class FabricDesignBundleController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  getAllFabricDesignBundles(int? fabricDesignId) async {
+  void deleteItemLocally(int id) {
+    allFabricDesignBundles
+        .removeWhere((element) => element.designbundleId == id);
+    cachedFabricDesignBundles
+        .removeWhere((element) => element.designbundleId == id);
+    searchFabricDesignBundles
+        .removeWhere((element) => element.designbundleId == id);
+    notifyListeners();
+  }
+
+  Future<void> getAllFabricDesignBundles(int fabricDesignId) async {
     _helperServices.showLoader();
-    final response = await FabricDesignBundleApiServiceProvider()
-        .getFabricDesignBundle('getDesignBundle');
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-        print(l),
-      },
-      (r) {
-        allFabricDesignBundles = r
-            .where((fabricDesignBundle) =>
-                fabricDesignBundle.fabricdesignId == fabricDesignId)
-            .toList();
-        searchFabricDesignBundles?.clear();
-        searchFabricDesignBundles?.addAll(allFabricDesignBundles!);
-
-        _helperServices.goBack();
-        notifyListeners();
-      },
-    );
+    try {
+      final response = await FabricDesignBundleApiServiceProvider()
+          .getFabricDesignBundle('getDesignBundle/$fabricDesignId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allFabricDesignBundles = r;
+          searchFabricDesignBundles = List.from(allFabricDesignBundles);
+          cachedFabricDesignBundles =
+              List.from(allFabricDesignBundles); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+          getFabricDesignRemainBundleAndWar(fabricDesignId);
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  searchFabricDesignBundleMethod(String text) {
+  Future<void> getFabricDesignRemainBundleAndWar(int fabricDesignId) async {
+    try {
+      final response = await FabricDesignBundleApiServiceProvider()
+          .getFabricDesignRemainBundleAndToop(
+              'remaining-toop-and-bundle?fabricdesign_id=$fabricDesignId');
+      response.fold(
+        (l) {
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          remainingBundle = r.bundle;
+          remainingToop = r.toop;
+
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  void searchFabricDesignBundlesMethod(String text) {
     searchText = text;
     updateFabricDesignBundleData();
   }
 
-  updateFabricDesignBundleData() {
-    searchFabricDesignBundles?.clear();
+  void updateFabricDesignBundleData() {
+    searchFabricDesignBundles.clear();
     if (searchText.isEmpty) {
-      searchFabricDesignBundles?.addAll(allFabricDesignBundles!);
+      searchFabricDesignBundles.addAll(cachedFabricDesignBundles);
     } else {
-      searchFabricDesignBundles?.addAll(
-        allFabricDesignBundles!
-            .where((element) =>
-                element.bundlename!.toLowerCase().contains(searchText) ||
-                element.bundletoop
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText))
+      searchFabricDesignBundles.addAll(
+        cachedFabricDesignBundles
+            .where(
+              (element) =>
+                  (element.bundlename
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.bundletoop
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.description
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.bundlewar
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.toopwar
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.status
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false),
+            )
             .toList(),
       );
     }
     notifyListeners();
   }
 
+  void resetSearchFilter() {
+    searchText = '';
+    updateFabricDesignBundleData();
+  }
+
   void clearAllControllers() {
     bundleNameController.clear();
     amountOfBundleToopController.clear();
-    // descriptionController.clear();
-    statusController.clear();
+    descriptionController.clear();
+    warBundleController.clear();
   }
 }

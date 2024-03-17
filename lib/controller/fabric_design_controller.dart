@@ -3,7 +3,6 @@ import 'package:fabricproject/api/fabric_design_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_model.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_create_screen.dart';
-import 'package:fabricproject/screens/fabric_design/fabric_design_details_screen.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_edit_screen.dart';
 import 'package:fabricproject/screens/fabric_design/fabric_design_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -70,7 +69,6 @@ class FabricDesignController extends ChangeNotifier {
     );
     await getAllFabricDesigns(id);
   }
-
 
   // Function to create a new fabric design through the API
   Future<void> createFabricDesign(int fabricPurchaseId) async {

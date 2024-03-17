@@ -1,3 +1,4 @@
+import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
@@ -15,7 +16,6 @@ import 'package:fabricproject/widgets/no_data_found.widget.dart';
 
 class FabricDesignListScreen extends StatefulWidget {
   final int fabricPurchaseId;
-
   final String fabricPurchaseCode;
   const FabricDesignListScreen({
     Key? key,
@@ -33,6 +33,8 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
   @override
   Widget build(BuildContext context) {
     final fabricDesignController = Provider.of<FabricDesignController>(context);
+    final fabricDesignBundleController =
+        Provider.of<FabricDesignBundleController>(context);
     final fabricDesignColorController =
         Provider.of<FabricDesignColorController>(context);
 
@@ -105,15 +107,6 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                     itemBuilder: (context, index) {
                       final data = searchFabricDesigns[index];
                       return ListTileWidget(
-                        onTap: () {
-                          fabricDesignColorController
-                              .navigateToFabricDesignDetails(
-                            data.name.toString(),
-                            data.fabricdesignId!.toInt(),
-                            data.countColor,
-                            data.colorsLength
-                          );
-                        },
                         onLongPress: () {
                           showModalBottomSheet(
                             context: context,
@@ -150,16 +143,41 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                           child: const Icon(Icons.more_vert_sharp),
                           itemBuilder: (context) => <PopupMenuEntry<String>>[
                             const PopupMenuItem(
-                                value: "delete",
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.delete),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    LocaleText('delete'),
-                                  ],
-                                )),
+                              value: "bundle",
+                              child: Row(
+                                children: [
+                                  Icon(Icons.list_alt),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  LocaleText('bundle'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: "color",
+                              child: Row(
+                                children: [
+                                  Icon(Icons.color_lens),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  LocaleText('color'),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: "delete",
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  LocaleText('delete'),
+                                ],
+                              ),
+                            ),
                             const PopupMenuItem(
                               value: "edit",
                               child: Row(
@@ -174,6 +192,26 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                             ),
                           ],
                           onSelected: (String value) {
+                            if (value == "bundle") {
+                              fabricDesignBundleController
+                                  .navigateToFabricDesignBundleListScreen(
+                                data.name.toString(),
+                                widget.fabricPurchaseCode,
+                                data.fabricdesignId!.toInt(),
+                                data.countColor,
+                                data.colorsLength,
+                              );
+                            }
+                            if (value == "color") {
+                              fabricDesignColorController
+                                  .navigateToFabricDesignColorsListScreen(
+                                data.name.toString(),
+                                widget.fabricPurchaseCode,
+                                data.fabricdesignId!.toInt(),
+                                data.countColor,
+                                data.colorsLength,
+                              );
+                            }
                             if (value == "edit") {
                               fabricDesignController.navigateToFabricDesignEdit(
                                 data,

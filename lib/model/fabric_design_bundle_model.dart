@@ -27,9 +27,12 @@ class Data {
   int? bundletoop;
   int? description;
   int? fabricdesignId;
-  String? status;
+  int? bundlewar;
   int? userId;
-  Fabricdesign? fabricdesign;
+  String? toopwar;
+  int? countFabricDesignColorId;
+  String? designBundleWar;
+  String? status;
 
   Data(
       {this.designbundleId,
@@ -37,9 +40,11 @@ class Data {
       this.bundletoop,
       this.description,
       this.fabricdesignId,
-      this.status,
+      this.bundlewar,
       this.userId,
-      this.fabricdesign});
+      this.toopwar,
+      this.countFabricDesignColorId,
+      this.status});
 
   Data.fromJson(Map<String, dynamic> json) {
     designbundleId = json['designbundle_id'];
@@ -47,11 +52,12 @@ class Data {
     bundletoop = json['bundletoop'];
     description = json['description'];
     fabricdesignId = json['fabricdesign_id'];
-    status = json['status'];
+    bundlewar = json['bundlewar'];
     userId = json['user_id'];
-    fabricdesign = json['fabricdesign'] != null
-        ? new Fabricdesign.fromJson(json['fabricdesign'])
-        : null;
+    toopwar = json['toopwar'];
+    countFabricDesignColorId = json['countFabricDesignColorId'];
+    designBundleWar = json['designBundleWar'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,60 +67,12 @@ class Data {
     data['bundletoop'] = this.bundletoop;
     data['description'] = this.description;
     data['fabricdesign_id'] = this.fabricdesignId;
+    data['bundlewar'] = this.bundlewar;
+    data['user_id'] = this.userId;
+    data['toopwar'] = this.toopwar;
+    data['countFabricDesignColorId'] = this.countFabricDesignColorId;
+    data['designBundleWar'] = this.designBundleWar;
     data['status'] = this.status;
-    data['user_id'] = this.userId;
-    if (this.fabricdesign != null) {
-      data['fabricdesign'] = this.fabricdesign!.toJson();
-    }
-    return data;
-  }
-}
-
-class Fabricdesign {
-  int? fabricdesignId;
-  String? name;
-  int? bundle;
-  int? war;
-  int? toop;
-  int? fabricpurchaseId;
-  String? designimage;
-  String? designname;
-  int? userId;
-
-  Fabricdesign(
-      {this.fabricdesignId,
-      this.name,
-      this.bundle,
-      this.war,
-      this.toop,
-      this.fabricpurchaseId,
-      this.designimage,
-      this.designname,
-      this.userId});
-
-  Fabricdesign.fromJson(Map<String, dynamic> json) {
-    fabricdesignId = json['fabricdesign_id'];
-    name = json['name'];
-    bundle = json['bundle'];
-    war = json['war'];
-    toop = json['toop'];
-    fabricpurchaseId = json['fabricpurchase_id'];
-    designimage = json['designimage'];
-    designname = json['designname'];
-    userId = json['user_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['fabricdesign_id'] = this.fabricdesignId;
-    data['name'] = this.name;
-    data['bundle'] = this.bundle;
-    data['war'] = this.war;
-    data['toop'] = this.toop;
-    data['fabricpurchase_id'] = this.fabricpurchaseId;
-    data['designimage'] = this.designimage;
-    data['designname'] = this.designname;
-    data['user_id'] = this.userId;
     return data;
   }
 }
