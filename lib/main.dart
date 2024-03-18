@@ -4,6 +4,7 @@ import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
+import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
 import 'package:fabricproject/controller/khalid_gereft_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
@@ -99,9 +100,9 @@ class MyApp extends StatelessWidget {
           create: (_) => ContainerController(HelperServices.instance),
         ),
 
-        // ChangeNotifierProvider<KhalidRasidController>(
-        //   create: (_) => KhalidRasidController(HelperServices.instance),
-        // ),
+        ChangeNotifierProvider<FabricDesignToopController>(
+          create: (_) => FabricDesignToopController(HelperServices.instance),
+        ),
         ChangeNotifierProvider<TransportPaymentController>(
           create: (_) => TransportPaymentController(HelperServices.instance),
         ),

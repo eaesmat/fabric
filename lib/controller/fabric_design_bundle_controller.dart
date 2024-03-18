@@ -20,6 +20,7 @@ class FabricDesignBundleController extends ChangeNotifier {
   int fabricDesignId = 0; // Initialize with a default value
   List<Data> allFabricDesignBundles = [];
   List<Data> searchFabricDesignBundles = [];
+  // Cached data to avoid unnecessary API calls
   List<Data> cachedFabricDesignBundles = [];
 
   String searchText = "";
@@ -27,12 +28,9 @@ class FabricDesignBundleController extends ChangeNotifier {
   int? remainingToop = 0;
   int? remainingBundle = 0;
 
-  // Cached data to avoid unnecessary API calls
   FabricDesignBundleController(
     this._helperServices,
-  ) {
-    // getAllFabricDesignBundles(fabricDesignId);
-  }
+  );
 
   navigateToFabricDesignBundleCreate() {
     clearAllControllers();
@@ -46,10 +44,12 @@ class FabricDesignBundleController extends ChangeNotifier {
     amountOfBundleToopController.text = data.bundletoop.toString();
     warBundleController.text = data.bundlewar.toString();
 
-    _helperServices.navigate(FabricDesignBundleEditScreen(
-      fabricDesignBundleData: data,
-      fabricDesignBundleId: id,
-    ));
+    _helperServices.navigate(
+      FabricDesignBundleEditScreen(
+        fabricDesignBundleData: data,
+        fabricDesignBundleId: id,
+      ),
+    );
   }
 
   navigateToFabricDesignBundleListScreen(
@@ -124,7 +124,6 @@ class FabricDesignBundleController extends ChangeNotifier {
 
   Future<void> distributeFabricDesignBundle(int fabricDesignBundleId) async {
     _helperServices.showLoader();
-    print(fabricDesignBundleId);
     try {
       var response =
           await FabricDesignBundleApiServiceProvider().distributingDesignBundle(
@@ -159,7 +158,6 @@ class FabricDesignBundleController extends ChangeNotifier {
 
   Future<void> completeDesignBundleStatus(int fabricDesignBundleId) async {
     _helperServices.showLoader();
-    print(fabricDesignBundleId);
     try {
       var response = await FabricDesignBundleApiServiceProvider()
           .completeDesignBundleStatus(

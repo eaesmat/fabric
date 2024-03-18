@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
+import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
 import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_item_details.dart';
 import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
@@ -35,10 +36,12 @@ class _FabricDesignBundleListScreenState
   Widget build(BuildContext context) {
     final fabricDesignBundleController =
         Provider.of<FabricDesignBundleController>(context);
+    final fabricDesignBundleToopController =
+        Provider.of<FabricDesignToopController>(context);
     return Scaffold(
       appBar: AppBar(
         title: CustomTextTitle(
-          text: '${widget.fabricDesignName} (${widget.fabricPurchaseCode})',
+          text: '| ${widget.fabricDesignName} | ${widget.fabricPurchaseCode} |',
         ),
         centerTitle: true,
       ),
@@ -105,7 +108,13 @@ class _FabricDesignBundleListScreenState
                           );
                         },
                         onTap: () {
-                          print(data.designBundleWar);
+                          fabricDesignBundleToopController
+                              .navigateToFabricDesignBundleToopListScreen(
+                            data.designbundleId!,
+                            widget.fabricPurchaseCode,
+                            data.bundlename,
+                            widget.fabricDesignName,
+                          );
                         },
                         lead: data.status == 'complete'
                             ? const Icon(Icons.check, color: Colors.green)
@@ -208,17 +217,12 @@ class _FabricDesignBundleListScreenState
                                     fabricDesignBundleController
                                         .completeDesignBundleStatus(
                                             data.designbundleId!);
-                                    print("UI ID");
-
-                                    print(data.designbundleId);
                                   }
                                   if (value == "distribute") {
                                     fabricDesignBundleController
                                         .distributeFabricDesignBundle(
                                       data.designbundleId!,
                                     );
-                                    print("UI ID");
-                                    print(data.designbundleId);
                                   }
                                 },
                               )

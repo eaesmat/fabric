@@ -34,7 +34,6 @@ class FabricDesignColorApiServiceProvider {
   Future<Either<String, int>> createFabricDesignColor(
       String apiEndpoint, List<Map<String, dynamic>> data) async {
     String jsonData = json.encode({"data": data}); // Wrap data with "data" key
-    print(jsonData);
     try {
       final response = await http.post(
         Uri.parse(_baseURL + apiEndpoint),
