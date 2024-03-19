@@ -81,6 +81,7 @@ class FabricDesignBundleApiServiceProvider {
       );
     }
   }
+
   Future<Either<String, int>> distributingDesignBundle(
       String apiEndpoint) async {
     try {
@@ -100,6 +101,7 @@ class FabricDesignBundleApiServiceProvider {
       );
     }
   }
+
   Future<Either<String, int>> completeDesignBundleStatus(
       String apiEndpoint) async {
     try {
@@ -119,6 +121,7 @@ class FabricDesignBundleApiServiceProvider {
       );
     }
   }
+
   Future<Either<String, int>> editFabricDesignBundle(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);

@@ -69,8 +69,8 @@ class FabricDesignToopApiServiceProvider {
     }
   }
 
-   Future<Either<String, remainingWarToop.Data>>
-      getFabricDesignRemainWarAndToop(String apiEndpoint) async {
+  Future<Either<String, remainingWarToop.Data>> getFabricDesignRemainWarAndToop(
+      String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),

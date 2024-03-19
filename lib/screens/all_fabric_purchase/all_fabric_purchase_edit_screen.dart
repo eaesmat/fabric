@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/model/fabric_purchase_model.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_company_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -16,12 +15,12 @@ import 'package:fabricproject/widgets/locale_text_widget.dart';
 
 class AllFabricPurchaseEditScreen extends StatefulWidget {
   // gets the data from the controller
-  final Data fabricPurchaseData;
   final int fabricPurchaseId;
+  final String status;
   const AllFabricPurchaseEditScreen({
     Key? key,
-    required this.fabricPurchaseData,
     required this.fabricPurchaseId,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -43,7 +42,7 @@ class _AllFabricPurchaseEditScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'new_purchase'),
+        title: const LocaleTexts(localeText: 'update_fabric_purchase'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -61,7 +60,9 @@ class _AllFabricPurchaseEditScreenState
                         context: context,
                         isScrollControlled: true,
                         builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet(screenType: 'allFabricPurchasesScreen',);
+                          return const VendorCompanyBottomSheet(
+                            screenType: 'allFabricPurchasesScreen',
+                          );
                         },
                       );
                     },
@@ -69,8 +70,8 @@ class _AllFabricPurchaseEditScreenState
                       customValidator: (value) =>
                           customValidator(value, currentLocale),
                       isDisabled: true,
-                      controller:
-                          allFabricPurchasesController.selectedVendorCompanyName,
+                      controller: allFabricPurchasesController
+                          .selectedVendorCompanyName,
                       iconBtn: const Icon(
                         size: 30,
                         Icons.add_box_rounded,
@@ -157,34 +158,11 @@ class _AllFabricPurchaseEditScreenState
                       ),
                     ],
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     showModalBottomSheet(
-                  //       context: context,
-                  //       isScrollControlled: true,
-                  //       builder: (BuildContext context) {
-                  //         return const TransportBottomSheet();
-                  //       },
-                  //     );
-                  //   },
-                  //   child: CustomTextFieldWithController(
-                  //     customValidator: (value) =>
-                  //         customValidator(value, currentLocale),
-                  //     isDisabled: true,
-                  //     controller:
-                  //         allFabricPurchasesController.selectedTransportName,
-                  //     iconBtn: const Icon(
-                  //       size: 30,
-                  //       Icons.add_box_rounded,
-                  //       color: Pallete.blueColor,
-                  //     ),
-                  //     lblText: const LocaleText('transports'),
-                  //   ),
-                  // ),
+
                   CustomTextFieldWithController(
                     lblText: const LocaleText('bank_receipt_photo'),
-                    controller:
-                        allFabricPurchasesController.bankReceivedPhotoController,
+                    controller: allFabricPurchasesController
+                        .bankReceivedPhotoController,
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('package_photo'),
@@ -205,8 +183,8 @@ class _AllFabricPurchaseEditScreenState
                     onTap: () {
                       // Check if the selected company is not empty
                       if (formKey.currentState!.validate()) {
-                        // allFabricPurchasesController
-                        //     .editFabricPurchase(widget.fabricPurchaseId);
+                        allFabricPurchasesController
+                            .editFabricPurchase(widget.fabricPurchaseId, widget.status);
                         Navigator.pop(context);
                       }
                     },

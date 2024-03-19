@@ -29,7 +29,7 @@ class _FabricDesignBundleCreateScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_design_bundle'),
+        title: const LocaleTexts(localeText: 'create_bundle'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -53,14 +53,14 @@ class _FabricDesignBundleCreateScreenState
                     controller: fabricDesignBundleController
                         .amountOfBundleToopController,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('war_bundle'),
                     controller:
                         fabricDesignBundleController.warBundleController,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('description'),

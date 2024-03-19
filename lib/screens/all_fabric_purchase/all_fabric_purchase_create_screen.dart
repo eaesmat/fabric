@@ -132,7 +132,7 @@ class _AllFabricPurchaseCreateScreenState
                   ),
                   CustomTextFieldWithController(
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     lblText: const LocaleText('bundle'),
                     controller:
                         allFabricPurchasesController.amountOfBundlesController,

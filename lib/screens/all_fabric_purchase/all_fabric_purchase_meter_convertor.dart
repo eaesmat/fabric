@@ -171,7 +171,7 @@ class _AllFabricPurchaseMeterConverterState
                     controller:
                         allFabricPurchasesController.amountOfMetersController,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     onChanged: (value) {
                       setState(() {
                         meterValue = double.tryParse(value) ?? 0.0;
@@ -185,7 +185,7 @@ class _AllFabricPurchaseMeterConverterState
                         allFabricPurchasesController.dollarPriceController,
                     lblText: const LocaleText('dollar_price'),
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     onChanged: (value) {
                       setState(() {
                         dollarPriceValue = double.tryParse(value) ?? 0.0;
@@ -272,7 +272,7 @@ class _AllFabricPurchaseMeterConverterState
                         .amountOfMetersController,
                     lblText: const LocaleText('meter'),
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     onChanged: (value) {
                       setState(() {
                         meterValue = double.tryParse(value) ?? 0.0;
@@ -286,7 +286,7 @@ class _AllFabricPurchaseMeterConverterState
                         allFabricPurchaseMeterConverter.yenPriceController,
                     lblText: const LocaleText('yen_price'),
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     onChanged: (value) {
                       setState(() {
                         yenPriceValue = double.tryParse(value) ?? 0.0;
@@ -300,7 +300,7 @@ class _AllFabricPurchaseMeterConverterState
                         allFabricPurchaseMeterConverter.exchangeRateController,
                     lblText: const LocaleText('exchange_rate'),
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                     onChanged: (value) {
                       setState(() {
                         exchangeRateValue = double.tryParse(value) ?? 0.0;
@@ -309,6 +309,7 @@ class _AllFabricPurchaseMeterConverterState
                     },
                     keyboardType: TextInputType.number,
                   ),
+                 
                   const SizedBox(
                     height: 20,
                   ),

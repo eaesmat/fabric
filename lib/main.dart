@@ -11,7 +11,6 @@ import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
 import 'package:fabricproject/controller/sarai_item_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
-import 'package:fabricproject/controller/container_controller.dart';
 import 'package:fabricproject/controller/customer_deal_controller.dart';
 import 'package:fabricproject/controller/customer_deals_controller.dart';
 import 'package:fabricproject/controller/customer_payment_controller.dart';
@@ -42,11 +41,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Locales.init(['en', 'fa', 'ps']);
+  await Locales.init(['en', 'fa','ar']);
   runApp(const MyApp());
 }
 
@@ -94,10 +92,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FabricDesignBundleController>(
           create: (_) => FabricDesignBundleController(HelperServices.instance),
-        ),
-
-        ChangeNotifierProvider<ContainerController>(
-          create: (_) => ContainerController(HelperServices.instance),
         ),
 
         ChangeNotifierProvider<FabricDesignToopController>(
@@ -176,18 +170,14 @@ class MyApp extends StatelessWidget {
       ],
       child: LocaleBuilder(
         builder: (locale) => MaterialApp(
-          localizationsDelegates: const [
-            ...Locales.delegates,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
+          localizationsDelegates: Locales.delegates,
+          supportedLocales: Locales.supportedLocales,
+          
           navigatorKey: HelperServices.instance.navigationKey,
           debugShowCheckedModeBanner: false,
-          supportedLocales: Locales.supportedLocales,
           locale: locale,
           theme: Pallete.lightModeAppTheme,
           home: const SplashScreen(),
-          // home: const CustomerListScreen(),
         ),
       ),
     );

@@ -33,7 +33,7 @@ class _KhalidGereftEditScreenState extends State<KhalidGereftEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'update_khalid_gereft'),
+        title: const LocaleTexts(localeText: 'withdrawal'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -50,7 +50,7 @@ class _KhalidGereftEditScreenState extends State<KhalidGereftEditScreen> {
                     controller: khalidGereftController.dollarPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('description'),

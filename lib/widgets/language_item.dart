@@ -19,7 +19,7 @@ class LanguageItem extends StatelessWidget {
             children: [
               if (languageAbr == 'en')
                 Flag.fromCode(FlagsCode.US, height: 20, width: 20),
-              if (languageAbr == 'ps' || languageAbr == 'fa')
+              if (languageAbr == 'fa' || languageAbr == 'ar')
                 Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
               const SizedBox(
                 width: 10,

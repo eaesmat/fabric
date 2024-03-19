@@ -33,7 +33,7 @@ class _AppLanguagesScreenState extends State<AppLanguagesScreen> {
           Divider(
             thickness: .3,
           ),
-          LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
+          LanguageItem(languageAbr: 'ar', languageName: 'پښتو'),
           Divider(
             thickness: .3,
           ),

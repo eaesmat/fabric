@@ -37,7 +37,7 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'update_khalid_rasid'),
+        title: const LocaleTexts(localeText: 'receipts'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -54,21 +54,21 @@ class _KhalidRasidEditScreenState extends State<KhalidRasidEditScreen> {
                     controller: khalidRasidController.yenPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('exchange_rate'),
                     controller: khalidRasidController.exchangeRateController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('dollar_price'),
                     controller: khalidRasidController.dollarPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   DatePicker(
                     controller: khalidRasidController.dateController,

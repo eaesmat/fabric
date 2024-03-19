@@ -32,6 +32,7 @@ class _CustomTextFieldWithControllerState
     extends State<CustomTextFieldWithController> {
   String text = "";
   bool isRTL = false;
+  bool hasError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +56,20 @@ class _CustomTextFieldWithControllerState
                 setState(() {
                   text = str;
                   widget.onChanged?.call(str);
+                  hasError = false; // Reset error status when text changes
                 });
               },
               controller: widget.controller,
               validator: (value) {
-                return widget.customValidator?.call(value);
+                final error = widget.customValidator?.call(value);
+                setState(() {
+                  hasError = error != null; // Update error status
+                });
+                return error;
               },
               decoration: InputDecoration(
                 labelStyle: TextStyle(
-                  color: widget.isDisabled != null && widget.isDisabled!
-                      ? Pallete
-                          .blueColor // Use Pallete.blackColor when disabled
-                      : Pallete
-                          .blueColor, // Use Pallete.blueColor when enabled or null
+                  color: hasError ? const Color.fromARGB(255, 199, 53, 43) : Pallete.blueColor,
                   fontSize: 14,
                 ),
                 // enabled: widget.isDisabled,
@@ -98,8 +100,14 @@ class _CustomTextFieldWithControllerState
                     width: 1.0,
                   ),
                 ),
-
                 errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(
+                    color: Pallete.redColor,
+                    width: 1.0,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                   borderSide: BorderSide(
                     color: Pallete.redColor,

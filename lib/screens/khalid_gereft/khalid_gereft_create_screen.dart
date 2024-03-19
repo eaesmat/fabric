@@ -30,7 +30,7 @@ class _KhalidGereftCreateScreenState extends State<KhalidGereftCreateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_khalid_gereft'),
+        title: const LocaleTexts(localeText: 'withdrawal'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -47,7 +47,7 @@ class _KhalidGereftCreateScreenState extends State<KhalidGereftCreateScreen> {
                     controller: khalidGereftController.dollarPriceController,
                     // customValidator: customFormValidator,
                     customValidator: (value) =>
-                        customValidator(value, currentLocale),
+                        customValidatorCheckNumberOnly(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
                     lblText: const LocaleText('description'),

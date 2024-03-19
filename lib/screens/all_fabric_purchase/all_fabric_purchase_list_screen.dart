@@ -162,11 +162,11 @@ class _AllFabricPurchaseListScreenState
                         ],
                         onSelected: (String value) {
                           if (value == "edit") {
-                            // allFabricPurchaseController
-                            //     .navigateToFabricPurchaseEdit(
-                            //   data,
-                            //   data.fabricpurchaseId!.toInt(),
-                            // );
+                            allFabricPurchasesController
+                                .navigateToFabricPurchaseEdit(
+                              data,
+                              data.fabricpurchaseId!.toInt(),
+                            );
                           }
                           if (value == "delete") {
                             allFabricPurchasesController.deleteFabricPurchase(

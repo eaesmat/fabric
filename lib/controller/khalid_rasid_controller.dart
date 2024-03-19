@@ -1,7 +1,7 @@
 import 'package:fabricproject/api/khalid_rasid_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/khalid_rasid_model.dart';
-import 'package:fabricproject/screens/khalid_rasid/khalid_gereft_edit_screen.dart';
+import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_edit_screen.dart';
 import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_create_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';

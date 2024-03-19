@@ -50,7 +50,7 @@ class _FabricDesignBundleToopColorCreateScreenState
                     lblText: const LocaleText('war_toop'),
                     controller:
                         fabricDesignBundleToopColorController.warToopController,
-                    customValidator: (value) => customValidator(
+                    customValidator: (value) => customValidatorCheckNumberOnly(
                       value,
                       currentLocale,
                     ),

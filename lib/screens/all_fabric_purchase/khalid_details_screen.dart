@@ -87,14 +87,14 @@ class _KhalidDetailsScreenState extends State<KhalidDetailsScreen> {
             rowsData: [
               RowData(
                 icon: Icons.balance,
-                textKey: 'KLDMD',
+                textKey: 'kldmd',
                 remainingValue:
                     allFabricPurchasesConroller.kldhmd.toString().toString(),
                 // Access the balance from the first item in khalidCalculation list
               ),
               RowData(
                 icon: Icons.draw,
-                textKey: 'draw',
+                textKey: 'receipts',
                 remainingValue: allFabricPurchasesConroller.submitDoller
                     .toString(), // Access the kldhmd from the first item in khalidCalculation list
                 iconColor: Pallete.redColor,

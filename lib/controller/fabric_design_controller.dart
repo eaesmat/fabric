@@ -152,6 +152,7 @@ class FabricDesignController extends ChangeNotifier {
               bundle: int.tryParse(amountOfBundlesController.text),
               war: int.tryParse(amountOfBundlesController.text),
               toop: int.tryParse(amountOfToopController.text),
+              
             ),
           );
         },

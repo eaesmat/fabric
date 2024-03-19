@@ -1,7 +1,9 @@
 import 'package:fabricproject/api/all_fabric_purchases_api.dart';
+import 'package:fabricproject/api/fabric_purchase_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/all_fabric_purchases_model.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -47,8 +49,38 @@ class AllFabricPurchasesController extends ChangeNotifier {
 
   navigateToFabricPurchaseCreate() {
     // dispose();
+    clearAllControllers();
+
     _helperServices.navigate(
       const AllFabricPurchaseCreateScreen(),
+    );
+  }
+
+  navigateToFabricPurchaseEdit(Data data, int fabricPurchaseId) {
+    clearAllControllers();
+    amountOfBundlesController.text = data.bundle.toString();
+    amountOfMetersController.text = data.meter.toString();
+    amountOfWarsController.text = data.war.toString();
+    yenPriceController.text = data.yenprice.toString();
+    exchangeRateController.text = data.yenexchange.toString();
+    ttCommissionController.text = data.ttcommission.toString();
+    dateController.text = data.date.toString();
+    selectedFabricIdController.text = data.fabricId.toString();
+    selectedCompanyIdController.text = data.companyId.toString();
+    selectedVendorCompanyId.text = data.vendorcompanyId.toString();
+    fabricCodeController.text = data.fabricpurchasecode.toString();
+    dollarPriceController.text = data.dollerprice.toString();
+    totalYenPriceController.text = data.totalyenprice.toString();
+    totalDollarPriceController.text = data.totaldollerprice.toString();
+    selectedVendorCompanyName.text = data.vendorcompany.toString();
+    selectedCompanyNameController.text = data.marka.toString();
+    selectedFabricNameController.text = data.fabricName.toString();
+
+    _helperServices.navigate(
+      AllFabricPurchaseEditScreen(
+        fabricPurchaseId: fabricPurchaseId,
+        status: data.status.toString(),
+      ),
     );
   }
 
@@ -101,25 +133,25 @@ class AllFabricPurchasesController extends ChangeNotifier {
     }
   }
 
-  // void printControllerValues() {
-  //   print("selectedCompanyIdController: ${selectedCompanyIdController.text}");
+  void printControllerValues() {
+    print("selectedCompanyIdController: ${selectedCompanyIdController.text}");
 
-  //   print("selectedFabricIdController: ${selectedFabricIdController.text}");
-  //   print("amountOfBundlesController: ${amountOfBundlesController.text}");
-  //   print("amountOfMetersController: ${amountOfMetersController.text}");
-  //   print("amountOfWarsController: ${amountOfWarsController.text}");
-  //   print("yenPriceController: ${yenPriceController.text}");
-  //   print("totalYenPriceController: ${totalYenPriceController.text}");
-  //   print("exchangeRateController: ${exchangeRateController.text}");
-  //   print("dollarPriceController: ${dollarPriceController.text}");
-  //   print("totalDollarPriceController: ${totalDollarPriceController.text}");
-  //   print("ttCommissionController: ${ttCommissionController.text}");
-  //   print("packagePhotoController: ${packagePhotoController.text}");
-  //   print("bankReceivedPhotoController: ${bankReceivedPhotoController.text}");
-  //   print("dateController: ${dateController.text}");
-  //   print("selectedVendorCompanyId: ${selectedVendorCompanyId.text}");
-  //   print("selectedTransportId: ${selectedTransportId.text}");
-  // }
+    print("selectedFabricIdController: ${selectedFabricIdController.text}");
+    print("amountOfBundlesController: ${amountOfBundlesController.text}");
+    print("amountOfMetersController: ${amountOfMetersController.text}");
+    print("amountOfWarsController: ${amountOfWarsController.text}");
+    print("yenPriceController: ${yenPriceController.text}");
+    print("totalYenPriceController: ${totalYenPriceController.text}");
+    print("exchangeRateController: ${exchangeRateController.text}");
+    print("dollarPriceController: ${dollarPriceController.text}");
+    print("totalDollarPriceController: ${totalDollarPriceController.text}");
+    print("ttCommissionController: ${ttCommissionController.text}");
+    print("packagePhotoController: ${packagePhotoController.text}");
+    print("bankReceivedPhotoController: ${bankReceivedPhotoController.text}");
+    print("dateController: ${dateController.text}");
+    print("selectedVendorCompanyId: ${selectedVendorCompanyId.text}");
+    print("selectedTransportId: ${selectedTransportId.text}");
+  }
 
   Future<void> createFabricPurchase() async {
     // printControllerValues();
@@ -167,13 +199,107 @@ class AllFabricPurchasesController extends ChangeNotifier {
               ),
             );
             getAllFabricPurchases();
-            clearAllTextControllers();
+            clearAllControllers();
           }
         },
       );
     } catch (e) {
       _helperServices.goBack();
       _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  Future<void> editFabricPurchase(int fabricPurchaseId, String status) async {
+    _helperServices.showLoader();
+    try {
+      final response = await FabricPurchaseApiServiceProvider()
+          .editFabricPurchase(
+              'updateKhalidPurchase?fabricpurchase_id=$fabricPurchaseId', {
+        "bundle": amountOfBundlesController.text,
+        "meter": amountOfMetersController.text,
+        "war": amountOfWarsController.text,
+        "yenprice": yenPriceController.text,
+        "allpriceinyen": totalYenPriceController.text,
+        "priceindoller": dollarPriceController.text,
+        "allpriceindoller": totalDollarPriceController.text,
+        "yenexchange": exchangeRateController.text,
+        "ttcommission": ttCommissionController.text,
+        "date": dateController.text,
+        "fabric_id": "${selectedFabricIdController.text} ${abrController.text}",
+        "company_id": selectedCompanyIdController.text,
+        "vc_id": selectedVendorCompanyId.text,
+        // "bankreceipt": "(binary)",
+        // "packagereceipt": "(binary)",
+        "fabricpurchasecode": fabricCodeController.text,
+      });
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+
+          updateKhalidPurchaseLocally(
+            fabricPurchaseId,
+            Data(
+              fabricpurchaseId: fabricPurchaseId,
+              bundle: int.tryParse(amountOfBundlesController.text),
+              meter: double.tryParse(amountOfMetersController.text),
+              war: double.tryParse(amountOfWarsController.text),
+              yenprice: double.tryParse(yenPriceController.text),
+              yenexchange: double.tryParse(exchangeRateController.text),
+              ttcommission: double.tryParse(ttCommissionController.text),
+              date: dateController.text,
+              fabricId: int.tryParse(selectedFabricIdController.text),
+              companyId: int.tryParse(selectedCompanyIdController.text),
+              vendorcompanyId: int.tryParse(selectedVendorCompanyId.text),
+              fabricpurchasecode: fabricCodeController.text,
+              dollerprice: double.tryParse(dollarPriceController.text),
+              totalyenprice: double.tryParse(totalYenPriceController.text),
+              totaldollerprice:
+                  double.tryParse(totalDollarPriceController.text),
+              vendorcompany: selectedVendorCompanyName.text,
+              marka: selectedCompanyNameController.text,
+              fabricName: selectedFabricNameController.text,
+              status: status,
+            ),
+          );
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
+
+  void updateKhalidPurchaseLocally(int id, Data updatedData) {
+    int index = allFabricPurchases
+        .indexWhere((element) => element.fabricpurchaseId == id);
+    if (index != -1) {
+      allFabricPurchases[index] = updatedData;
+      int cacheIndex =
+          cachedForex.indexWhere((element) => element.fabricpurchaseId == id);
+      if (cacheIndex != -1) {
+        cachedForex[cacheIndex] = updatedData; // Update cache
+      }
+      int searchIndex = searchAllFabricPurchases
+          .indexWhere((element) => element.fabricpurchaseId == id);
+      if (searchIndex != -1) {
+        searchAllFabricPurchases[searchIndex] =
+            updatedData; // Update search list
+      }
+      notifyListeners();
     }
   }
 
@@ -318,7 +444,7 @@ class AllFabricPurchasesController extends ChangeNotifier {
     super.dispose();
   }
 
-  void clearAllTextControllers() {
+  void clearAllControllers() {
     selectedCompanyIdController.clear();
     abrController.clear();
     selectedCompanyNameController.clear();

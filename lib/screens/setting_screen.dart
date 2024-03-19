@@ -44,7 +44,7 @@ class SettingScreen extends StatelessWidget {
               children: [
                 LanguageItem(languageAbr: 'en', languageName: 'English'),
                 LanguageItem(languageAbr: 'fa', languageName: 'دری'),
-                LanguageItem(languageAbr: 'ps', languageName: 'پښتو'),
+                LanguageItem(languageAbr: 'ar', languageName: 'پښتو'),
               ],
             ),
 // Language section ends

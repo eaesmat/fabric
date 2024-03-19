@@ -28,7 +28,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_fabric_design'),
+        title: const LocaleTexts(localeText: 'create_design'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -52,7 +52,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                     controller:
                         fabricDesignController.amountOfBundlesController,
                     lblText: const LocaleText('bundle'),
-                    customValidator: (value) => customValidator(
+                    customValidator: (value) => customValidatorCheckNumberOnly(
                       value,
                       currentLocale,
                     ),
@@ -60,7 +60,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                   CustomTextFieldWithController(
                     controller: fabricDesignController.amountOfWarsController,
                     lblText: const LocaleText('war'),
-                    customValidator: (value) => customValidator(
+                    customValidator: (value) => customValidatorCheckNumberOnly(
                       value,
                       currentLocale,
                     ),
@@ -68,7 +68,7 @@ class _FabricDesignCreateScreenState extends State<FabricDesignCreateScreen> {
                   CustomTextFieldWithController(
                     controller: fabricDesignController.amountOfToopController,
                     lblText: const LocaleText('toop'),
-                    customValidator: (value) => customValidator(
+                    customValidator: (value) => customValidatorCheckNumberOnly(
                       value,
                       currentLocale,
                     ),

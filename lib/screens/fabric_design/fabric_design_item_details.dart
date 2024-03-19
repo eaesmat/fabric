@@ -1,6 +1,7 @@
 import 'package:fabricproject/model/fabric_design_model.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
@@ -49,36 +50,28 @@ class FabricDesignDetailsBottomSheet extends StatelessWidget {
                 DataTable(
                   columns: const [
                     DataColumn(
-                      label: Text(
-                        'attribute',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      label: LocaleTexts(
+                        localeText: 'attribute',
                       ),
                     ),
                     DataColumn(
-                      label: Text(
-                        'value',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      label: LocaleTexts(
+                        localeText: 'value',
                       ),
                     ),
                   ],
                   rows: [
                     buildDataRow(
-                      LocaleText('bundle'),
+                      const LocaleText('bundle'),
                       Text(data.bundle.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('war'),
+                      const LocaleText('war'),
                       Text(data.war.toString()),
                     ),
                     buildDataRow(
-                      LocaleText('toop'),
+                      const LocaleText('toop'),
                       Text(data.toop.toString()),
-                    ),
-                    buildDataRow(
-                      LocaleText('colors'),
-                      Text(
-                        data.colors.toString(),
-                      ),
                     ),
                   ],
                 ),

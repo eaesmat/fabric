@@ -37,7 +37,7 @@ class _FabricDesignBundleToopEditScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'create_fabric_design'),
+        title: const LocaleTexts(localeText: 'update_color'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(
@@ -53,7 +53,7 @@ class _FabricDesignBundleToopEditScreenState
                     lblText: const LocaleText('war_toop'),
                     controller:
                         fabricDesignBundleToopColorController.warToopController,
-                    customValidator: (value) => customValidator(
+                    customValidator: (value) => customValidatorCheckNumberOnly(
                       value,
                       currentLocale,
                     ),
@@ -79,7 +79,7 @@ class _FabricDesignBundleToopEditScreenState
                         Icons.add_box_rounded,
                         color: Pallete.blueColor,
                       ),
-                      lblText: const LocaleText('colors'),
+                      lblText: const LocaleText('color'),
                     ),
                   ),
                   CustomDropDownButton(

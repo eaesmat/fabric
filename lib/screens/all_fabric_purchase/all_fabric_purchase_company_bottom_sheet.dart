@@ -86,7 +86,8 @@ class _CompanyBottomSheetState extends State<CompanyBottomSheet> {
 
                       allFabricPurchasesController
                               .selectedCompanyNameController.text =
-                          '${data.name},  ${data.description} (${data.marka} )';
+                          '${data.name},  ${data.description} ( ${data.marka} )';
+                          
                       Navigator.pop(context);
                     },
                     lead: CircleAvatar(
