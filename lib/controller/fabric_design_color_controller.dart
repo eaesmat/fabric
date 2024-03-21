@@ -1,8 +1,9 @@
 import 'package:fabricproject/api/fabric_design_color_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/fabric_design_color_model.dart';
+import 'package:fabricproject/model/fabric_design_model.dart' as fabric_design_data;
 import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_color_list_screen.dart';
-import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_edit_screen.dart';
+import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_color_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/no_bundle_color_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,8 @@ class FabricDesignColorController extends ChangeNotifier {
     int fabricDesignId,
     colorCount,
     colorLength,
+    fabric_design_data.Data fabricDesignData,
+
   ) async {
     if (colorCount == 0) {
       await getAllFabricDesignColors(
@@ -81,6 +84,7 @@ class FabricDesignColorController extends ChangeNotifier {
       );
       _helperServices.navigate(
         FabricDesignColorListScreen(
+          fabricDesignData: fabricDesignData,
           fabricDesignId: fabricDesignId,
           fabricDesignName: fabricDesignName,
           colorCount: colorCount,
@@ -198,6 +202,8 @@ class FabricDesignColorController extends ChangeNotifier {
               fabricdesigncolorId: fabricDesignColorId,
               colorname: selectedColorNameController.text,
               colorId: int.tryParse(selectedColorIdController.text),
+              
+
             ),
           );
         },

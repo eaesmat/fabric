@@ -94,7 +94,10 @@ class _FabricDesignEditScreenState extends State<FabricDesignEditScreen> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         fabricDesignController.editFabricDesign(
-                            widget.fabricDesignId, widget.fabricPurchaseId);
+                          widget.fabricDesignId,
+                          widget.fabricPurchaseId,
+                          widget.fabricDesignData,
+                        );
                         Navigator.pop(context);
                       }
                     },

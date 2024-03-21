@@ -151,6 +151,7 @@ class ForexController extends ChangeNotifier {
               phone: phoneController.text,
               shopno: shopNoController.text,
               location: locationController.text,
+              
             ),
           );
         },

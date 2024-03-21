@@ -12,8 +12,11 @@ import 'package:provider/provider.dart';
 
 class FabricDesignBundleEditScreen extends StatefulWidget {
   final Data fabricDesignBundleData;
-  final int  fabricDesignBundleId;
-  const FabricDesignBundleEditScreen({super.key, required this.fabricDesignBundleData, required this.fabricDesignBundleId});
+  final int fabricDesignBundleId;
+  const FabricDesignBundleEditScreen(
+      {super.key,
+      required this.fabricDesignBundleData,
+      required this.fabricDesignBundleId});
 
   @override
   State<FabricDesignBundleEditScreen> createState() =>
@@ -44,7 +47,7 @@ class _FabricDesignBundleEditScreenState
               key: formKey,
               child: Column(
                 children: [
-                   CustomTextFieldWithController(
+                  CustomTextFieldWithController(
                     lblText: const LocaleText('bundle_name'),
                     controller:
                         fabricDesignBundleController.bundleNameController,
@@ -83,7 +86,10 @@ class _FabricDesignBundleEditScreenState
                     bgColor: Pallete.blueColor,
                     onTap: () {
                       if (formKey.currentState!.validate()) {
-                        fabricDesignBundleController.editFabricDesignBundle(widget.fabricDesignBundleId);
+                        fabricDesignBundleController.editFabricDesignBundle(
+                          widget.fabricDesignBundleId,
+                          widget.fabricDesignBundleData,
+                        );
                         Navigator.pop(context);
                       }
                     },

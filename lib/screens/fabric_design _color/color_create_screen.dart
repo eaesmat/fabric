@@ -26,7 +26,7 @@ class _ColorCreateScreenState extends State<ColorCreateScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const LocaleTexts(localeText: 'new_purchase'),
+        title: const LocaleTexts(localeText: 'new_color'),
         centerTitle: true,
       ),
       body: Dialog.fullscreen(

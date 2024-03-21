@@ -70,7 +70,7 @@ class FabricDesignBundleDetailsBottomSheet extends StatelessWidget {
                       Text(data.bundletoop.toString()),
                     ),
                     buildDataRow(
-                      const LocaleText('bundle_war'),
+                      const LocaleText('war_bundle'),
                       Text(data.bundlewar.toString()),
                     ),
                     buildDataRow(

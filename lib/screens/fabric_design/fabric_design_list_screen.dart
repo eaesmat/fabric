@@ -62,26 +62,9 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                         color: Pallete.blueColor,
                       ),
                       onPressed: () {
-                        final fabricDesignController =
-                            Provider.of<FabricDesignController>(context,
-                                listen: false);
-                        int bundle =
-                            fabricDesignController.remainingBundle ?? 0;
-                        int war = fabricDesignController.remainingWar ?? 0;
-
-                        if (bundle > 0 && war > 0) {
-                          fabricDesignController.navigateToFabricDesignCreate(
-                              widget.fabricPurchaseId);
-                        } else {
-                          helper.showMessage(
-                            const LocaleText('no_wars_bundles'),
-                            Colors.deepOrange,
-                            const Icon(
-                              Icons.warning,
-                              color: Pallete.whiteColor,
-                            ),
-                          );
-                        }
+                        fabricDesignController.navigateToFabricDesignCreate(
+                          widget.fabricPurchaseId,
+                        );
                       },
                     ),
                     lblText: const LocaleText('search'),
@@ -200,6 +183,7 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                                 data.fabricdesignId!.toInt(),
                                 data.countColor,
                                 data.colorsLength,
+                                data,
                               );
                             }
                             if (value == "color") {
@@ -210,6 +194,7 @@ class _FabricDesignListScreenState extends State<FabricDesignListScreen> {
                                 data.fabricdesignId!.toInt(),
                                 data.countColor,
                                 data.colorsLength,
+                                data,
                               );
                             }
                             if (value == "edit") {

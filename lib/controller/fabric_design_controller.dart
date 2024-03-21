@@ -40,6 +40,10 @@ class FabricDesignController extends ChangeNotifier {
     );
   }
 
+  void notify() {
+    notifyListeners();
+  }
+
   // Navigation function to the fabric design edit screen
   navigateToFabricDesignEdit(Data data, int fabricDesignId, fabricPurchaseId) {
     clearAllControllers();
@@ -111,7 +115,8 @@ class FabricDesignController extends ChangeNotifier {
     }
   }
 
-  Future<void> editFabricDesign(int fabricDesignId, fabricPurchaseId) async {
+  Future<void> editFabricDesign(
+      int fabricDesignId, fabricPurchaseId, Data data) async {
     _helperServices.showLoader();
     try {
       final response = await FabricDesignApiServiceProvider().editFabricDesign(
@@ -123,6 +128,7 @@ class FabricDesignController extends ChangeNotifier {
           "war": amountOfWarsController.text,
           "toop": amountOfToopController.text,
           "fp_id": fabricPurchaseId,
+          
         },
       );
       response.fold(
@@ -152,7 +158,10 @@ class FabricDesignController extends ChangeNotifier {
               bundle: int.tryParse(amountOfBundlesController.text),
               war: int.tryParse(amountOfBundlesController.text),
               toop: int.tryParse(amountOfToopController.text),
-              
+              status: data.status,
+              colorsLength: data.colorsLength,
+              countColor: data.countColor,
+              colors: data.colors,
             ),
           );
         },

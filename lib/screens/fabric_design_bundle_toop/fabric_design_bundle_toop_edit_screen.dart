@@ -10,12 +10,15 @@ import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
+import 'package:fabricproject/model/fabric_design_toop_model.dart';
 
 class FabricDesignBundleToopEditScreen extends StatefulWidget {
+  final Data data;
   final int fabricDesignBundleToopColorId;
   final int fabricDesignPatiColorId;
   const FabricDesignBundleToopEditScreen({
     super.key,
+    required this.data,
     required this.fabricDesignBundleToopColorId,
     required this.fabricDesignPatiColorId,
   });
@@ -99,6 +102,7 @@ class _FabricDesignBundleToopEditScreenState
                             .editFabricDesignBundleToop(
                           widget.fabricDesignBundleToopColorId,
                           widget.fabricDesignPatiColorId,
+                          widget.data,
                         );
                         Navigator.pop(context);
                       }

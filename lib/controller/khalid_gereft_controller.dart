@@ -127,16 +127,14 @@ class KhalidGereftController extends ChangeNotifier {
             id,
             Data(
               drawId: id,
-              drawDate:
-                  dateController.text.isNotEmpty ? dateController.text : null,
-              doller: dollarPriceController.text.isNotEmpty
-                  ? double.tryParse(dollarPriceController.text)
-                  : null,
-              description: descriptionController.text.isNotEmpty
-                  ? descriptionController.text
-                  : null,
+              drawDate: dateController.text,
+              doller: double.tryParse(dollarPriceController.text),
+              description: descriptionController.text,
               sarafName: selectedForexNameController.text.isNotEmpty
                   ? selectedForexNameController.text
+                  : null,
+              sarafiId: selectedForexIdController.text.isNotEmpty
+                  ? int.tryParse(selectedForexIdController.text)
                   : null,
             ),
           );
@@ -166,7 +164,7 @@ class KhalidGereftController extends ChangeNotifier {
     }
   }
 
- Future<void> deleteKhalidGereft(int id) async {
+  Future<void> deleteKhalidGereft(int id) async {
     _helperServices.showLoader();
     try {
       final response = await KhalidGereftApiServiceProvider()

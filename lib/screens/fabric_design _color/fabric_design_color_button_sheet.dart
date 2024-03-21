@@ -1,9 +1,12 @@
 import 'package:fabricproject/controller/colors_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
+import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
+import 'package:fabricproject/model/fabric_design_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -12,7 +15,11 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class ColorListScreenBottomSheet extends StatefulWidget {
-  const ColorListScreenBottomSheet({Key? key}) : super(key: key);
+  final Data fabricDesignData;
+  const ColorListScreenBottomSheet({
+    Key? key,
+    required this.fabricDesignData,
+  }) : super(key: key);
 
   @override
   State<ColorListScreenBottomSheet> createState() =>
@@ -110,6 +117,24 @@ class _ColorListScreenBottomSheetState
               CustomDropDownButton(
                 bgColor: Pallete.blueColor,
                 onTap: () {
+                  // add a colorLength to fabric Design to be able to go the
+                  // fabric Design bundle screen
+                  final data = widget.fabricDesignData;
+                  Provider.of<FabricDesignController>(context, listen: false)
+                      .updateFabricDesignLocally(
+                    data.fabricdesignId!,
+                    Data(
+                      fabricdesignId: data.fabricdesignId,
+                      bundle: data.bundle,
+                      colors: data.colors,
+                      colorsLength: 2,
+                      countColor: data.countColor,
+                      name: data.name,
+                      status: data.status,
+                      toop: data.toop,
+                      war: data.war,
+                    ),
+                  );
                   fabricDesignColorController.createColors();
                   colorsController.clearAllControllers();
                   Navigator.pop(context);

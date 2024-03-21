@@ -73,6 +73,10 @@ class FabricDesignDetailsBottomSheet extends StatelessWidget {
                       const LocaleText('toop'),
                       Text(data.toop.toString()),
                     ),
+                    buildDataRow(
+                      const LocaleText('color'),
+                      Text(data.colors.toString()),
+                    ),
                   ],
                 ),
               ],

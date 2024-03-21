@@ -69,7 +69,7 @@ class _FabricDesignColorEditScreenState
                         Icons.add_box_rounded,
                         color: Pallete.blueColor,
                       ),
-                      lblText: const LocaleText('colors'),
+                      lblText: const LocaleText('color'),
                     ),
                   ),
                   CustomTextFieldWithController(

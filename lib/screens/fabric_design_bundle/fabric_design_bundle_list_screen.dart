@@ -1,4 +1,5 @@
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
+import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
 import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_item_details.dart';
 import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
@@ -11,14 +12,17 @@ import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
+import 'package:fabricproject/model/fabric_design_model.dart';
 
 class FabricDesignBundleListScreen extends StatefulWidget {
+  final Data fabricDesignData;
   final int fabricDesignId;
   final String fabricDesignName;
   final String fabricPurchaseCode;
   final int colorLength;
   const FabricDesignBundleListScreen({
     Key? key,
+    required this.fabricDesignData,
     required this.fabricDesignId,
     required this.fabricDesignName,
     required this.fabricPurchaseCode,
@@ -222,6 +226,30 @@ class _FabricDesignBundleListScreenState
                                     fabricDesignBundleController
                                         .distributeFabricDesignBundle(
                                       data.designbundleId!,
+                                    );
+
+                                    // update fabricDesign countColor when it is distributed
+                                    // to avoid user from editing colors
+                                    // without to reload the server
+                                    final fabricDesignData =
+                                        widget.fabricDesignData;
+                                    Provider.of<FabricDesignController>(context,
+                                            listen: false)
+                                        .updateFabricDesignLocally(
+                                      fabricDesignData.fabricdesignId!,
+                                      Data(
+                                        fabricdesignId:
+                                            fabricDesignData.fabricdesignId,
+                                        bundle: fabricDesignData.bundle,
+                                        colors: fabricDesignData.colors,
+                                        colorsLength:
+                                            fabricDesignData.colorsLength,
+                                        countColor: 2,
+                                        name: fabricDesignData.name,
+                                        status: fabricDesignData.status,
+                                        toop: fabricDesignData.toop,
+                                        war: fabricDesignData.war,
+                                      ),
                                     );
                                   }
                                 },

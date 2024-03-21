@@ -6,6 +6,8 @@ import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_
 import 'package:fabricproject/screens/fabric_design_bundle/fabric_design_bundle_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/no_bundle_color_screen_widget.dart';
+import 'package:fabricproject/model/fabric_design_model.dart'
+    as fabric_design_data;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -58,6 +60,7 @@ class FabricDesignBundleController extends ChangeNotifier {
     int fabricDesignId,
     colorCount,
     colorLength,
+    fabric_design_data.Data data,
   ) async {
     clearAllControllers();
 
@@ -67,6 +70,7 @@ class FabricDesignBundleController extends ChangeNotifier {
       );
       _helperServices.navigate(
         FabricDesignBundleListScreen(
+          fabricDesignData: data,
           fabricDesignId: fabricDesignId,
           fabricDesignName: fabricDesignName,
           colorLength: colorLength,
@@ -190,7 +194,8 @@ class FabricDesignBundleController extends ChangeNotifier {
     }
   }
 
-  Future<void> editFabricDesignBundle(int fabricDesignBundleId) async {
+  Future<void> editFabricDesignBundle(
+      int fabricDesignBundleId, Data data) async {
     _helperServices.showLoader();
     try {
       var response =
@@ -231,6 +236,11 @@ class FabricDesignBundleController extends ChangeNotifier {
               description: 0,
               bundletoop: int.tryParse(amountOfBundleToopController.text),
               bundlewar: int.tryParse(warBundleController.text),
+              countFabricDesignColorId: data.countFabricDesignColorId,
+              fabricdesignId: data.fabricdesignId,
+              status: data.status,
+              toopwar: data.toopwar,
+              userId: data.userId,
             ),
           );
         },

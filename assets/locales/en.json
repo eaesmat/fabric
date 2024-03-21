@@ -39,6 +39,13 @@
   "distribute": "Distribute",
   "complete": "Complete",
   "toop_war": "Toop War",
+  "new_color": "New Color",
+  "color_name": "Color Name",
+  "select": "Select",
+  "edit_fabric_design_color": "Update Design Color",
+  "no_colors_are_added": "No colors are added",
+  "toops_are_added_can_not_add_new_color": "Toops are added can not add new color",
+  "no_data": "No data found",
 
   "chineseـaccounts": "Chinese Accounts",
   "buying_for_others": "Buying for Others",

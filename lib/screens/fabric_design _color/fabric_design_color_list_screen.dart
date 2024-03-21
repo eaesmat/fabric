@@ -3,17 +3,20 @@ import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/fabric_design%20_color/fabric_design_color_button_sheet.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
-import 'package:fabricproject/widgets/no_bundle_color_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:fabricproject/model/fabric_design_model.dart';
+
 import 'package:provider/provider.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
 
 class FabricDesignColorListScreen extends StatefulWidget {
   final int fabricDesignId;
+
+  final Data fabricDesignData;
   final String fabricDesignName;
   final String fabricPurchaseCode;
   final int colorCount;
@@ -21,6 +24,7 @@ class FabricDesignColorListScreen extends StatefulWidget {
   const FabricDesignColorListScreen({
     Key? key,
     required this.fabricDesignId,
+    required this.fabricDesignData,
     required this.fabricDesignName,
     required this.fabricPurchaseCode,
     required this.colorCount,
@@ -65,7 +69,9 @@ class _FabricDesignColorListScreenState
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
-                            return const ColorListScreenBottomSheet();
+                            return  ColorListScreenBottomSheet(
+                              fabricDesignData: widget.fabricDesignData,
+                            );
                           },
                         );
                       },

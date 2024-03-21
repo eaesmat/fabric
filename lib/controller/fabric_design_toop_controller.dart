@@ -7,6 +7,7 @@ import 'package:fabricproject/screens/fabric_design_bundle_toop/fabric_design_bu
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+
 import 'package:fabricproject/model/fabric_design_bundle_toop_color_model.dart'
     // ignore: library_prefixes
     as fabricDBTColor;
@@ -53,6 +54,7 @@ class FabricDesignToopController extends ChangeNotifier {
 
     _helperServices.navigate(
       FabricDesignBundleToopEditScreen(
+        data: data,
         fabricDesignBundleToopColorId: fabricDesignBundleToopColorId,
         fabricDesignPatiColorId: fabricDesignPatiColorId,
       ),
@@ -176,7 +178,7 @@ class FabricDesignToopController extends ChangeNotifier {
   }
 
   Future<void> editFabricDesignBundleToop(
-      int fabricDesignBundleToopColorId, patiDesignColorId) async {
+      int fabricDesignBundleToopColorId, patiDesignColorId, Data data) async {
     _helperServices.showLoader();
     try {
       final response =
@@ -213,6 +215,7 @@ class FabricDesignToopController extends ChangeNotifier {
               fabricdesigncolorId: fabricDesignBundleToopColorId,
               war: int.tryParse(warToopController.text),
               colorname: selectedColorNameController.text,
+              status: data.status,
             ),
           );
           getFabricDesignRemainBundleAndWar(fabricDesignBundleId);

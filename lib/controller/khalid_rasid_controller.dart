@@ -144,7 +144,9 @@ class KhalidRasidController extends ChangeNotifier {
               exchangerate: double.tryParse(exchangeRateController.text),
               photo: bankPhotoController.text,
               vendorcompanyName: selectedVendorCompanyName.text,
+              vendorcompanyId: int.tryParse(selectedVendorCompanyId.text),
               sarafiName: selectedForexNameController.text,
+              sarafiId: int.tryParse(selectedForexIdController.text),
             ),
           );
         },
