@@ -21,7 +21,7 @@
   "withdrawal": "اخستنه",
   "design_name": "د ډیزاین نوم",
   "toop": "توپ",
-  "by_person" : "په لاس",
+  "by_person": "په لاس",
   "create_design": "نوی ډیزاین",
   "update_design": "ډیزاین سمون",
   "color": "رنګ",
@@ -33,7 +33,8 @@
   "distribute": "ویشل",
   "complete": "بشپړول",
   "toop_war": "توپ وار ",
-
+  "yen_price_convertor": "د ین قیمت محاسبه ",
+  "dollar_price_convertor": "د ډالر قیمت محاسبه ",
   "ٰwarehouses": "ګدامونه",
   "customers": "پیرودونکي",
   "desires": " غوښتنې",

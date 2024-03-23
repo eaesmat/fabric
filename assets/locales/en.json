@@ -94,8 +94,9 @@
   "create_fabric": "Create Fabric",
   "update_fabric": "Update Fabric",
   "vendor_companies": "Vendor Companies",
-  "by_person" : "By Person",
-
+  "by_person": "By Person",
+  "dollar_price_convertor": "Dollar Price Calculator",
+  "yen_price_convertor": "Yen Price Calculator",
   "vendor_company": "Vendor Company",
   "create_vendor_company": "Create Vendor Company",
   "update_vendor_company": "َUpdate Vendor Company",

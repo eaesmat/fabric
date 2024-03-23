@@ -1,4 +1,3 @@
-import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_meter_convertor.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_fabric_bottom_sheet.dart';
@@ -13,23 +12,23 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 
-class AllFabricPurchaseEditScreen extends StatefulWidget {
+class HesabatChinaPurchaseEditScreen extends StatefulWidget {
   // gets the data from the controller
   final int fabricPurchaseId;
   final String status;
-  const AllFabricPurchaseEditScreen({
+  const HesabatChinaPurchaseEditScreen({
     Key? key,
     required this.fabricPurchaseId,
     required this.status,
   }) : super(key: key);
 
   @override
-  State<AllFabricPurchaseEditScreen> createState() =>
-      _AllFabricPurchaseEditScreenState();
+  State<HesabatChinaPurchaseEditScreen> createState() =>
+      _HesabatChinaPurchaseEditScreenState();
 }
 
-class _AllFabricPurchaseEditScreenState
-    extends State<AllFabricPurchaseEditScreen> {
+class _HesabatChinaPurchaseEditScreenState
+    extends State<HesabatChinaPurchaseEditScreen> {
   final formKey = GlobalKey<FormState>();
   late String buttonText;
 
@@ -54,33 +53,14 @@ class _AllFabricPurchaseEditScreenState
               key: formKey,
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet(
-                            screenType: 'allFabricPurchasesScreen',
-                          );
-                        },
-                      );
-                    },
-                    child: CustomTextFieldWithController(
-                      customValidator: (value) =>
-                          customValidator(value, currentLocale),
-                      isDisabled: true,
-                      controller: allFabricPurchasesController
-                          .selectedVendorCompanyName,
-                      iconBtn: const Icon(
-                        size: 30,
-                        Icons.add_box_rounded,
-                        color: Pallete.blueColor,
-                      ),
-                      lblText: const LocaleText('vendor_companies'),
-                    ),
+                   CustomTextFieldWithController(
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
+                    isDisabled: true,
+                    controller:
+                        allFabricPurchasesController.selectedVendorCompanyName,
+                    lblText: const LocaleText('vendor_companies'),
                   ),
-
                   // company bottom sheet to select the company
                   GestureDetector(
                     onTap: () {

@@ -1,6 +1,6 @@
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
-import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
@@ -11,7 +11,13 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class HesabatChinaPurchaseListScreen extends StatefulWidget {
-  const HesabatChinaPurchaseListScreen({super.key});
+  final String vendorCompanyName;
+  final int vendorCompanyId;
+  const HesabatChinaPurchaseListScreen({
+    Key? key,
+    required this.vendorCompanyName,
+    required this.vendorCompanyId,
+  }) : super(key: key);
 
   @override
   State<HesabatChinaPurchaseListScreen> createState() =>
@@ -49,15 +55,20 @@ class _HesabatChinaPurchaseListScreenState
                 // Search text filed
                 child: CustomTextFieldWithController(
                   iconBtn: IconButton(
-                      icon: const Icon(
-                        Icons.add_box,
-                        color: Pallete.blueColor,
-                      ),
-                      onPressed: () {
-                        // navigate to new create screen
-                        allFabricPurchasesController
-                            .navigateToFabricPurchaseCreate();
-                      }),
+                    icon: const Icon(
+                      Icons.add_box,
+                      color: Pallete.blueColor,
+                    ),
+                    onPressed: () {
+                      // navigate to new create screen
+                      allFabricPurchasesController
+                          .navigateToFabricPurchaseCreate('vendorcompany');
+                      allFabricPurchasesController.selectedVendorCompanyId
+                          .text = widget.vendorCompanyId.toString();
+                      allFabricPurchasesController.selectedVendorCompanyName
+                          .text = widget.vendorCompanyName;
+                    },
+                  ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
                     // pass the data to the search method controller
@@ -76,16 +87,22 @@ class _HesabatChinaPurchaseListScreenState
                     .searchAllFabricPurchases.reversed
                     .toList();
 
-                if (reversedList.isEmpty) {
-                  // If no data, display the "noData.png" image
+                // Filtered list to hold only matched items
+                final matchedItems = reversedList
+                    .where((data) =>
+                        data.vendorcompanyId == widget.vendorCompanyId)
+                    .toList();
+
+                if (matchedItems.isEmpty) {
+                  // If no matched items, display the "NoDataFoundWidget"
                   return const NoDataFoundWidget();
                 }
 
                 return ListView.builder(
-                  itemCount: reversedList.length,
+                  itemCount: matchedItems.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data = reversedList[index];
+                    final data = matchedItems[index];
 
                     return ListTileWidget(
                       onTap: () {
@@ -107,8 +124,7 @@ class _HesabatChinaPurchaseListScreenState
                         );
                       },
                       lead: data.status == 'complete'
-                          ? // Check if status is complete
-                          const Icon(Icons.check, color: Colors.green)
+                          ? const Icon(Icons.check, color: Colors.green)
                           : const Icon(Icons.close, color: Colors.red),
                       tileTitle: Row(
                         children: [
@@ -149,24 +165,25 @@ class _HesabatChinaPurchaseListScreenState
                             ),
                           ),
                           const PopupMenuItem(
-                              value: "edit",
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  LocaleText('update'),
-                                ],
-                              )),
+                            value: "edit",
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                LocaleText('update'),
+                              ],
+                            ),
+                          ),
                         ],
                         onSelected: (String value) {
                           if (value == "edit") {
                             allFabricPurchasesController
                                 .navigateToFabricPurchaseEdit(
-                              data,
-                              data.fabricpurchaseId!.toInt(),
-                            );
+                                    data,
+                                    data.fabricpurchaseId!.toInt(),
+                                    'vendorcompany');
                           }
                           if (value == "delete") {
                             allFabricPurchasesController.deleteFabricPurchase(

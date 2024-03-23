@@ -4,6 +4,8 @@ import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/all_fabric_purchases_model.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_create_screen.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_edit_screen.dart';
+import 'package:fabricproject/screens/hesabat_china/hesabat_china_fabric_purchase_edit_screen.dart';
+import 'package:fabricproject/screens/hesabat_china/hesabat_china_purchase_create_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -47,16 +49,23 @@ class AllFabricPurchasesController extends ChangeNotifier {
     getAllFabricPurchases();
   }
 
-  navigateToFabricPurchaseCreate() {
+  navigateToFabricPurchaseCreate(String purchaseType) {
     // dispose();
     clearAllControllers();
 
-    _helperServices.navigate(
-      const AllFabricPurchaseCreateScreen(),
-    );
+    if (purchaseType == 'khalid') {
+      _helperServices.navigate(
+        const AllFabricPurchaseCreateScreen(),
+      );
+    } else {
+      _helperServices.navigate(
+        const HesabatChinaFabricPurchaseCreateScreen(),
+      );
+    }
   }
 
-  navigateToFabricPurchaseEdit(Data data, int fabricPurchaseId) {
+  navigateToFabricPurchaseEdit(
+      Data data, int fabricPurchaseId, String purchaseType) {
     clearAllControllers();
     amountOfBundlesController.text = data.bundle.toString();
     amountOfMetersController.text = data.meter.toString();
@@ -76,12 +85,21 @@ class AllFabricPurchasesController extends ChangeNotifier {
     selectedCompanyNameController.text = data.marka.toString();
     selectedFabricNameController.text = data.fabricName.toString();
 
-    _helperServices.navigate(
-      AllFabricPurchaseEditScreen(
-        fabricPurchaseId: fabricPurchaseId,
-        status: data.status.toString(),
-      ),
-    );
+    if (purchaseType == 'khalid') {
+      _helperServices.navigate(
+        AllFabricPurchaseEditScreen(
+          fabricPurchaseId: fabricPurchaseId,
+          status: data.status.toString(),
+        ),
+      );
+    } else {
+      _helperServices.navigate(
+        HesabatChinaPurchaseEditScreen(
+          fabricPurchaseId: fabricPurchaseId,
+          status: data.status.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> getAllFabricPurchases() async {

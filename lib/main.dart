@@ -21,7 +21,6 @@ import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
-import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/controller/pati_controller.dart';
@@ -82,9 +81,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SaraiController>(
           create: (_) => SaraiController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<FabricPurchaseController>(
-          create: (_) => FabricPurchaseController(HelperServices.instance),
-        ),
+       
         ChangeNotifierProvider<KhalidRasidController>(
           create: (_) => KhalidRasidController(HelperServices.instance),
         ),

@@ -1,11 +1,8 @@
-import 'package:fabricproject/bottom_sheets/vendor_company_bottom_sheet.dart';
-import 'package:fabricproject/constants/screen_type_constants.dart';
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_meter_convertor.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_company_bottom_sheet.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_fabric_bottom_sheet.dart';
-import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_transport_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
@@ -15,24 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class AllFabricPurchaseCreateScreen extends StatefulWidget {
-  const AllFabricPurchaseCreateScreen({super.key});
+class HesabatChinaFabricPurchaseCreateScreen extends StatefulWidget {
+  const HesabatChinaFabricPurchaseCreateScreen({super.key});
 
   @override
-  State<AllFabricPurchaseCreateScreen> createState() =>
-      _AllFabricPurchaseCreateScreenState();
+  State<HesabatChinaFabricPurchaseCreateScreen> createState() =>
+      _HesabatChinaFabricPurchaseCreateScreenState();
 }
 
-class _AllFabricPurchaseCreateScreenState
-    extends State<AllFabricPurchaseCreateScreen> {
-  // @override
-  // void dispose() {
-  //   final allFabricPurchasesController =
-  //       Provider.of<AllFabricPurchasesController>(context, listen: false);
-  //   allFabricPurchasesController.dispose(); // Dispose controllers here
-  //   super.dispose();
-  // }
-
+class _HesabatChinaFabricPurchaseCreateScreenState
+    extends State<HesabatChinaFabricPurchaseCreateScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -55,32 +44,13 @@ class _AllFabricPurchaseCreateScreenState
               key: formKey,
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return const VendorCompanyBottomSheet(
-                            screenType:
-                                ScreenTypeConstants.allFabricPurchasesScreen,
-                          );
-                        },
-                      );
-                    },
-                    child: CustomTextFieldWithController(
-                      customValidator: (value) =>
-                          customValidator(value, currentLocale),
-                      isDisabled: true,
-                      controller: allFabricPurchasesController
-                          .selectedVendorCompanyName,
-                      iconBtn: const Icon(
-                        size: 30,
-                        Icons.add_box_rounded,
-                        color: Pallete.blueColor,
-                      ),
-                      lblText: const LocaleText('vendor_companies'),
-                    ),
+                  CustomTextFieldWithController(
+                    customValidator: (value) =>
+                        customValidator(value, currentLocale),
+                    isDisabled: true,
+                    controller:
+                        allFabricPurchasesController.selectedVendorCompanyName,
+                    lblText: const LocaleText('vendor_companies'),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -157,30 +127,7 @@ class _AllFabricPurchaseCreateScreenState
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return const TransportBottomSheet();
-                        },
-                      );
-                    },
-                    child: CustomTextFieldWithController(
-                      customValidator: (value) =>
-                          customValidator(value, currentLocale),
-                      isDisabled: true,
-                      controller:
-                          allFabricPurchasesController.selectedTransportName,
-                      iconBtn: const Icon(
-                        size: 30,
-                        Icons.add_box_rounded,
-                        color: Pallete.blueColor,
-                      ),
-                      lblText: const LocaleText('transports'),
-                    ),
-                  ),
+                  
                   CustomTextFieldWithController(
                     lblText: const LocaleText('bank_receipt_photo'),
                     controller: allFabricPurchasesController

@@ -1,6 +1,6 @@
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/fabric_design_controller.dart';
-import 'package:fabricproject/screens/fabric_purchase/fabric_purchase_item_details.dart';
+import 'package:fabricproject/screens/all_fabric_purchase/fabric_purchase_item_details.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
@@ -56,7 +56,9 @@ class _AllFabricPurchaseListScreenState
                       onPressed: () {
                         // navigate to new create screen
                         allFabricPurchasesController
-                            .navigateToFabricPurchaseCreate();
+                            .navigateToFabricPurchaseCreate(
+                              'khalid'
+                            );
                       }),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
@@ -166,6 +168,7 @@ class _AllFabricPurchaseListScreenState
                                 .navigateToFabricPurchaseEdit(
                               data,
                               data.fabricpurchaseId!.toInt(),
+                              'khalid'
                             );
                           }
                           if (value == "delete") {

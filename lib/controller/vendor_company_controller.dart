@@ -1,6 +1,7 @@
 import 'package:fabricproject/api/vendor_company_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/vendor_company_model.dart';
+import 'package:fabricproject/screens/hesabat_china/hesabat_china_details_screen.dart';
 import 'package:fabricproject/screens/vendor_company/vendor_company_create_screen.dart';
 import 'package:fabricproject/screens/vendor_company/vendor_company_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -37,6 +38,16 @@ class VendorCompanyController extends ChangeNotifier {
       VendorCompanyEditScreen(
         vendorCompanyData: data,
         vendorCompanyId: id,
+      ),
+    );
+  }
+
+  navigateToVendorCompanyPurchaseListScreen(
+      String vendorCompanyName, int vendorCompanyId) {
+    _helperServices.navigate(
+      HesabatChinaDetailsScreen(
+        vendorCompanyName: vendorCompanyName,
+        vendorCompanyId: vendorCompanyId,
       ),
     );
   }
