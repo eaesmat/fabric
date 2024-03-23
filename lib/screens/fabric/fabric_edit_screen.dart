@@ -53,12 +53,12 @@ class _FabricEditScreenState extends State<FabricEditScreen> {
                         customValidator(value, currentLocale),
                   ),
                   CustomTextFieldWithController(
-                    controller: fabricController.desorptionController,
-                    lblText: const LocaleText('description'),
-                  ),
-                  CustomTextFieldWithController(
                     controller: fabricController.abrController,
                     lblText: const LocaleText('abr'),
+                  ),
+                  CustomTextFieldWithController(
+                    controller: fabricController.descriptionController,
+                    lblText: const LocaleText('description'),
                   ),
                   CustomDropDownButton(
                     btnWidth: 1,

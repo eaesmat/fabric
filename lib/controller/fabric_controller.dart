@@ -8,147 +8,185 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class FabricController extends ChangeNotifier {
-// helper class instance
   final HelperServices _helperServices;
-  // provides and gets data from and to the ui
   TextEditingController nameController = TextEditingController();
-  TextEditingController desorptionController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController abrController = TextEditingController();
-// will hold api calls data
-  List<Data>? allFabrics = [];
-  List<Data>? searchFabrics = [];
-// holds search textfield text from ui
+  List<Data> allFabrics = [];
+  List<Data> searchFabrics = [];
   String searchText = "";
 
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedFabrics = [];
+
   FabricController(this._helperServices) {
-// get all the data at first visit
     getAllFabrics();
   }
-// used as router to navigate to the create screen
+
   navigateToFabricCreate() {
     clearAllControllers();
-// navigate comes from helper class
     _helperServices.navigate(const FabricCreateScreen());
   }
 
   navigateToFabricEdit(Data data, int id) {
     clearAllControllers();
-// passed the data to the edit screen textfield
-    nameController.text = data.name.toString();
-    abrController.text = data.abr.toString();
-    desorptionController.text = data.description.toString();
+    nameController.text = data.name ?? '';
+    abrController.text = data.abr ?? '';
+    descriptionController.text = data.description ?? '';
     _helperServices.navigate(FabricEditScreen(
-// passes data from constructor
       fabricData: data,
       fabricId: id,
     ));
   }
 
-  getAllFabrics() async {
+  Future<void> getAllFabrics() async {
     _helperServices.showLoader();
-// passes the endPont to the api calls class
-    final response = await FabricApiServiceProvider().getFabric('getFabric');
-    response.fold(
-// left return failure message or status code
-        (l) => {
-              _helperServices.goBack(),
-              _helperServices.showErrorMessage(l),
-            }, (r) {
-// r return data or status code
-      allFabrics = r;
+    try {
+      final response = await FabricApiServiceProvider().getFabric('getFabric');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allFabrics = r;
+          searchFabrics = List.from(allFabrics);
+          cachedFabrics = List.from(allFabrics); // Cache initial data
+          _helperServices.goBack();
+          updateFabricsData();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      updateFabricsData();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createFabric() async {
+  Future<void> createFabric() async {
     _helperServices.showLoader();
+    try {
+      final response = await FabricApiServiceProvider().createFabric(
+        'add-fabric',
+        {
+          "fabric_id": 0,
+          "name": nameController.text,
+          "description": descriptionController.text,
+          "abr": abrController.text,
+        },
+      );
 
-    var response = await FabricApiServiceProvider().createFabric(
-      'add-fabric',
-      {
-        "fabric_id": 0,
-        "name": nameController.text,
-        "description": desorptionController.text,
-        "abr": abrController.text,
-      },
-    );
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        getAllFabrics(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllFabrics();
+          }
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editFabric(int id) async {
+  Future<void> editFabric(int id) async {
     _helperServices.showLoader();
-
-    var response = await FabricApiServiceProvider().editFabric(
-      'update-fabric?fabric_id=$id',
-      {
-        "fabric_id": id,
-        "name": nameController.text,
-        "description": desorptionController.text,
-        "abr": abrController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllFabrics(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response = await FabricApiServiceProvider().editFabric(
+        'update-fabric?fabric_id=$id',
+        {
+          "fabric_id": id,
+          "name": nameController.text,
+          "description": descriptionController.text,
+          "abr": abrController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('updated'),
+              Colors.green,
+              const Icon(
+                Icons.edit_note_outlined,
+                color: Pallete.whiteColor,
+              ),
+            );
+            updateFabricLocally(
+              id,
+              Data(
+                fabricId: id,
+                name: nameController.text,
+                description: descriptionController.text,
+                abr: abrController.text,
+              ),
+            );
+          }
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  void deleteItemLocally(int id) {
-    final index = allFabrics!.indexWhere((element) => element.fabricId == id);
+  void updateFabricLocally(int id, Data updatedData) {
+    int index = allFabrics.indexWhere((element) => element.fabricId == id);
     if (index != -1) {
-      allFabrics!.removeAt(index);
-
-      final searchIndex =
-          searchFabrics!.indexWhere((element) => element.fabricId == id);
-      if (searchIndex != -1) {
-        searchFabrics!.removeAt(searchIndex);
+      allFabrics[index] = updatedData;
+      int cacheIndex =
+          cachedFabrics.indexWhere((element) => element.fabricId == id);
+      if (cacheIndex != -1) {
+        cachedFabrics[cacheIndex] = updatedData; // Update cache
       }
-
+      int searchIndex =
+          searchFabrics.indexWhere((element) => element.fabricId == id);
+      if (searchIndex != -1) {
+        searchFabrics[searchIndex] = updatedData; // Update search list
+      }
       notifyListeners();
     }
   }
 
-  deleteFabric(id, index) async {
+  void deleteItemLocally(int id) {
+    allFabrics.removeWhere((element) => element.fabricId == id);
+    cachedFabrics.removeWhere((element) => element.fabricId == id);
+    searchFabrics.removeWhere((element) => element.fabricId == id);
+    notifyListeners();
+  }
+
+  Future<void> deleteFabric(int id) async {
     _helperServices.showLoader();
-    var response = await FabricApiServiceProvider()
-        .deleteFabric('delete-fabric?fabric_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await FabricApiServiceProvider()
+          .deleteFabric('delete-fabric?fabric_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -156,12 +194,9 @@ class FabricController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-// is it is 500 means it is parent can not be deleted
-        else if (r == 500)
-          {
+            );
+            deleteItemLocally(id);
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -169,37 +204,45 @@ class FabricController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-// filters item in ui
-  searchFabricsMethod(String name) {
-    searchText = name;
+  searchFabricsMethod(String text) {
+    searchText = text;
     updateFabricsData();
   }
 
-// provides data based on
   updateFabricsData() {
-    searchFabrics?.clear();
+    searchFabrics.clear();
     if (searchText.isEmpty) {
-      searchFabrics?.addAll(allFabrics!);
+      searchFabrics.addAll(cachedFabrics);
     } else {
-      searchFabrics?.addAll(
-        allFabrics!
-            .where((element) =>
-                // search happen based on this fields
-                element.name!.toLowerCase().contains(searchText) ||
-                element.description!.toLowerCase().contains(searchText) ||
-                element.abr!.toLowerCase().contains(searchText))
-            .toList(),
+      searchFabrics.addAll(
+        cachedFabrics.where(
+          (element) =>
+              (element.name
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (element.description
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (element.abr?.toLowerCase().contains(searchText.toLowerCase()) ??
+                  false),
+        ),
       );
     }
     notifyListeners();
   }
-   // Reset the search text
+
   void resetSearchFilter() {
     searchText = '';
     updateFabricsData();
@@ -207,7 +250,7 @@ class FabricController extends ChangeNotifier {
 
   void clearAllControllers() {
     nameController.clear();
-    desorptionController.clear();
+    descriptionController.clear();
     abrController.clear();
   }
 }

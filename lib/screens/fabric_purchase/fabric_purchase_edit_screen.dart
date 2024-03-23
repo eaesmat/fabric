@@ -9,7 +9,6 @@ import 'package:fabricproject/controller/fabric_purchase_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/model/fabric_purchase_model.dart';
 import 'package:fabricproject/screens/all_fabric_purchase/all_fabric_purchase_company_bottom_sheet.dart';
-import 'package:fabricproject/screens/fabric/fabric_bottom_sheet.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';

@@ -140,7 +140,7 @@ class _FabricBottomSheetState extends State<FabricBottomSheet> {
                         }
                         if (value == "delete") {
                           // delete the item
-                          fabricController.deleteFabric(data.fabricId, index);
+                          fabricController.deleteFabric(data.fabricId!);
                         }
                       },
                     ),
