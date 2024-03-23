@@ -32,6 +32,8 @@ class ForexController extends ChangeNotifier {
     );
   }
 
+
+
   navigateToForexEdit(Data data, int id) {
     clearAllControllers();
     fullNameController.text = data.fullname ?? '';
@@ -151,7 +153,7 @@ class ForexController extends ChangeNotifier {
               phone: phoneController.text,
               shopno: shopNoController.text,
               location: locationController.text,
-              
+
             ),
           );
         },

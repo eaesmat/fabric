@@ -5,6 +5,9 @@ import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
+import 'package:fabricproject/controller/forex_calculation_controller%20copy.dart';
+import 'package:fabricproject/controller/forex_calculation_controller.dart';
+import 'package:fabricproject/controller/forex_gereft_controller.dart';
 import 'package:fabricproject/controller/khalid_gereft_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_bundle_select_controller.dart';
 import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
@@ -32,6 +35,7 @@ import 'package:fabricproject/controller/transport_controller.dart';
 import 'package:fabricproject/controller/transport_deals_controller.dart';
 import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/controller/transfer_bundles_controller.dart';
+import 'package:fabricproject/controller/user_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
@@ -106,9 +110,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ColorsController>(
           create: (_) => ColorsController(HelperServices.instance),
         ),
-        // ChangeNotifierProvider<PatiDesignColorController>(
-        //   create: (_) => PatiDesignColorController(HelperServices.instance),
-        // ),
+        ChangeNotifierProvider<ForexCalculationController>(
+          create: (_) => ForexCalculationController(HelperServices.instance),
+        ),
         ChangeNotifierProvider<PatiController>(
           create: (_) => PatiController(HelperServices.instance),
         ),
@@ -166,6 +170,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<KhalidGereftController>(
           create: (_) => KhalidGereftController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<UserController>(
+          create: (_) => UserController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<ForexGereftController>(
+          create: (_) => ForexGereftController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<ForexTalabatController>(
+          create: (_) => ForexTalabatController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

@@ -4,6 +4,7 @@ import 'package:fabricproject/screens/all_fabric_purchase/khalid_details_screen.
 import 'package:fabricproject/screens/company/company_list_screen.dart';
 import 'package:fabricproject/screens/customer/customer_list_screen.dart';
 import 'package:fabricproject/screens/fabric/fabric_list_screen.dart';
+import 'package:fabricproject/screens/forex/forex_details_screen.dart';
 import 'package:fabricproject/screens/forex/forex_list_screen.dart';
 import 'package:fabricproject/screens/sarai/sarai_list_screen.dart';
 import 'package:fabricproject/screens/transport/transport_list_screen.dart';
@@ -75,7 +76,7 @@ class DrawerScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ForexListScreen(),
+                        builder: (context) => const ForexDetailsScreen(),
                       ),
                     );
                   },
@@ -282,7 +283,7 @@ class DrawerScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ForexListScreen(),
+                    builder: (context) => const ForexDetailsScreen(),
                   ),
                 );
               },
