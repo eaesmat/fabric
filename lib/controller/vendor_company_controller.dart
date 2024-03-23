@@ -8,140 +8,180 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class VendorCompanyController extends ChangeNotifier {
-// helper class instance
   final HelperServices _helperServices;
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController desorptionController = TextEditingController();
-// holds api calls return data
-  List<Data>? allVendorCompanies = [];
-  List<Data>? searchVendorCompanies = [];
-// store search texts
+  TextEditingController descriptionController = TextEditingController();
+  List<Data> allVendorCompanies = [];
+  List<Data> searchVendorCompanies = [];
   String searchText = "";
+
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedVendorCompanies = [];
 
   VendorCompanyController(this._helperServices) {
     getAllVendorCompanies();
   }
-// navigates to create screen
+
   navigateToVendorCompanyCreate() {
     clearAllControllers();
-
     _helperServices.navigate(const VendorCompanyCreateScreen());
   }
 
-// navigates to edit screen
   navigateToVendorCompanyEdit(Data data, int id) {
     clearAllControllers();
-
-// pass the data to edit screen
-    nameController.text = data.name.toString();
-    phoneController.text = data.phone.toString();
-    desorptionController.text = data.description.toString();
+    nameController.text = data.name ?? '';
+    phoneController.text = data.phone ?? '';
+    descriptionController.text = data.description ?? '';
     _helperServices.navigate(
-      VendorCompanyEditScreen(vendorCompanyData: data, vendorCompanyId: id),
+      VendorCompanyEditScreen(
+        vendorCompanyData: data,
+        vendorCompanyId: id,
+      ),
     );
   }
 
-// gets data from api
-  getAllVendorCompanies() async {
+  Future<void> getAllVendorCompanies() async {
     _helperServices.showLoader();
-    final response = await VendorCompanyApiServiceProvider()
-        .getVendorCompany('getVendorCompany');
-    response.fold(
-        (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+    try {
+      final response = await VendorCompanyApiServiceProvider()
+          .getVendorCompany('getVendorCompany');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
         (r) {
-      allVendorCompanies = r;
+          allVendorCompanies = r;
+          searchVendorCompanies = List.from(allVendorCompanies);
+          cachedVendorCompanies =
+              List.from(allVendorCompanies); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      updateVendorCompaniesData();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createVendorCompany() async {
+  Future<void> createVendorCompany() async {
     _helperServices.showLoader();
-
-    var response = await VendorCompanyApiServiceProvider().createVendorCompany(
-      'add-vendor-company',
-      {
-        "vendorcompany_id": 0,
-        "name": nameController.text,
-        "phone": phoneController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllVendorCompanies(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response =
+          await VendorCompanyApiServiceProvider().createVendorCompany(
+        'add-vendor-company',
+        {
+          "vendor_name": nameController.text,
+          "phone": phoneController.text,
+          "description": descriptionController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllVendorCompanies();
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editVendorCompany(int id) async {
+  Future<void> editVendorCompany(int id) async {
     _helperServices.showLoader();
-
-    var response = await VendorCompanyApiServiceProvider().editVendorCompany(
-      'update-vendor-company?vendorcompany_id=$id',
-      {
-        "vendorcompany_id": id,
-        "name": nameController.text,
-        "phone": phoneController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllVendorCompanies(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response =
+          await VendorCompanyApiServiceProvider().editVendorCompany(
+        'update-vendor-company?vendorcompany_id=$id',
+        {
+          "vendorcompany_id": id,
+          "name": nameController.text,
+          "phone": phoneController.text,
+          "description": descriptionController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+          updateVendorCompanyLocally(
+            id,
+            Data(
+              vendorcompanyId: id,
+              name: nameController.text,
+              phone: phoneController.text,
+              description: descriptionController.text,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  void deleteItemLocally(int id) {
-    final index = allVendorCompanies!
+  void updateVendorCompanyLocally(int id, Data updatedData) {
+    int index = allVendorCompanies
         .indexWhere((element) => element.vendorcompanyId == id);
     if (index != -1) {
-      allVendorCompanies!.removeAt(index);
-
-      final searchIndex = searchVendorCompanies!
+      allVendorCompanies[index] = updatedData;
+      int cacheIndex = cachedVendorCompanies
+          .indexWhere((element) => element.vendorcompanyId == id);
+      if (cacheIndex != -1) {
+        cachedVendorCompanies[cacheIndex] = updatedData; // Update cache
+      }
+      int searchIndex = searchVendorCompanies
           .indexWhere((element) => element.vendorcompanyId == id);
       if (searchIndex != -1) {
-        searchVendorCompanies!.removeAt(searchIndex);
+        searchVendorCompanies[searchIndex] = updatedData; // Update search list
       }
-
       notifyListeners();
     }
   }
 
-  deleteVendorCompany(id, index) async {
+  Future<void> deleteVendorCompany(int id) async {
     _helperServices.showLoader();
-    var response = await VendorCompanyApiServiceProvider()
-        .deleteVendorCompany('delete-vendor-company?vendorcompany_id=$id');
-    _helperServices.goBack();
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        if (r == 200)
-          {
+    try {
+      final response = await VendorCompanyApiServiceProvider()
+          .deleteVendorCompany('delete-vendor-company?vendorcompany_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteItemLocally(id);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -149,11 +189,8 @@ class VendorCompanyController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -161,34 +198,59 @@ class VendorCompanyController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  searchVendorCompaniesMethod(String name) {
-    searchText = name;
+  void deleteItemLocally(int id) {
+    allVendorCompanies.removeWhere((element) => element.vendorcompanyId == id);
+    cachedVendorCompanies
+        .removeWhere((element) => element.vendorcompanyId == id);
+    searchVendorCompanies
+        .removeWhere((element) => element.vendorcompanyId == id);
+    notifyListeners();
+  }
+
+  void searchVendorCompaniesMethod(String text) {
+    searchText = text;
     updateVendorCompaniesData();
   }
 
-  updateVendorCompaniesData() {
-    searchVendorCompanies?.clear();
+  void updateVendorCompaniesData() {
+    searchVendorCompanies.clear();
     if (searchText.isEmpty) {
-      searchVendorCompanies?.addAll(allVendorCompanies!);
+      searchVendorCompanies.addAll(cachedVendorCompanies);
     } else {
-      searchVendorCompanies?.addAll(
-        allVendorCompanies!
-            .where((element) =>
-                element.name!.toLowerCase().contains(searchText) ||
-                element.phone!.toLowerCase().contains(searchText) ||
-                element.description!.toLowerCase().contains(searchText))
+      searchVendorCompanies.addAll(
+        cachedVendorCompanies
+            .where(
+              (element) =>
+                  (element.name
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.phone
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.description
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false),
+            )
             .toList(),
       );
     }
     notifyListeners();
   }
-   // Reset the search text
+
+  // Reset the search text
   void resetSearchFilter() {
     searchText = '';
     updateVendorCompaniesData();
@@ -197,6 +259,6 @@ class VendorCompanyController extends ChangeNotifier {
   void clearAllControllers() {
     nameController.clear();
     phoneController.clear();
-    desorptionController.clear();
+    descriptionController.clear();
   }
 }

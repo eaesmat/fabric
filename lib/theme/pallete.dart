@@ -26,6 +26,7 @@ class Pallete {
     scaffoldBackgroundColor: blackColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
+      scrolledUnderElevation: 0.0,
       backgroundColor: drawerColor,
       iconTheme: IconThemeData(
         color: whiteColor,
@@ -52,10 +53,11 @@ class Pallete {
       visualDensity: VisualDensity.compact,
       // Else theme will be use
     ),
-    
+
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
+      scrolledUnderElevation: 0.0,
       backgroundColor: whiteColor,
       elevation: 0,
       iconTheme: IconThemeData(

@@ -3,15 +3,18 @@ import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
+import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
+import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class VendorCompanyBottomSheet extends StatefulWidget {
   final String screenType;
-  const VendorCompanyBottomSheet({super.key, required this.screenType});
+  const VendorCompanyBottomSheet({Key? key, required this.screenType})
+      : super(key: key);
 
   @override
   State<VendorCompanyBottomSheet> createState() =>
@@ -44,8 +47,7 @@ class _VendorCompanyBottomSheetState extends State<VendorCompanyBottomSheet> {
       final khalidRasidController =
           Provider.of<KhalidRasidController>(context, listen: false);
 
-      khalidRasidController.selectedVendorCompanyName.text =
-          vendorCompanyName;
+      khalidRasidController.selectedVendorCompanyName.text = vendorCompanyName;
       khalidRasidController.selectedVendorCompanyId.text =
           vendorCompanyId.toString();
     }
@@ -59,120 +61,130 @@ class _VendorCompanyBottomSheetState extends State<VendorCompanyBottomSheet> {
         Provider.of<VendorCompanyController>(context);
     // final allDrawController = Provider.of<AllDrawController>(context);
 
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(20.0),
-        topRight: Radius.circular(20.0),
-      ),
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        padding: const EdgeInsets.all(16.0),
-        color: Pallete.whiteColor,
-        child: SingleChildScrollView(
+    return CustomRefreshIndicator(
+      onRefresh: () async {
+        // Implement your refresh logic here
+        await Provider.of<VendorCompanyController>(context, listen: false)
+            .getAllVendorCompanies();
+      },
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+        child: Container(
+          margin: EdgeInsets.zero,
+          height: MediaQuery.of(context).size.height * 0.9,
+          padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+          color: Pallete.whiteColor,
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                // search text filed
                 child: CustomTextFieldWithController(
-                  // create button in the search text filed
                   iconBtn: IconButton(
                     icon: const Icon(
-                      size: 30,
-                      Icons.add_box_rounded,
+                      Icons.add_box,
                       color: Pallete.blueColor,
                     ),
                     onPressed: () {
-                      // to create new
+                      // search Icon to create new item
                       vendorCompanyController.navigateToVendorCompanyCreate();
                     },
                   ),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
-                    // searches item
+                    // Passes search text to the controller
                     vendorCompanyController.searchVendorCompaniesMethod(value);
                   },
                 ),
               ),
-              const SizedBox(height: 20.0),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount:
-                    vendorCompanyController.searchVendorCompanies?.length ?? 0,
-                itemBuilder: (context, index) {
-                  // data gets data from controller
-                  final reversedList = vendorCompanyController
-                      .searchVendorCompanies!.reversed
-                      .toList();
-                  final data = reversedList[index];
-                  return ListTileWidget(
-                    onTap: () {
-                      passDataToController(
-                          widget.screenType, data.name, data.vendorcompanyId);
-                      Navigator.pop(context);
-                    },
-                    // Tile Title
+              Expanded(
+                child: vendorCompanyController.searchVendorCompanies.isEmpty
+                    ? const NoDataFoundWidget()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: vendorCompanyController
+                            .searchVendorCompanies.length,
+                        itemBuilder: (context, index) {
+                          // data gets data from controller
+                          final reversedList = vendorCompanyController
+                              .searchVendorCompanies.reversed
+                              .toList();
+                          final data = reversedList[index];
 
-                    tileTitle: Text(
-                      data.name.toString(),
-                    ),
-                    // subtitle
+                          return ListTileWidget(
+                            onTap: () {
+                              passDataToController(widget.screenType, data.name,
+                                  data.vendorcompanyId);
+                              Navigator.pop(context);
+                            },
+                            // Tile Title
 
-                    tileSubTitle: Row(
-                      children: [
-                        Text(
-                          data.description.toString(),
-                        ),
-                        const Spacer(),
-                        Text(
-                          data.phone.toString(),
-                        ),
-                      ],
-                    ),
-                    // trailing hold delete and update buttons
+                            tileTitle: Text(
+                              data.name.toString(),
+                            ),
+                            // subtitle
 
-                    trail: PopupMenuButton(
-                      color: Pallete.whiteColor,
-                      child: const Icon(Icons.more_vert_sharp),
-                      itemBuilder: (context) => <PopupMenuEntry<String>>[
-                        const PopupMenuItem(
-                            value: "delete",
-                            child: Row(
+                            tileSubTitle: Row(
                               children: [
-                                Icon(Icons.delete),
-                                SizedBox(
-                                  width: 10,
+                                Text(
+                                  data.description.toString(),
                                 ),
-                                LocaleText('delete'),
-                              ],
-                            )),
-                        const PopupMenuItem(
-                            value: "edit",
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit),
-                                SizedBox(
-                                  width: 10,
+                                const Spacer(),
+                                Text(
+                                  data.phone.toString(),
                                 ),
-                                LocaleText('update'),
                               ],
-                            )),
-                      ],
-                      onSelected: (String value) {
-                        if (value == "edit") {
-                          // navigates to the edit screen
+                            ),
+                            // trailing hold delete and update buttons
 
-                          vendorCompanyController.navigateToVendorCompanyEdit(
-                              data, data.vendorcompanyId!.toInt());
-                        }
-                        if (value == "delete") {
-                          vendorCompanyController.deleteVendorCompany(
-                              data.vendorcompanyId, index);
-                        }
-                      },
-                    ),
-                  );
-                },
+                            trail: PopupMenuButton(
+                              color: Pallete.whiteColor,
+                              child: const Icon(Icons.more_vert_sharp),
+                              itemBuilder: (context) =>
+                                  <PopupMenuEntry<String>>[
+                                const PopupMenuItem(
+                                    value: "delete",
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.delete),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        LocaleText('delete'),
+                                      ],
+                                    )),
+                                const PopupMenuItem(
+                                    value: "edit",
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.edit),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        LocaleText('update'),
+                                      ],
+                                    )),
+                              ],
+                              onSelected: (String value) {
+                                if (value == "edit") {
+                                  // navigates to the edit screen
+
+                                  vendorCompanyController
+                                      .navigateToVendorCompanyEdit(
+                                          data, data.vendorcompanyId!.toInt());
+                                }
+                                if (value == "delete") {
+                                  vendorCompanyController.deleteVendorCompany(
+                                    data.vendorcompanyId!,
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
               ),
             ],
           ),

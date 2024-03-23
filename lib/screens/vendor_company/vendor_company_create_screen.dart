@@ -55,7 +55,7 @@ class _VendorCompanyCreateScreenState extends State<VendorCompanyCreateScreen> {
                     lblText: const LocaleText('phone'),
                   ),
                   CustomTextFieldWithController(
-                    controller: vendorCompanyController.desorptionController,
+                    controller: vendorCompanyController.descriptionController,
                     lblText: const LocaleText('description'),
                   ),
                   CustomDropDownButton(
