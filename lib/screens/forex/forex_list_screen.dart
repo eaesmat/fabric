@@ -67,15 +67,15 @@ class _ForexListScreenState extends State<ForexListScreen> {
           Expanded(
             child: Consumer<ForexController>(
               builder: (context, forexController, child) {
-                final searchForex =
-                    forexController.searchForex; //data list view
+                final searchForex = forexController.searchForex.reversed
+                    .toList(); // data list view, reversed
                 if (searchForex.isNotEmpty) {
                   return ListView.builder(
-                    itemCount: forexController.searchForex.length,
+                    itemCount: searchForex.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       // data vars takes data from controller
-                      final data = forexController.searchForex[index];
+                      final data = searchForex[index];
                       return ListTileWidget(
                         onTap: () {
                           forexGereftController.navigateToForexGereftListScreen(
@@ -89,29 +89,29 @@ class _ForexListScreenState extends State<ForexListScreen> {
                         lead: CircleAvatar(
                           backgroundColor: Pallete.blueColor,
                           child: Text(
-                            data.shopno.toString(),
+                            data.shopno?.toString() ?? '',
                             style: const TextStyle(color: Pallete.whiteColor),
                           ),
                         ),
                         tileTitle: Row(
                           children: [
                             Text(
-                              data.fullname.toString(),
+                              data.fullname ?? '',
                             ),
                             const Spacer(),
                             Text(
-                              data.phone.toString(),
+                              data.phone ?? '',
                             ),
                           ],
                         ),
                         tileSubTitle: Row(
                           children: [
                             Text(
-                              data.description.toString(),
+                              data.description ?? '',
                             ),
                             const Spacer(),
                             Text(
-                              data.location.toString(),
+                              data.location ?? '',
                             ),
                           ],
                         ),
