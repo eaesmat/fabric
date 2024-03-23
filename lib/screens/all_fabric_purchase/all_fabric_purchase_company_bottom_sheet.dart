@@ -1,7 +1,5 @@
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
-import 'package:fabricproject/controller/colors_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
-import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +40,8 @@ class _CompanyBottomSheetState extends State<CompanyBottomSheet> {
     return CustomRefreshIndicator(
       onRefresh: () async {
         // Implement your refresh logic here
-        await Provider.of<ColorsController>(context, listen: false)
-            .getAllColors();
+        await Provider.of<CompanyController>(context, listen: false)
+            .getAllCompanies();
       },
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
