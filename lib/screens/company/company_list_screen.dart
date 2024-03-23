@@ -1,4 +1,5 @@
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
+import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/controller/company_controller.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -19,7 +20,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
       Provider.of<CompanyController>(context, listen: false)
           .resetSearchFilter();
@@ -50,7 +51,6 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                     // create new item here
                     iconBtn: IconButton(
                       icon: const Icon(
-                        size: 30,
                         Icons.add_box_rounded,
                         color: Pallete.blueColor,
                       ),
@@ -72,8 +72,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
             Expanded(
               child: Consumer<CompanyController>(
                 builder: (context, companyController, child) {
-                  final searchCompanies =
-                      companyController.searchCompanies ?? [];
+                  final searchCompanies = companyController.searchCompanies;
 
                   if (searchCompanies.isNotEmpty) {
                     return ListView.builder(
@@ -88,17 +87,17 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                           lead: CircleAvatar(
                             backgroundColor: Pallete.blueColor,
                             child: Text(
-                              data.marka!.toUpperCase(),
+                              data.marka?.toString() ?? ''.toUpperCase(),
                               style: const TextStyle(color: Pallete.whiteColor),
                             ),
                           ),
                           // Tile Title
                           tileTitle: Text(
-                            data.name.toString(),
+                            data.name?.toString() ??'',
                           ),
                           // subtitle
                           tileSubTitle: Text(
-                            data.description.toString(),
+                            data.description?.toString() ?? '',
                           ),
                           // trailing hold delete and update buttons
                           trail: PopupMenuButton(
@@ -136,8 +135,8 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                                     data, data.companyId!.toInt());
                               }
                               if (value == "delete") {
-                                companyController.deleteCompany(
-                                    data.companyId, index);
+                                companyController
+                                    .deleteCompany(data.companyId!);
                               }
                             },
                           ),
@@ -145,14 +144,8 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                       },
                     );
                   } else {
-                    // If no data, display the "noData.png" image
-                    return Center(
-                      child: Image.asset(
-                        'assets/images/noData.png',
-                        width: 800, // Set the width as needed
-                        height: 500, // Set the height as needed
-                      ),
-                    );
+                    // If no data, display the "No Data Found" widget
+                    return const NoDataFoundWidget();
                   }
                 },
               ),

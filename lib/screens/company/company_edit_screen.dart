@@ -56,7 +56,7 @@ class _CompanyEditScreenState extends State<CompanyEditScreen> {
                     lblText: const LocaleText('marka'),
                   ),
                   CustomTextFieldWithController(
-                    controller: companyController.desorptionController,
+                    controller: companyController.descriptionController,
                     lblText: const LocaleText('description'),
                   ),
                   CustomDropDownButton(

@@ -8,160 +8,178 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class CompanyController extends ChangeNotifier {
-  // helper class instance
   final HelperServices _helperServices;
-  // TextEditing Controller to send and receive data from ui
   TextEditingController nameController = TextEditingController();
   TextEditingController markaController = TextEditingController();
-  TextEditingController desorptionController = TextEditingController();
-  // lists to hold data comes from api
-  List<Data>? allCompanies = [];
-  List<Data>? searchCompanies = [];
-  // this will hold search text field text
+  TextEditingController descriptionController = TextEditingController();
+  List<Data> allCompanies = [];
+  List<Data> searchCompanies = [];
   String searchText = "";
 
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedCompanies = [];
+
   CompanyController(this._helperServices) {
-    // Gets data at first visit to the ui
     getAllCompanies();
   }
-  // navigate comes to from helper class works as router
-  // navigate to the the create page
+
   navigateToCompanyCreate() {
-    clearAllController();
-    _helperServices.navigate(
-      const CompanyCreateScreen(),
-    );
+    clearAllControllers();
+    _helperServices.navigate(const CompanyCreateScreen());
   }
 
-//Pass data and id to the edit screen
   navigateToCompanyEdit(Data data, int id) {
-    clearAllController();
-    // passed all the data to the edit screen
-    nameController.text = data.name.toString();
-    markaController.text = data.marka.toString();
-    desorptionController.text = data.description.toString();
-    _helperServices.navigate(CompanyEditScreen(
-      companyData: data,
-      companyId: id,
-    ));
+    clearAllControllers();
+    nameController.text = data.name ?? '';
+    markaController.text = data.marka ?? '';
+    descriptionController.text = data.description ?? '';
+    _helperServices.navigate(
+      CompanyEditScreen(
+        companyData: data,
+        companyId: id,
+      ),
+    );
   }
 
-// gets all the data
-  getAllCompanies() async {
+  Future<void> getAllCompanies() async {
     _helperServices.showLoader();
-    // endpoint passed to the api class
-    final response = await CompanyApiServiceProvider().getCompany('getCompany');
-    response.fold(
-        (l) => {
-// l returns failure with status code to the ui
-              _helperServices.goBack(),
-              _helperServices.showErrorMessage(l),
-            }, (r) {
-// r holds data comes from api with success
-      allCompanies = r;
-      // goBack pops the current stack
+    try {
+      final response =
+          await CompanyApiServiceProvider().getCompany('getCompany');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allCompanies = r;
+          searchCompanies = List.from(allCompanies);
+          cachedCompanies = List.from(allCompanies); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      searchCompanies?.clear();
-      searchCompanies?.addAll(allCompanies!);
-      // this methods assign the recent data to the search List
-      // updateForexData();
-      notifyListeners();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createCompany() async {
+  Future<void> createCompany() async {
     _helperServices.showLoader();
+    try {
+      final response = await CompanyApiServiceProvider().createCompany(
+        'add-company',
+        {
+          "company_id": 0,
+          "name": nameController.text,
+          "marka": markaController.text,
+          "description": descriptionController.text,
+        },
+      );
 
-    var response = await CompanyApiServiceProvider().createCompany(
-      'add-company',
-      {
-        "company_id": 0,
-        "name": nameController.text,
-        "marka": markaController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        getAllCompanies(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllController(),
-      },
-    );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllCompanies();
+          }
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editCompany(int id) async {
+  Future<void> editCompany(int id) async {
     _helperServices.showLoader();
-
-    var response = await CompanyApiServiceProvider().editCompany(
-      'update-company?company_id=$id',
-      {
-        "company_id": id,
-        "name": nameController.text,
-        "marka": markaController.text,
-        "description": desorptionController.text,
-      },
-    );
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) => {
-        getAllCompanies(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllController(),
-      },
-    );
+    try {
+      final response = await CompanyApiServiceProvider().editCompany(
+        'update-company?company_id=$id',
+        {
+          "company_id": id,
+          "name": nameController.text,
+          "marka": markaController.text,
+          "description": descriptionController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          _helperServices.showMessage(
+            const LocaleText('updated'),
+            Colors.green,
+            const Icon(
+              Icons.edit_note_outlined,
+              color: Pallete.whiteColor,
+            ),
+          );
+          updateCompanyLocally(
+            id,
+            Data(
+              companyId: id,
+              name: nameController.text,
+              marka: markaController.text,
+              description: descriptionController.text,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-// This method removes  or delete the item without reloading server
-  void deleteItemLocally(int id) {
-    final index =
-        allCompanies!.indexWhere((element) => element.companyId == id);
+  void updateCompanyLocally(int id, Data updatedData) {
+    int index = allCompanies.indexWhere((element) => element.companyId == id);
     if (index != -1) {
-      allCompanies!.removeAt(index);
-
-      final searchIndex =
-          searchCompanies!.indexWhere((element) => element.companyId == id);
-      if (searchIndex != -1) {
-        searchCompanies!.removeAt(searchIndex);
+      allCompanies[index] = updatedData;
+      int cacheIndex =
+          cachedCompanies.indexWhere((element) => element.companyId == id);
+      if (cacheIndex != -1) {
+        cachedCompanies[cacheIndex] = updatedData; // Update cache
       }
-
+      int searchIndex =
+          searchCompanies.indexWhere((element) => element.companyId == id);
+      if (searchIndex != -1) {
+        searchCompanies[searchIndex] = updatedData; // Update search list
+      }
       notifyListeners();
     }
   }
 
-  deleteCompany(id, index) async {
+  Future<void> deleteCompany(int id) async {
     _helperServices.showLoader();
-    var response = await CompanyApiServiceProvider()
-        .deleteCompany('delete-company?company_id=$id');
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        _helperServices.goBack(),
-        if (r == 200)
-          {
+    try {
+      final response = await CompanyApiServiceProvider()
+          .deleteCompany('delete-company?company_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            deleteItemLocally(id);
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -169,11 +187,8 @@ class CompanyController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
+            );
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -181,45 +196,64 @@ class CompanyController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  searchCompaniesMethod(String name) {
-    searchText = name;
-    updateCompaniesData();
+  void deleteItemLocally(int id) {
+    allCompanies.removeWhere((element) => element.companyId == id);
+    cachedCompanies.removeWhere((element) => element.companyId == id);
+    searchCompanies.removeWhere((element) => element.companyId == id);
+    notifyListeners();
   }
 
-// updates data ui according entered search text
-  updateCompaniesData() {
-    searchCompanies?.clear();
+  void searchCompaniesMethod(String text) {
+    searchText = text;
+    updateCompanyData();
+  }
+
+  void updateCompanyData() {
+    searchCompanies.clear();
     if (searchText.isEmpty) {
-      searchCompanies?.addAll(allCompanies!);
+      searchCompanies.addAll(cachedCompanies);
     } else {
-      searchCompanies?.addAll(
-        allCompanies!
-            .where((element) =>
-                // search filter is applied on these columns
-                element.name!.toLowerCase().contains(searchText) ||
-                element.marka!.toLowerCase().contains(searchText) ||
-                element.description!.toLowerCase().contains(searchText))
+      searchCompanies.addAll(
+        cachedCompanies
+            .where(
+              (element) =>
+                  (element.name
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.description
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.marka
+                          ?.toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false),
+            )
             .toList(),
       );
     }
     notifyListeners();
   }
 
-  // Reset the search text
   void resetSearchFilter() {
     searchText = '';
-    updateCompaniesData();
+    updateCompanyData();
   }
 
-  void clearAllController() {
+  void clearAllControllers() {
     nameController.clear();
+    descriptionController.clear();
     markaController.clear();
-    desorptionController.clear();
   }
 }
