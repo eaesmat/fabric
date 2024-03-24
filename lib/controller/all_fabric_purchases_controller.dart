@@ -151,26 +151,6 @@ class AllFabricPurchasesController extends ChangeNotifier {
     }
   }
 
-  void printControllerValues() {
-    print("selectedCompanyIdController: ${selectedCompanyIdController.text}");
-
-    print("selectedFabricIdController: ${selectedFabricIdController.text}");
-    print("amountOfBundlesController: ${amountOfBundlesController.text}");
-    print("amountOfMetersController: ${amountOfMetersController.text}");
-    print("amountOfWarsController: ${amountOfWarsController.text}");
-    print("yenPriceController: ${yenPriceController.text}");
-    print("totalYenPriceController: ${totalYenPriceController.text}");
-    print("exchangeRateController: ${exchangeRateController.text}");
-    print("dollarPriceController: ${dollarPriceController.text}");
-    print("totalDollarPriceController: ${totalDollarPriceController.text}");
-    print("ttCommissionController: ${ttCommissionController.text}");
-    print("packagePhotoController: ${packagePhotoController.text}");
-    print("bankReceivedPhotoController: ${bankReceivedPhotoController.text}");
-    print("dateController: ${dateController.text}");
-    print("selectedVendorCompanyId: ${selectedVendorCompanyId.text}");
-    print("selectedTransportId: ${selectedTransportId.text}");
-  }
-
   Future<void> createFabricPurchase() async {
     // printControllerValues();
     _helperServices.showLoader();

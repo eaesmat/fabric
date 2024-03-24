@@ -3,6 +3,8 @@ import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/khalid_rasid_model.dart';
 import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_edit_screen.dart';
 import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_create_screen.dart';
+import 'package:fabricproject/screens/vendorcompany_rasid/vendorcompany_rasid_create_screen.dart';
+import 'package:fabricproject/screens/vendorcompany_rasid/vendorcompany_rasid_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
@@ -34,15 +36,20 @@ class KhalidRasidController extends ChangeNotifier {
     getAllKhalidRasids();
   }
 
-  navigateToKhalidRasidCreate() {
+  navigateToKhalidRasidCreate(String residType) {
     clearAllControllers();
-
-    _helperServices.navigate(
-      const KhalidRasidCreateScreen(),
-    );
+    if (residType == 'khalid') {
+      _helperServices.navigate(
+        const KhalidRasidCreateScreen(),
+      );
+    } else {
+      _helperServices.navigate(
+        const VendorCompanyRasidCreateScreen(),
+      );
+    }
   }
 
-  navigateToKhalidRasidEdit(Data data, int id) {
+  navigateToKhalidRasidEdit(Data data, int id, String rasidType) {
     clearAllControllers();
     dateController.text = data.drawDate.toString();
     yenPriceController.text = data.yen.toString();
@@ -53,10 +60,21 @@ class KhalidRasidController extends ChangeNotifier {
     selectedForexIdController.text = data.sarafiId.toString();
     selectedForexNameController.text = data.sarafiName.toString();
 
-    _helperServices.navigate(KhalidRasidEditScreen(
-      data: data,
-      khalidRasidId: id,
-    ));
+    if (rasidType == 'khalid') {
+      _helperServices.navigate(
+        KhalidRasidEditScreen(
+          data: data,
+          khalidRasidId: id,
+        ),
+      );
+    } else {
+      _helperServices.navigate(
+        VendorCompanyRasidEditScreen(
+          data: data,
+          khalidRasidId: id,
+        ),
+      );
+    }
   }
 
   Future<void> createKhalidRasd() async {

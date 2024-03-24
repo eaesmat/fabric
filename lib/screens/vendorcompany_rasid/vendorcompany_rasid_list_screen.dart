@@ -1,24 +1,30 @@
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_item_details.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
+import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
+import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
-import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class KhalidRasidListScreen extends StatefulWidget {
-  const KhalidRasidListScreen({
+class VendorCompanyRasidListScreen extends StatefulWidget {
+  final String vendorCompanyName;
+  final int vendorCompanyId;
+  const VendorCompanyRasidListScreen({
     Key? key,
+    required this.vendorCompanyId,
+    required this.vendorCompanyName,
   }) : super(key: key);
 
   @override
-  State<KhalidRasidListScreen> createState() => _KhalidRasidListScreenState();
+  State<VendorCompanyRasidListScreen> createState() =>
+      _VendorCompanyRasidListScreenState();
 }
 
-class _KhalidRasidListScreenState extends State<KhalidRasidListScreen> {
+class _VendorCompanyRasidListScreenState
+    extends State<VendorCompanyRasidListScreen> {
   @override
   void initState() {
     super.initState();
@@ -50,7 +56,11 @@ class _KhalidRasidListScreenState extends State<KhalidRasidListScreen> {
                         color: Pallete.blueColor,
                       ),
                       onPressed: () {
-                        khalidRasidController.navigateToKhalidRasidCreate('khalid');
+                        khalidRasidController.navigateToKhalidRasidCreate('vendorcompany');
+                        khalidRasidController.selectedVendorCompanyId.text =
+                            widget.vendorCompanyId.toString();
+                        khalidRasidController.selectedVendorCompanyName.text =
+                            widget.vendorCompanyName;
                       }),
                   lblText: const LocaleText('search'),
                   onChanged: (value) {
@@ -66,16 +76,22 @@ class _KhalidRasidListScreenState extends State<KhalidRasidListScreen> {
                 final reversedList =
                     khalidRasidController.searchKhalidRasids.reversed.toList();
 
-                if (reversedList.isEmpty) {
-                  // If no data, display the "noData.png" image
+                // Filtered list to hold only matched items
+                final matchedItems = reversedList
+                    .where((data) =>
+                        data.vendorcompanyId == widget.vendorCompanyId)
+                    .toList();
+
+                if (matchedItems.isEmpty) {
+                  // If no matched items, display the "NoDataFoundWidget"
                   return const NoDataFoundWidget();
                 }
 
                 return ListView.builder(
-                  itemCount: reversedList.length,
+                  itemCount: matchedItems.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final data = reversedList[index];
+                    final data = matchedItems[index];
                     return ListTileWidget(
                       onLongPress: () {
                         showModalBottomSheet(
@@ -158,10 +174,7 @@ class _KhalidRasidListScreenState extends State<KhalidRasidListScreen> {
                         onSelected: (String value) {
                           if (value == "edit") {
                             khalidRasidController.navigateToKhalidRasidEdit(
-                              data,
-                              data.drawId!.toInt(),
-                              'khalid',
-                            );
+                                data, data.drawId!.toInt(), 'vendorcompany');
                           }
                           if (value == "delete") {
                             khalidRasidController.deleteKhalidRasid(

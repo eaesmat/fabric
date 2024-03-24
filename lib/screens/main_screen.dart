@@ -3,7 +3,7 @@
 import 'package:fabricproject/screens/drawer_screen.dart';
 import 'package:fabricproject/screens/home_screen.dart';
 import 'package:fabricproject/screens/setting_screen.dart';
-import 'package:fabricproject/screens/vendor_company/vendor_company_list_screen.dart';
+import 'package:fabricproject/screens/vendor_company/vendorcompanies_details_screen.dart';
 import 'package:fabricproject/widgets/bottom_navigation.dart'; // Import the new file
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   int currentPage = 0;
   List<Widget> pages = [
     const HomeScreen(),
-    const VendorCompanyListScreen(),
+    const VendorCompaniesDetailsScreen(),
     const SettingScreen(),
     const DrawerScreen()
   ];
