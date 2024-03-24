@@ -5,7 +5,7 @@ import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_select_controller.dart';
 import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
-import 'package:fabricproject/controller/forex_calculation_controller%20copy.dart';
+import 'package:fabricproject/controller/forex_talabat_controller.dart';
 import 'package:fabricproject/controller/forex_calculation_controller.dart';
 import 'package:fabricproject/controller/forex_gereft_controller.dart';
 import 'package:fabricproject/controller/khalid_gereft_controller.dart';
@@ -36,6 +36,7 @@ import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/controller/transfer_bundles_controller.dart';
 import 'package:fabricproject/controller/user_controller.dart';
 import 'package:fabricproject/controller/vendor_company_controller.dart';
+import 'package:fabricproject/controller/vendorcompany_calculation_controller.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/controller/customer_controller.dart';
 import 'package:fabricproject/screens/splash_screen.dart';
@@ -176,6 +177,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<ForexTalabatController>(
           create: (_) => ForexTalabatController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<VendorCompanyCalculationController>(
+          create: (_) => VendorCompanyCalculationController(HelperServices.instance),
         ),
       ],
       child: LocaleBuilder(

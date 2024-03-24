@@ -1,11 +1,9 @@
-import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
-import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_list_screen.dart';
+import 'package:fabricproject/screens/vendor_company/vendor_calculation_list_screen.dart';
 import 'package:fabricproject/screens/vendor_company/vendor_company_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
-import 'package:provider/provider.dart';
 
 class VendorCompaniesDetailsScreen extends StatefulWidget {
   const VendorCompaniesDetailsScreen({
@@ -36,8 +34,6 @@ class _VendorCompaniesDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final allFabricPurchasesConroller =
-        Provider.of<AllFabricPurchasesController>(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -63,7 +59,7 @@ class _VendorCompaniesDetailsScreenState
                 },
                 tabs: [
                   _buildTab(Icons.list_alt_sharp, 'vendor_companies', 0),
-                  _buildTab(Icons.draw, 'receipts', 1),
+                  _buildTab(Icons.fact_check_sharp, 'balance', 1),
                 ],
               ),
             ),
@@ -78,7 +74,7 @@ class _VendorCompaniesDetailsScreenState
           },
           children: const [
             VendorCompanyListScreen(),
-            KhalidRasidListScreen(),
+            VendorCalculationListScreen(),
           ],
         ),
       ),

@@ -68,7 +68,6 @@ class TransportController extends ChangeNotifier {
       var response = await TransportApiServiceProvider().createTransport(
         'add-transport',
         {
-          "transport_id": 0,
           "name": nameController.text,
           "phone": phoneController.text,
           "description": descriptionController.text,
@@ -137,6 +136,7 @@ class TransportController extends ChangeNotifier {
               name: nameController.text,
               description: descriptionController.text,
               phone: phoneController.text,
+              
             ),
           );
         },

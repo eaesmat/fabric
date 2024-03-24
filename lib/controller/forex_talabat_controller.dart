@@ -1,37 +1,34 @@
-import 'package:fabricproject/api/forex_calculation_api.dart';
+import 'package:fabricproject/api/forex_talabat_api.dart';
 import 'package:fabricproject/helper/helper.dart';
-import 'package:fabricproject/model/forex_calculation_model.dart';
+import 'package:fabricproject/model/forex_talabat_model.dart';
 import 'package:flutter/material.dart';
 
-class ForexCalculationController extends ChangeNotifier {
+class ForexTalabatController extends ChangeNotifier {
   final HelperServices _helperServices;
 
-  List<Data> allForexCalculation = [];
-  List<Data> searchForexCalculation = [];
+  List<Data> allForexTalabat = [];
+  List<Data> searchForexTalabat = [];
   String searchText = "";
 
   // Cached data to avoid unnecessary API calls
-  List<Data> cachedForexCalculation = [];
+  List<Data> cachedForexTalabat = [];
 
-  ForexCalculationController(this._helperServices) {
-    getAllForexCalculation();
-  }
+  ForexTalabatController(this._helperServices);
 
-  Future<void> getAllForexCalculation() async {
+  Future<void> getAllForexTalabat(int forexId) async {
     _helperServices.showLoader();
     try {
-      final response = await ForexCalculationApiServiceProvider()
-          .getCalculation('sarafi-list');
+      final response = await ForexTalabatApiServiceProvider()
+          .getForexTalabat('load-talab-sarafi?sarafi_id=$forexId');
       response.fold(
         (l) {
           _helperServices.goBack();
           _helperServices.showErrorMessage(l);
         },
         (r) {
-          allForexCalculation = r;
-          searchForexCalculation = List.from(allForexCalculation);
-          cachedForexCalculation =
-              List.from(allForexCalculation); // Cache initial data
+          allForexTalabat = r;
+          searchForexTalabat = List.from(allForexTalabat);
+          cachedForexTalabat = List.from(allForexTalabat); // Cache initial data
           _helperServices.goBack();
           notifyListeners();
         },
@@ -42,25 +39,45 @@ class ForexCalculationController extends ChangeNotifier {
     }
   }
 
-  void searchForexCalculationMethod(String text) {
+  void searchForexTalabatMethod(String text) {
     searchText = text;
-    updateForexCalculationData();
+    updateForexTalabatData();
   }
 
-  void updateForexCalculationData() {
-    searchForexCalculation.clear();
+  void updateForexTalabatData() {
+    searchForexTalabat.clear();
     if (searchText.isEmpty) {
-      searchForexCalculation.addAll(cachedForexCalculation);
+      searchForexTalabat.addAll(cachedForexTalabat);
     } else {
-      searchForexCalculation.addAll(
-        cachedForexCalculation
+      searchForexTalabat.addAll(
+        cachedForexTalabat
             .where(
               (element) =>
-                  (element.sarafiName
+                  (element.drawDate
                           ?.toLowerCase()
                           .contains(searchText.toLowerCase()) ??
                       false) ||
-                  (element.balance
+                  (element.yen
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.exchangerate
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.doller
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.vendorcompanyName
+                          ?.toString()
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ??
+                      false) ||
+                  (element.name
                           ?.toString()
                           .toLowerCase()
                           .contains(searchText.toLowerCase()) ??
@@ -74,6 +91,6 @@ class ForexCalculationController extends ChangeNotifier {
 
   void resetSearchFilter() {
     searchText = '';
-    updateForexCalculationData();
+    updateForexTalabatData();
   }
 }

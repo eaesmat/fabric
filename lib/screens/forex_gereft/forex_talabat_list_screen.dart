@@ -1,4 +1,4 @@
-import 'package:fabricproject/controller/forex_calculation_controller%20copy.dart';
+import 'package:fabricproject/controller/forex_talabat_controller.dart';
 import 'package:fabricproject/screens/forex_gereft/forex_talabat_item_details.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';

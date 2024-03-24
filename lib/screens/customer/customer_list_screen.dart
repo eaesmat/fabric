@@ -212,7 +212,8 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                           }
                           if (value == "delete") {
                             customerController.deleteCustomer(
-                                data.customerId, index);
+                              data.customerId!,
+                            );
                           }
                         },
                       ),

@@ -8,11 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 
 class CustomerController extends ChangeNotifier {
-  // helper class instance
-
   final HelperServices _helperServices;
-  // TextEditing Controller to send and receive data from ui
-
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController photoController = TextEditingController();
@@ -20,164 +16,193 @@ class CustomerController extends ChangeNotifier {
   TextEditingController brunchController = TextEditingController();
   TextEditingController provinceController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  // lists to hold data comes from api
-  List<Data>? allCustomers = [];
-  List<Data>? searchCustomers = [];
-  // this will hold search text field text
-
+  List<Data> allCustomers = [];
+  List<Data> searchCustomers = [];
   String searchText = "";
+
+  // Cached data to avoid unnecessary API calls
+  List<Data> cachedCustomers = [];
 
   CustomerController(this._helperServices) {
     getAllCustomers();
   }
-  // navigate comes to from helper class works as router
-  // navigate to the the create page
+
   navigateToCustomerCreate() {
     clearAllControllers();
-
     _helperServices.navigate(const CustomerCreateScreen());
   }
-//Pass data and id to the edit screen
 
   navigateToCustomerEdit(Data data, int id) {
     clearAllControllers();
-    // passed all the data to the edit screen
-
-    firstNameController.text = data.firstname.toString();
-    lastNameController.text = data.lastname.toString();
-    photoController.text = data.photo.toString();
-    addressController.text = data.address.toString();
-    brunchController.text = data.brunch.toString();
-    provinceController.text = data.province.toString();
-    phoneController.text = data.phone.toString();
+    firstNameController.text = data.firstname ?? '';
+    lastNameController.text = data.lastname ?? '';
+    photoController.text = data.photo ?? '';
+    addressController.text = data.address ?? '';
+    brunchController.text = data.brunch ?? '';
+    provinceController.text = data.province ?? '';
+    phoneController.text = data.phone ?? '';
     _helperServices.navigate(CustomerEditScreen(
       customerData: data,
       customerId: id,
     ));
   }
-// gets all the data
 
-  getAllCustomers() async {
+  Future<void> getAllCustomers() async {
     _helperServices.showLoader();
-    final response =
-        // endpoint passed to the api class
-
-        await CustomerApiServiceProvider().getCustomer('getCustomer');
-    response.fold(
-        // l returns failure with status code to the ui
-
-        (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
+    try {
+      final response =
+          await CustomerApiServiceProvider().getCustomer('getCustomer');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
         (r) {
-      // r holds data comes from api with success
-
-      allCustomers = r;
-      // goBack pops the current stack
+          allCustomers = r;
+          searchCustomers = List.from(allCustomers);
+          cachedCustomers = List.from(allCustomers); // Cache initial data
+          _helperServices.goBack();
+          notifyListeners();
+        },
+      );
+    } catch (e) {
       _helperServices.goBack();
-      searchCustomers?.clear();
-      searchCustomers?.addAll(allCustomers!);
-      // this methods assign the recent data to the search List
-      // updateForexData();
-      notifyListeners();
-    });
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  createCustomer() async {
+  Future<void> createCustomer() async {
     _helperServices.showLoader();
-
-    var response = await CustomerApiServiceProvider().createCustomer(
-      'add-customer',
-      {
-        "customer_id": 0,
-        "firstname": firstNameController.text,
-        "lastname": lastNameController.text,
-        "photo": photoController.text,
-        "address": addressController.text,
-        "user_id": 1,
-        "brunch": brunchController.text,
-        "province": provinceController.text,
-        "phone": phoneController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllCustomers(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('added'),
-          Colors.green,
-          const Icon(
-            Icons.check,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response = await CustomerApiServiceProvider().createCustomer(
+        'add-customer',
+        {
+          "customer_id": 0,
+          "firstname": firstNameController.text,
+          "lastname": lastNameController.text,
+          "photo": photoController.text,
+          "address": addressController.text,
+          "user_id": 1,
+          "brunch": brunchController.text,
+          "province": provinceController.text,
+          "phone": phoneController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('added'),
+              Colors.green,
+              const Icon(
+                Icons.check,
+                color: Pallete.whiteColor,
+              ),
+            );
+            getAllCustomers();
+          }
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  editCustomer(int id) async {
+  Future<void> editCustomer(int id) async {
     _helperServices.showLoader();
-
-    var response = await CustomerApiServiceProvider().editCustomer(
-      'update-customer?customer_id=$id',
-      {
-        "customer_id": id,
-        "firstname": firstNameController.text,
-        "lastname": lastNameController.text,
-        "photo": photoController.text,
-        "address": addressController.text,
-        "user_id": 1,
-        "brunch": brunchController.text,
-        "province": provinceController.text,
-        "phone": phoneController.text,
-      },
-    );
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        getAllCustomers(),
-        _helperServices.goBack(),
-        _helperServices.showMessage(
-          const LocaleText('updated'),
-          Colors.green,
-          const Icon(
-            Icons.edit_note_outlined,
-            color: Pallete.whiteColor,
-          ),
-        ),
-        clearAllControllers(),
-      },
-    );
+    try {
+      final response = await CustomerApiServiceProvider().editCustomer(
+        'update-customer?customer_id=$id',
+        {
+          "customer_id": id,
+          "firstname": firstNameController.text,
+          "lastname": lastNameController.text,
+          "photo": photoController.text,
+          "address": addressController.text,
+          "user_id": 1,
+          "brunch": brunchController.text,
+          "province": provinceController.text,
+          "phone": phoneController.text,
+        },
+      );
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
+            _helperServices.showMessage(
+              const LocaleText('updated'),
+              Colors.green,
+              const Icon(
+                Icons.edit_note_outlined,
+                color: Pallete.whiteColor,
+              ),
+            );
+            updateCustomerLocally(
+              id,
+              Data(
+                customerId: id,
+                firstname: firstNameController.text,
+                lastname: lastNameController.text,
+                photo: photoController.text,
+                address: addressController.text,
+                brunch: brunchController.text,
+                province: provinceController.text,
+                phone: phoneController.text,
+              ),
+            );
+          }
+          clearAllControllers();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-// This method removes  or delete the item without reloading server
-  void deleteItemLocally(int id) {
-    final index =
-        allCustomers!.indexWhere((element) => element.customerId == id);
+  void updateCustomerLocally(int id, Data updatedData) {
+    int index =
+        allCustomers.indexWhere((customer) => customer.customerId == id);
     if (index != -1) {
-      allCustomers!.removeAt(index);
-
-      final searchIndex =
-          searchCustomers!.indexWhere((element) => element.customerId == id);
-      if (searchIndex != -1) {
-        searchCustomers!.removeAt(searchIndex);
+      allCustomers[index] = updatedData;
+      int cacheIndex =
+          cachedCustomers.indexWhere((customer) => customer.customerId == id);
+      if (cacheIndex != -1) {
+        cachedCustomers[cacheIndex] = updatedData; // Update cache
       }
-
+      int searchIndex =
+          searchCustomers.indexWhere((customer) => customer.customerId == id);
+      if (searchIndex != -1) {
+        searchCustomers[searchIndex] = updatedData; // Update search list
+      }
       notifyListeners();
     }
   }
 
-  deleteCustomer(id, index) async {
+  Future<void> deleteCustomer(int id) async {
     _helperServices.showLoader();
-    var response = await CustomerApiServiceProvider()
-        .deleteCustomer('delete-customer?customer_id=$id');
-    response.fold(
-      (l) => {_helperServices.goBack(), _helperServices.showErrorMessage(l)},
-      (r) => {
-        if (r == 200)
-          {
-            _helperServices.goBack(),
+    try {
+      final response = await CustomerApiServiceProvider()
+          .deleteCustomer('delete-customer?customer_id=$id');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          _helperServices.goBack();
+          if (r == 200) {
             _helperServices.showMessage(
               const LocaleText('deleted'),
               Colors.red,
@@ -185,12 +210,9 @@ class CustomerController extends ChangeNotifier {
                 Icons.close,
                 color: Pallete.whiteColor,
               ),
-            ),
-            deleteItemLocally(id),
-          }
-        else if (r == 500)
-          {
-            _helperServices.goBack(),
+            );
+            deleteCustomerLocally(id);
+          } else if (r == 500) {
             _helperServices.showMessage(
               const LocaleText('parent'),
               Colors.deepOrange,
@@ -198,40 +220,62 @@ class CustomerController extends ChangeNotifier {
                 Icons.warning,
                 color: Pallete.whiteColor,
               ),
-            ),
+            );
           }
-      },
-    );
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
-  searchCustomer(String name) {
+  void deleteCustomerLocally(int id) {
+    allCustomers.removeWhere((customer) => customer.customerId == id);
+    cachedCustomers.removeWhere((customer) => customer.customerId == id);
+    searchCustomers.removeWhere((customer) => customer.customerId == id);
+    notifyListeners();
+  }
+
+  void searchCustomer(String name) {
     searchText = name;
     updateCustomersData();
   }
-// updates data ui according entered search text
 
-  updateCustomersData() {
-    searchCustomers?.clear();
+  void updateCustomersData() {
+    searchCustomers.clear();
     if (searchText.isEmpty) {
-      searchCustomers?.addAll(allCustomers!);
+      searchCustomers.addAll(cachedCustomers);
     } else {
-      searchCustomers?.addAll(
-        allCustomers!
-            .where((element) =>
-                // search filter is applied on these columns
-
-                element.firstname!.toLowerCase().contains(searchText) ||
-                element.lastname!.toLowerCase().contains(searchText) ||
-                element.brunch!.toLowerCase().contains(searchText) ||
-                element.province!.toLowerCase().contains(searchText) ||
-                element.address!.toLowerCase().contains(searchText))
-            .toList(),
+      searchCustomers.addAll(
+        cachedCustomers.where(
+          (customer) =>
+              (customer.firstname
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (customer.lastname
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (customer.brunch
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (customer.province
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false) ||
+              (customer.address
+                      ?.toLowerCase()
+                      .contains(searchText.toLowerCase()) ??
+                  false),
+        ),
       );
     }
     notifyListeners();
   }
 
-  // Reset the search text
   void resetSearchFilter() {
     searchText = '';
     updateCustomersData();
@@ -244,6 +288,5 @@ class CustomerController extends ChangeNotifier {
     addressController.clear();
     brunchController.clear();
     provinceController.clear();
-    phoneController.clear();
   }
 }
