@@ -2,10 +2,10 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
 class SaraiInFabricWidget extends StatelessWidget {
-  final String title;
-  final Color backgroundColor;
-  final String indate;
-  final String bundle;
+  final String? title;
+  final Color? backgroundColor;
+  final String? indate;
+  final String? bundle;
   final String? patiName;
   final String? patiWar;
 
@@ -36,11 +36,16 @@ class SaraiInFabricWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null) _buildInfoRow(Icons.barcode_reader, title),
-                if (patiName != null) _buildInfoRow(Icons.view_module, patiName!),
-                if (indate != null) _buildInfoRow(Icons.calendar_month, indate),
-                if (bundle != null) _buildInfoRow(Icons.view_module, bundle),
-                if (patiWar != null) _buildInfoRow(Icons.view_module, patiWar!),
+                if (title != null)
+                  _buildInfoRow(Icons.barcode_reader, title ?? ''),
+                if (patiName != null)
+                  _buildInfoRow(Icons.view_module, patiName ?? ''),
+                if (indate != null)
+                  _buildInfoRow(Icons.calendar_month, indate ?? ''),
+                if (bundle != null)
+                  _buildInfoRow(Icons.view_module, bundle ?? ''),
+                if (patiWar != null)
+                  _buildInfoRow(Icons.view_module, patiWar ?? ''),
               ],
             ),
           ),

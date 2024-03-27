@@ -20,7 +20,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
       Provider.of<CompanyController>(context, listen: false)
           .resetSearchFilter();

@@ -1,12 +1,8 @@
 import 'package:fabricproject/controller/sarai_out_fabric_controller.dart';
-import 'package:fabricproject/helper/helper_methods.dart';
 import 'package:fabricproject/screens/sarai_item_list/sarai_fabric_out_details_screen.dart';
-import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
-import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +50,7 @@ class _AllSaraiOutFabricState extends State<AllSaraiOutFabric> {
             child: Consumer<SaraiOutFabricController>(
               builder: (context, saraiOutFabricController, child) {
                 final searchCompanies =
-                    saraiOutFabricController.searchSaraiOutFabrics ?? [];
+                    saraiOutFabricController.searchSaraiOutFabrics;
 
                 if (searchCompanies.isNotEmpty) {
                   return ListView.builder(

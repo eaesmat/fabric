@@ -1,6 +1,4 @@
-import 'package:fabricproject/screens/transport/transport_calculation.dart';
 import 'package:fabricproject/screens/transport_deals/transport_deals_list_screen.dart';
-import 'package:fabricproject/screens/transport_payment/transport_payment_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';
 import 'package:flutter/material.dart';

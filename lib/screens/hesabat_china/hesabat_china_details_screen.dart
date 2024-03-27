@@ -1,5 +1,4 @@
 import 'package:fabricproject/screens/hesabat_china/hesabat_china_purchase_list_screen.dart';
-import 'package:fabricproject/screens/khalid_rasid/khalid_rasid_list_screen.dart';
 import 'package:fabricproject/screens/vendorcompany_rasid/vendorcompany_rasid_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_title.dart';

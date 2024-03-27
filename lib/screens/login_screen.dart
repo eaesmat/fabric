@@ -1,6 +1,5 @@
 import 'package:fabricproject/screens/main_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
-import 'package:fabricproject/widgets/custom_button.dart';
 import 'package:fabricproject/widgets/custom_drop_down_button.dart';
 import 'package:fabricproject/widgets/login_screen_appbar.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';

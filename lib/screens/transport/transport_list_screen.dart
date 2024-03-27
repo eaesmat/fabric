@@ -1,6 +1,5 @@
 import 'package:fabricproject/controller/transport_controller.dart';
 import 'package:fabricproject/controller/transport_deals_controller.dart';
-import 'package:fabricproject/controller/transport_payment_controller.dart';
 import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
@@ -82,7 +81,7 @@ class _TransportListScreenState extends State<TransportListScreen> {
               child: Consumer<TransportController>(
                 builder: (context, transportController, child) {
                   return ListView.builder(
-                    itemCount: transportController.searchTransports.length ?? 0,
+                    itemCount: transportController.searchTransports.length,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       // data holds result of controller

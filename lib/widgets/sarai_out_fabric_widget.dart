@@ -2,12 +2,12 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
 
 class SaraiOutFabricWidget extends StatelessWidget {
-  final String title;
-  final Color backgroundColor;
-  final String indate;
-  final String bundle;
-  final String outDate;
-  final String outPlace;
+  final String? title;
+  final Color? backgroundColor;
+  final String? indate;
+  final String? bundle;
+  final String? outDate;
+  final String? outPlace;
   final String? patiName;
   final String? patiWar;
 
@@ -40,15 +40,20 @@ class SaraiOutFabricWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null) _buildInfoRow(Icons.barcode_reader, title),
-                if (indate != null) _buildInfoRow(Icons.calendar_month, indate),
-                if (bundle != null) _buildInfoRow(Icons.view_module, bundle),
-                if (patiWar != null) _buildInfoRow(Icons.view_module, patiWar.toString()),
-                if (patiName != null) _buildInfoRow(Icons.view_module, patiName.toString()),
+                if (title != null)
+                  _buildInfoRow(Icons.barcode_reader, title ?? ''),
+                if (indate != null)
+                  _buildInfoRow(Icons.calendar_month, indate ?? ''),
+                if (bundle != null)
+                  _buildInfoRow(Icons.view_module, bundle ?? ''),
+                if (patiWar != null)
+                  _buildInfoRow(Icons.view_module, patiWar.toString()),
+                if (patiName != null)
+                  _buildInfoRow(Icons.view_module, patiName.toString()),
                 if (outDate != null)
-                  _buildInfoRow(Icons.calendar_month, outDate),
+                  _buildInfoRow(Icons.calendar_month, outDate ?? ''),
                 if (outPlace != null)
-                  _buildInfoRow(Icons.location_on, outPlace),
+                  _buildInfoRow(Icons.location_on, outPlace ?? ''),
               ],
             ),
           ),

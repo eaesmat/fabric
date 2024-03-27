@@ -4,7 +4,6 @@ import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/list_tile_widget.dart';
 import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
 class SaraiTypesButtonSheet extends StatefulWidget {

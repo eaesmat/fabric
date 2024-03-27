@@ -1,4 +1,3 @@
-import 'package:fabricproject/screens/forex/forex_calculation_list_screen.dart';
 import 'package:fabricproject/screens/forex_gereft/forex_gereft_list_screen.dart';
 import 'package:fabricproject/screens/forex_gereft/forex_talabat_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
