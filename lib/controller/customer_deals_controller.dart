@@ -1,3 +1,4 @@
+import 'package:fabricproject/api/customer_calculation_api.dart';
 import 'package:fabricproject/api/customer_deals_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/customer_deals_model.dart';
@@ -7,23 +8,27 @@ import 'package:flutter/material.dart';
 class CustomerDealsController extends ChangeNotifier {
   final HelperServices _helperServices;
 
-  int? customerId;
-  List<Data>? allCustomersDeals = [];
-  List<Data>? searchCustomersDeals = [];
+  List<Data> allCustomersDeals = [];
+  List<Data> searchCustomersDeals = [];
+  List<Data> cachedCustomerDeals = [];
+  double? afghaniDeal = 0;
+  double? afghaniPayment = 0;
+  double? afghaniDue = 0;
+  double? dollorDue = 0;
+  double? dollorDeal = 0;
+  double? dollorPayment = 0;
+
   String searchText = "";
 
   CustomerDealsController(
     this._helperServices,
-  ) {
-    getAllCustomerDeals(customerId);
-  }
+  );
 
-  navigateToCustomerDealDetailsScreen(String customerName, int id) async {
-    customerId = id;
-
+  navigateToCustomerDealDetailsScreen(
+      String customerName, int customerId) async {
     _helperServices.navigate(
       CustomerDetailsScreen(
-        customerId: id,
+        customerId: customerId,
         customerName: customerName,
       ),
     );
@@ -31,24 +36,57 @@ class CustomerDealsController extends ChangeNotifier {
     await getAllCustomerDeals(customerId);
   }
 
-  getAllCustomerDeals(int? customerId) async {
+// Function to fetch all customer deals from the API
+  Future<void> getAllCustomerDeals(int customerId) async {
     _helperServices.showLoader();
-    final response = await CustomerDealsApiServiceProvider()
-        .getCustomerDeals('getCustomerTransaction?customer_id=$customerId');
-    response.fold(
-      (l) => {
-        _helperServices.goBack(),
-        _helperServices.showErrorMessage(l),
-      },
-      (r) {
-        allCustomersDeals = r.data;
-        searchCustomersDeals?.clear();
-        searchCustomersDeals?.addAll(allCustomersDeals!);
+    try {
+      final response = await CustomerDealsApiServiceProvider()
+          .getCustomerDeals('getCustomerDeals?customer_id=$customerId');
+      response.fold(
+        (l) {
+          _helperServices.goBack();
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allCustomersDeals = r;
+          searchCustomersDeals = List.from(allCustomersDeals);
+          cachedCustomerDeals = List.from(allCustomersDeals);
+          _helperServices.goBack();
+          notifyListeners();
+          getAllCustomerBalance(customerId);
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
+  }
 
-        _helperServices.goBack();
-        notifyListeners();
-      },
-    );
+  Future<void> getAllCustomerBalance(int customerId) async {
+    try {
+      final response = await CustomerCalculationApiServiceProvider()
+          .getAllCustomerBalanceCalculation(
+              'getDollorAfghaniCustomer?customer_id=$customerId');
+      response.fold(
+        (l) {
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          // Check if the data already exists in the list, if not, add it
+
+         afghaniDeal = r.afghaniDeal;
+         afghaniDue = r.afghaniDue;
+         afghaniPayment = r.afghaniPayment;
+         dollorDeal = r.dollorDeal;
+         dollorDue = r.dollorDue;
+         dollorPayment = r.dollorPayment;
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
   searchCustomerDealMethod(String name) {
@@ -56,40 +94,53 @@ class CustomerDealsController extends ChangeNotifier {
     updateCustomerDealData();
   }
 
-  updateCustomerDealData() {
-    searchCustomersDeals?.clear();
+  void updateCustomerDealData() {
+    searchCustomersDeals.clear();
 
     if (searchText.isEmpty) {
-      searchCustomersDeals?.addAll(allCustomersDeals!);
+      searchCustomersDeals.addAll(cachedCustomerDeals);
     } else {
-      searchCustomersDeals?.addAll(
-        allCustomersDeals!
+      searchCustomersDeals.addAll(
+        cachedCustomerDeals
             .where((element) =>
-                element.type.toString().toLowerCase().contains(searchText) ||
-                element.date.toString().toLowerCase().contains(searchText) ||
-                element.begaknumber
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.afghani.toString().toLowerCase().contains(searchText) ||
-                element.doller.toString().toLowerCase().contains(searchText) ||
-                element.balanceAfghani
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.balanceAfghani
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.afghaniPayment
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.dollerPayment
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchText) ||
-                element.date.toString().toLowerCase().contains(searchText))
+                (element.type?.toString().toLowerCase().contains(searchText.toLowerCase()) ?? false) ||
+                (element.date
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.begakNumber
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.afghani
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.doller
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.balanceAfghani
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.balanceAfghani
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.afghani
+                        ?.toString()
+                        .toLowerCase()
+                        .contains(searchText.toLowerCase()) ??
+                    false) ||
+                (element.doller?.toString().toLowerCase().contains(searchText.toLowerCase()) ?? false) ||
+                (element.date?.toString().toLowerCase().contains(searchText.toLowerCase()) ?? false))
             .toList(),
       );
     }

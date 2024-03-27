@@ -1,7 +1,9 @@
+import 'package:fabricproject/api/all_customer_balance_calculation_api.dart';
 import 'package:fabricproject/api/customer_api.dart';
 import 'package:fabricproject/helper/helper.dart';
 import 'package:fabricproject/model/customer_model.dart';
 import 'package:fabricproject/screens/customer/customer_create_screen.dart';
+import 'package:fabricproject/screens/customer/customer_details_screen.dart';
 import 'package:fabricproject/screens/customer/customer_edit_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,13 @@ class CustomerController extends ChangeNotifier {
   TextEditingController phoneController = TextEditingController();
   List<Data> allCustomers = [];
   List<Data> searchCustomers = [];
+  double? allTotalCostAfghani = 0;
+  double? allTotalCostDoller = 0;
+  double? allPaymentAfghani = 0;
+  double? allPaymentDoller = 0;
+  double? allDueAfghani = 0;
+  double? allDueDoller = 0;
+
   String searchText = "";
 
   // Cached data to avoid unnecessary API calls
@@ -32,19 +41,51 @@ class CustomerController extends ChangeNotifier {
     _helperServices.navigate(const CustomerCreateScreen());
   }
 
+  navigateToCustomerDetailsScreen(int customerId, String customerName) {
+    _helperServices.navigate(CustomerDetailsScreen(
+      customerId: customerId,
+      customerName: customerName,
+    ));
+  }
+
   navigateToCustomerEdit(Data data, int id) {
     clearAllControllers();
     firstNameController.text = data.firstname ?? '';
     lastNameController.text = data.lastname ?? '';
     photoController.text = data.photo ?? '';
     addressController.text = data.address ?? '';
-    brunchController.text = data.brunch ?? '';
+    brunchController.text = data.branch ?? '';
     provinceController.text = data.province ?? '';
     phoneController.text = data.phone ?? '';
     _helperServices.navigate(CustomerEditScreen(
       customerData: data,
       customerId: id,
     ));
+  }
+
+  Future<void> getAllCustomerBalance() async {
+    try {
+      final response = await AllCustomerBalanceCalculationApiServiceProvider()
+          .getAllCustomerBalanceCalculation('totalDollorAfghani');
+      response.fold(
+        (l) {
+          _helperServices.showErrorMessage(l);
+        },
+        (r) {
+          allTotalCostAfghani = r.allTotalCostAfghani;
+          allTotalCostDoller = r.allTotalCostDoller;
+          allPaymentAfghani = r.allPaymentAfghani;
+          allPaymentDoller = r.allPaymentDoller;
+          allDueAfghani = r.allDueAfghani;
+          allDueDoller = r.allDueDoller;
+
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _helperServices.goBack();
+      _helperServices.showErrorMessage(e.toString());
+    }
   }
 
   Future<void> getAllCustomers() async {
@@ -63,6 +104,7 @@ class CustomerController extends ChangeNotifier {
           cachedCustomers = List.from(allCustomers); // Cache initial data
           _helperServices.goBack();
           notifyListeners();
+          getAllCustomerBalance();
         },
       );
     } catch (e) {
@@ -156,7 +198,7 @@ class CustomerController extends ChangeNotifier {
                 lastname: lastNameController.text,
                 photo: photoController.text,
                 address: addressController.text,
-                brunch: brunchController.text,
+                branch: brunchController.text,
                 province: provinceController.text,
                 phone: phoneController.text,
               ),
@@ -258,7 +300,7 @@ class CustomerController extends ChangeNotifier {
                       ?.toLowerCase()
                       .contains(searchText.toLowerCase()) ??
                   false) ||
-              (customer.brunch
+              (customer.branch
                       ?.toLowerCase()
                       .contains(searchText.toLowerCase()) ??
                   false) ||

@@ -44,10 +44,10 @@ class VendorCompanyCalculationController extends ChangeNotifier {
 
   void searchVendorCalculationMethod(String text) {
     searchText = text;
-    updateForexCalculationData();
+    updateVendorCalculationData();
   }
 
-  void updateForexCalculationData() {
+  void updateVendorCalculationData() {
     searchVendorCalculation.clear();
     if (searchText.isEmpty) {
       searchVendorCalculation.addAll(cachedForexCalculation);
@@ -79,6 +79,6 @@ class VendorCompanyCalculationController extends ChangeNotifier {
 
   void resetSearchFilter() {
     searchText = '';
-    updateForexCalculationData();
+    updateVendorCalculationData();
   }
 }

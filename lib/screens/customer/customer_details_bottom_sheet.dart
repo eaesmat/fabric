@@ -55,14 +55,12 @@ class CustomerDetailsBottomSheet extends StatelessWidget {
                   ],
                   rows: [
                     buildDataRow(
-                        'first_name', data.firstname.toString()),
-                    buildDataRow(
-                        'last_name', data.lastname.toString()),
-                    buildDataRow('address', data.address.toString()),
-                    buildDataRow('branch', data.brunch.toString()),
-                    buildDataRow('province', data.province.toString()),
-                    buildDataRow('phone', data.phone.toString()),
-                   
+                        'first_name', data.firstname?.toString() ?? ''),
+                    buildDataRow('last_name', data.lastname?.toString() ?? ''),
+                    buildDataRow('address', data.address?.toString() ?? ''),
+                    buildDataRow('branch', data.branch?.toString() ?? ''),
+                    buildDataRow('province', data.province?.toString() ?? ''),
+                    buildDataRow('phone', data.phone?.toString() ?? ''),
                   ],
                 ),
               ],

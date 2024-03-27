@@ -1,5 +1,7 @@
 import 'package:fabricproject/controller/all_fabric_purchases_controller.dart';
 import 'package:fabricproject/controller/colors_controller.dart';
+import 'package:fabricproject/controller/customer_balance_controller.dart';
+import 'package:fabricproject/controller/customer_sales_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_in_controller.dart';
 import 'package:fabricproject/controller/dokan_pati_out_controller.dart';
@@ -14,9 +16,8 @@ import 'package:fabricproject/controller/sarai_fabric_purchase_controller.dart';
 import 'package:fabricproject/controller/sarai_in_fabric_controller.dart';
 import 'package:fabricproject/controller/sarai_item_controller.dart';
 import 'package:fabricproject/controller/company_controller.dart';
-import 'package:fabricproject/controller/customer_deal_controller.dart';
 import 'package:fabricproject/controller/customer_deals_controller.dart';
-import 'package:fabricproject/controller/customer_payment_controller.dart';
+import 'package:fabricproject/controller/customer_rasidat_controller.dart';
 import 'package:fabricproject/controller/fabric_controller.dart';
 import 'package:fabricproject/controller/fabric_design_bundle_controller.dart';
 import 'package:fabricproject/controller/fabric_design_color_controller.dart';
@@ -24,7 +25,6 @@ import 'package:fabricproject/controller/fabric_design_controller.dart';
 import 'package:fabricproject/controller/forex_controller.dart';
 import 'package:fabricproject/controller/khalid_rasid_controller.dart';
 import 'package:fabricproject/controller/pati_controller.dart';
-import 'package:fabricproject/controller/pati_design_color_controller.dart';
 import 'package:fabricproject/controller/sarai_controller.dart';
 import 'package:fabricproject/controller/sarai_in_deal_controller.dart';
 import 'package:fabricproject/controller/sarai_marka_controller.dart';
@@ -48,7 +48,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Locales.init(['en', 'fa','ar']);
+  await Locales.init(['en', 'fa', 'ar']);
   runApp(const MyApp());
 }
 
@@ -82,7 +82,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SaraiController>(
           create: (_) => SaraiController(HelperServices.instance),
         ),
-       
         ChangeNotifierProvider<KhalidRasidController>(
           create: (_) => KhalidRasidController(HelperServices.instance),
         ),
@@ -95,7 +94,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FabricDesignBundleController>(
           create: (_) => FabricDesignBundleController(HelperServices.instance),
         ),
-
         ChangeNotifierProvider<FabricDesignToopController>(
           create: (_) => FabricDesignToopController(HelperServices.instance),
         ),
@@ -114,11 +112,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<PatiController>(
           create: (_) => PatiController(HelperServices.instance),
         ),
-        ChangeNotifierProvider<CustomerDealController>(
-          create: (_) => CustomerDealController(HelperServices.instance),
-        ),
-        ChangeNotifierProvider<CustomerPaymentController>(
-          create: (_) => CustomerPaymentController(HelperServices.instance),
+        ChangeNotifierProvider<CustomerRasidatController>(
+          create: (_) => CustomerRasidatController(HelperServices.instance),
         ),
         ChangeNotifierProvider<CustomerDealsController>(
           create: (_) => CustomerDealsController(HelperServices.instance),
@@ -179,14 +174,21 @@ class MyApp extends StatelessWidget {
           create: (_) => ForexTalabatController(HelperServices.instance),
         ),
         ChangeNotifierProvider<VendorCompanyCalculationController>(
-          create: (_) => VendorCompanyCalculationController(HelperServices.instance),
+          create: (_) =>
+              VendorCompanyCalculationController(HelperServices.instance),
         ),
+        ChangeNotifierProvider<CustomerBalanceController>(
+          create: (_) => CustomerBalanceController(HelperServices.instance),
+        ),
+        ChangeNotifierProvider<CustomerSalesController>(
+          create: (_) => CustomerSalesController(HelperServices.instance),
+        ),
+        
       ],
       child: LocaleBuilder(
         builder: (locale) => MaterialApp(
           localizationsDelegates: Locales.delegates,
           supportedLocales: Locales.supportedLocales,
-          
           navigatorKey: HelperServices.instance.navigationKey,
           debugShowCheckedModeBanner: false,
           locale: locale,

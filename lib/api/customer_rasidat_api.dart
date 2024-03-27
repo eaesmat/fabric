@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:fabricproject/constants/api_url.dart';
-import 'package:fabricproject/model/container_model.dart';
+import 'package:fabricproject/model/customer_rasidat_model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
-class ContainerApiServiceProvider {
+class CustomerRasidatApiServiceProvider {
   final String _baseURL = baseURL;
 
-  Future<Either<String, List<Data>>> getContainer(String apiEndpoint) async {
+  Future<Either<String, List<Data>>> getCustomerRasidat(
+      String apiEndpoint) async {
     try {
       var response = await http.get(
         Uri.parse(_baseURL + apiEndpoint),
@@ -15,10 +16,10 @@ class ContainerApiServiceProvider {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
-        final draw = ContainerModel.fromJson(jsonResponse);
+        final customerRasidat = CustomerRasidatModel.fromJson(jsonResponse);
 
         return right(
-          draw.data!,
+          customerRasidat.data!,
         );
       } else {
         return left(" ${response.statusCode}");
@@ -30,7 +31,7 @@ class ContainerApiServiceProvider {
     }
   }
 
-  Future<Either<String, int>> createContainer(
+  Future<Either<String, int>> createCustomerRasidat(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
     try {
@@ -52,7 +53,7 @@ class ContainerApiServiceProvider {
     }
   }
 
-  Future<Either<String, int>> editContainer(
+  Future<Either<String, int>> editCustomerRasidat(
       String apiEndpoint, Map<String, dynamic> data) async {
     String jsonData = json.encode(data);
     try {
@@ -75,7 +76,7 @@ class ContainerApiServiceProvider {
     }
   }
 
-  Future<Either<String, int>> deleteContainer(String apiEndpoint) async {
+  Future<Either<String, int>> deleteCustomerRasidat(String apiEndpoint) async {
     try {
       final response = await http.delete(Uri.parse(_baseURL + apiEndpoint));
       if (response.statusCode == 200) {

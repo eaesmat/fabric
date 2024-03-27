@@ -2,7 +2,7 @@ import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class NoDataFoundWidget extends StatelessWidget {
-  const NoDataFoundWidget({Key? key});
+  const NoDataFoundWidget({super.key,});
 
   @override
   Widget build(BuildContext context) {

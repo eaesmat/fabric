@@ -51,7 +51,7 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
                   ),
                   CustomTextFieldWithController(
                     controller: customerController.brunchController,
-                    lblText: const LocaleText('brunch'),
+                    lblText: const LocaleText('branch'),
                   ),
                   CustomTextFieldWithController(
                     controller: customerController.provinceController,

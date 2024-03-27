@@ -29,7 +29,7 @@ class ExpansionTileItemWidget extends StatelessWidget {
             trailing: trail,
           ),
           const Divider(
-            thickness: 0.1,
+            thickness: 0.2,
           )
         ],
       ),

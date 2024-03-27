@@ -33,7 +33,7 @@ class ListTileWidget extends StatelessWidget {
           onLongPress: onLongPress,
         ),
         const Divider(
-          thickness: 0.3,
+          thickness: 0.2,
         ),
       ],
     );

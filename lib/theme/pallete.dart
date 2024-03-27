@@ -15,7 +15,9 @@ class Pallete {
   static var darkModeAppTheme = ThemeData.dark().copyWith(
     textTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'Bahij-Pashto',
+          
         ),
+
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 20),
       dense: true,
@@ -45,14 +47,11 @@ class Pallete {
     textTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'Bahij-Pashto',
         ),
-    listTileTheme: const ListTileThemeData(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-      dense: true,
-      minLeadingWidth: 0,
-      minVerticalPadding: 0.0,
-      visualDensity: VisualDensity.compact,
-      // Else theme will be use
-    ),
+    radioTheme: ThemeData().radioTheme.copyWith(
+          fillColor: MaterialStateColor.resolveWith(
+            (states) => Pallete.blueColor,
+          ),
+        ),
 
     scaffoldBackgroundColor: whiteColor,
     cardColor: greyColor,

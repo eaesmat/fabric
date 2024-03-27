@@ -1,6 +1,5 @@
 import 'package:fabricproject/controller/fabric_design_toop_controller.dart';
 import 'package:fabricproject/helper/helper_methods.dart';
-import 'package:fabricproject/widgets/custom_refresh_indicator.dart';
 import 'package:fabricproject/widgets/no_data_found.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';

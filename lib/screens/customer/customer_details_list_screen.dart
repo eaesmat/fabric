@@ -1,33 +1,28 @@
-import 'package:fabricproject/controller/customer_deals_controller.dart';
-import 'package:fabricproject/screens/customer_deal/customer_deals_list_screen.dart';
-import 'package:fabricproject/screens/customer_rasidat/customer_rasidat_list_screen.dart';
-import 'package:fabricproject/screens/customer_sales/customer_sales_list_screen.dart';
+import 'package:fabricproject/controller/customer_controller.dart';
+import 'package:fabricproject/screens/customer/customer_balance_list_screen.dart';
+import 'package:fabricproject/screens/customer/customer_list_screen.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/calculation_bottom_navigation.dart';
-import 'package:fabricproject/widgets/custom_text_title.dart';
+import 'package:fabricproject/widgets/locale_text_widget.dart';
 import 'package:flag/flag_enum.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 
-class CustomerDetailsScreen extends StatefulWidget {
-  final int customerId;
-  final String customerName;
-
-  const CustomerDetailsScreen({
+class CustomerDetailsListScreen extends StatefulWidget {
+  const CustomerDetailsListScreen({
     Key? key,
-    required this.customerId,
-    required this.customerName,
   }) : super(key: key);
 
   @override
-  State<CustomerDetailsScreen> createState() => _CustomerDetailsScreenState();
+  State<CustomerDetailsListScreen> createState() =>
+      _CustomerDetailsListScreenState();
 }
 
-class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
+class _CustomerDetailsListScreenState extends State<CustomerDetailsListScreen> {
   int _selectedIndex = 0;
-  late PageController _pageController;
+  late PageController _pageController; // Define PageController here
 
   @override
   void initState() {
@@ -37,28 +32,26 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController.dispose(); // Dispose PageController
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final allCustomerCalculation =
-        Provider.of<CustomerDealsController>(context);
-
+    final allCustomerCalculation = Provider.of<CustomerController>(context);
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: CustomTextTitle(text: widget.customerName),
+          title: const LocaleTexts(localeText: 'Customers'),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: Container(
               color: Theme.of(context).primaryColor,
               child: TabBar(
-                indicatorColor: Colors.transparent,
                 dividerColor: Pallete.whiteColor,
+                indicatorColor: Colors.transparent,
                 onTap: (index) {
                   setState(() {
                     _selectedIndex = index;
@@ -70,9 +63,8 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
                   });
                 },
                 tabs: [
-                  _buildTab(Icons.handshake, 'deals', 0),
-                  _buildTab(Icons.shopify, 'sales', 1),
-                  _buildTab(Icons.draw, 'receipts', 2),
+                  _buildTab(Icons.list_alt_sharp, 'customers', 0),
+                  _buildTab(Icons.equalizer, 'balance', 1),
                 ],
               ),
             ),
@@ -85,10 +77,9 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
               _selectedIndex = index;
             });
           },
-          children: [
-            CustomerDealsListScreen(customerId: widget.customerId),
-            CustomerSalesListScreen(customerId: widget.customerId),
-            CustomerRasidatListScreen(customerId: widget.customerId)
+          children: const [
+            CustomerListScreen(),
+            CustomerBalanceListScreen(),
           ],
         ),
         bottomNavigationBar: SingleChildScrollView(
@@ -98,44 +89,42 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.US, height: 20, width: 20),
-                textKey: 'total_due_dollar',
+                textKey: 'total_cost_dollar',
                 remainingValue:
-                    allCustomerCalculation.dollorDue?.toString() ?? '0',
+                    allCustomerCalculation.allTotalCostDoller.toString(),
               ),
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.US, height: 20, width: 20),
                 textKey: 'total_dollar_payment',
                 remainingValue:
-                    allCustomerCalculation.dollorPayment?.toString() ?? '0',
+                    allCustomerCalculation.allPaymentDoller.toString(),
               ),
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.US, height: 20, width: 20),
-                textKey: 'deals',
-                remainingValue:
-                    allCustomerCalculation.dollorDeal?.toString() ?? '0',
+                textKey: 'total_due_dollar',
+                remainingValue: allCustomerCalculation.allDueDoller.toString(),
               ),
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
-                textKey: 'total_due_afghani',
+                textKey: 'total_cost_afghani',
                 remainingValue:
-                    allCustomerCalculation.afghaniDeal?.toString() ?? '0',
+                    allCustomerCalculation.allTotalCostAfghani.toString(),
               ),
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
                 textKey: 'total_payment_afghani',
                 remainingValue:
-                    allCustomerCalculation.afghaniPayment?.toString() ?? '0',
+                    allCustomerCalculation.allPaymentAfghani.toString(),
               ),
               RowData(
                 customWidget:
                     Flag.fromCode(FlagsCode.AF, height: 20, width: 20),
-                textKey: 'deals',
-                remainingValue:
-                    allCustomerCalculation.afghaniDeal?.toString() ?? '0',
+                textKey: 'total_due_afghani',
+                remainingValue: allCustomerCalculation.allDueAfghani.toString(),
               ),
             ],
           ),

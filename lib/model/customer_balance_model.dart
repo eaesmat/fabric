@@ -1,9 +1,9 @@
-class CustomerDealsModel {
+class CustomerBalanceModel {
   List<Data>? data;
 
-  CustomerDealsModel({this.data});
+  CustomerBalanceModel({this.data});
 
-  CustomerDealsModel.fromJson(Map<String, dynamic> json) {
+  CustomerBalanceModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -14,31 +14,25 @@ class CustomerDealsModel {
 }
 
 class Data {
-  String? customerId;
-  double? afghani;
-  double? doller;
-  String? type;
-  String? date;
-  int? begakNumber;
-  double? balanceDoller;
-  double? balanceAfghani;
+  int? customerId;
+  String? firstname;
+  String? lastname;
+  double? dueDoller;
+  double? dueAfghani;
 
   Data(
       {this.customerId,
-      this.afghani,
-      this.doller,
-      this.balanceDoller,
-      this.balanceAfghani});
+      this.firstname,
+      this.lastname,
+      this.dueDoller,
+      this.dueAfghani});
 
   Data.fromJson(Map<String, dynamic> json) {
     customerId = json['customer_id'];
-    afghani = checkDouble(json['afghani']);
-    doller = checkDouble(json['doller']);
-    type = json['type'];
-    date = json['date'];
-    begakNumber = json['begakNumber'];
-    balanceDoller = checkDouble(json['balanceDoller']);
-    balanceAfghani = checkDouble(json['balanceAfghani']);
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    dueDoller = checkDouble(json['dueDoller']);
+    dueAfghani = checkDouble(json['dueAfghani']);
   }
 
   double? checkDouble(dynamic value) {

@@ -28,7 +28,7 @@ class ExpansionTileWidget extends StatelessWidget {
           ],
         ),
         const Divider(
-          thickness: .3,
+          thickness: 0.2,
         ),
       ],
     );

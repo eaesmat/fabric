@@ -1,5 +1,5 @@
 import 'package:fabricproject/controller/transport_deals_controller.dart';
-import 'package:fabricproject/screens/customer_deal/transport_deal_item_details.dart';
+import 'package:fabricproject/screens/transport_deals/transport_deal_item_details.dart';
 import 'package:flutter/material.dart';
 import 'package:fabricproject/theme/pallete.dart';
 import 'package:fabricproject/widgets/custom_text_filed_with_controller.dart';

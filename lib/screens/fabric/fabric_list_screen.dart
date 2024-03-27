@@ -20,7 +20,7 @@ class _FabricListScreenState extends State<FabricListScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // Reset search filter after the build cycle is complete
       Provider.of<FabricController>(context, listen: false).resetSearchFilter();
     });

@@ -59,7 +59,7 @@ class _VendorCompaniesDetailsScreenState
                 },
                 tabs: [
                   _buildTab(Icons.list_alt_sharp, 'vendor_companies', 0),
-                  _buildTab(Icons.fact_check_sharp, 'balance', 1),
+                  _buildTab(Icons.equalizer, 'balance', 1),
                 ],
               ),
             ),

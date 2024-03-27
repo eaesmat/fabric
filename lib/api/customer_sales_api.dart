@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:fabricproject/constants/api_url.dart';
-import 'package:fabricproject/model/customer_deals_model.dart';
+import 'package:fabricproject/model/customer_sales.model.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 
-class CustomerDealsApiServiceProvider {
+class CustomerSalesApiServiceProvider {
   final String _baseURL = baseURL;
 
-  Future<Either<String, List<Data>>> getCustomerDeals(
+  Future<Either<String, List<Data>>> getCustomerSales(
       String apiEndpoint) async {
     try {
       var response = await http.get(
@@ -16,10 +16,10 @@ class CustomerDealsApiServiceProvider {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse =
             json.decode(response.body.toString());
-        final customerDeals = CustomerDealsModel.fromJson(jsonResponse);
+        final customerSales = CustomerSalesModel.fromJson(jsonResponse);
 // return data to the controller
         return right(
-          customerDeals.data!,
+          customerSales.data!,
         );
       } else {
         return left(" ${response.statusCode}");

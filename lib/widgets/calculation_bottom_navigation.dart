@@ -26,40 +26,49 @@ class CalculationBottomNavigationBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: rowsData.map(
-          (rowData) {
-            return Row(
-              children: [
-                Icon(rowData.icon, color: rowData.iconColor),
+        children: rowsData.map((rowData) {
+          return Row(
+            children: [
+              if (rowData.icon != null) ...[
+                Icon(rowData.icon!, color: rowData.iconColor),
                 const SizedBox(width: 5),
-                LocaleText(
-                  rowData.textKey,
-                  style: TextStyle(color: rowData.textColor),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  rowData.remainingValue,
-                  style: TextStyle(color: rowData.textColor),
-                ),
-                const SizedBox(width: 20),
               ],
-            );
-          },
-        ).toList(),
+              LocaleText(
+                rowData.textKey,
+                style: TextStyle(color: rowData.textColor),
+              ),
+              const SizedBox(width: 5),
+              Text(
+                rowData.remainingValue,
+                style: TextStyle(color: rowData.textColor),
+              ),
+              const SizedBox(width: 5),
+              if (rowData.customWidget != null) ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: rowData.customWidget!,
+                ),
+              ],
+              const SizedBox(width: 20),
+            ],
+          );
+        }).toList(),
       ),
     );
   }
 }
 
 class RowData {
-  final IconData icon;
+  final IconData? icon;
+  final Widget? customWidget;
   final String textKey;
   final String remainingValue;
   final Color iconColor;
   final Color textColor;
 
   RowData({
-    required this.icon,
+    this.icon,
+    this.customWidget,
     required this.textKey,
     required this.remainingValue,
     this.iconColor = Pallete.blueColor,
